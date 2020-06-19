@@ -11,5 +11,6 @@ namespace bkfc.Data
 
         public DbSet<Vendor> Vendor { get; set; }
         public DbSet<Food> Food { get; set; }
+        public DbSet<Payment> Payment { get; set; }
     }
 }

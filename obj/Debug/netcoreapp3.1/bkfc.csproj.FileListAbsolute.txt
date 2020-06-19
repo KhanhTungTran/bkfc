@@ -345,3 +345,8 @@ C:\Users\tktun\Desktop\HK192\SE\Assignment\Submission4\newNewBkfc\bkfc\obj\Debug
 C:\Users\tktun\Desktop\HK192\SE\Assignment\Submission4\newNewBkfc\bkfc\obj\Debug\netcoreapp3.1\Razor\Views\Food\Details.cshtml.g.cs
 C:\Users\tktun\Desktop\HK192\SE\Assignment\Submission4\newNewBkfc\bkfc\obj\Debug\netcoreapp3.1\Razor\Views\Food\Edit.cshtml.g.cs
 C:\Users\tktun\Desktop\HK192\SE\Assignment\Submission4\newNewBkfc\bkfc\obj\Debug\netcoreapp3.1\Razor\Views\Food\Index.cshtml.g.cs
+C:\Users\tktun\Desktop\HK192\SE\Assignment\Submission4\newNewBkfc\bkfc\obj\Debug\netcoreapp3.1\Razor\Views\Payment\Create.cshtml.g.cs
+C:\Users\tktun\Desktop\HK192\SE\Assignment\Submission4\newNewBkfc\bkfc\obj\Debug\netcoreapp3.1\Razor\Views\Payment\Delete.cshtml.g.cs
+C:\Users\tktun\Desktop\HK192\SE\Assignment\Submission4\newNewBkfc\bkfc\obj\Debug\netcoreapp3.1\Razor\Views\Payment\Details.cshtml.g.cs
+C:\Users\tktun\Desktop\HK192\SE\Assignment\Submission4\newNewBkfc\bkfc\obj\Debug\netcoreapp3.1\Razor\Views\Payment\Edit.cshtml.g.cs
+C:\Users\tktun\Desktop\HK192\SE\Assignment\Submission4\newNewBkfc\bkfc\obj\Debug\netcoreapp3.1\Razor\Views\Payment\Index.cshtml.g.cs

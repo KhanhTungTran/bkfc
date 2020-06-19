@@ -20536,6 +20536,11 @@
       "FileKind": "mvc"
     },
     {
+      "FilePath": "c:\\Users\\tktun\\Desktop\\HK192\\SE\\Assignment\\Submission4\\newNewBkfc\\bkfc\\Views\\Payments\\Create.cshtml",
+      "TargetPath": "Views\\Payments\\Create.cshtml",
+      "FileKind": "mvc"
+    },
+    {
       "FilePath": "c:\\Users\\tktun\\Desktop\\HK192\\SE\\Assignment\\Submission4\\newNewBkfc\\bkfc\\Views\\Shared\\_ValidationScriptsPartial.cshtml",
       "TargetPath": "Views\\Shared\\_ValidationScriptsPartial.cshtml",
       "FileKind": "mvc"
@@ -20543,6 +20548,11 @@
     {
       "FilePath": "c:\\Users\\tktun\\Desktop\\HK192\\SE\\Assignment\\Submission4\\newNewBkfc\\bkfc\\Views\\Home\\Privacy.cshtml",
       "TargetPath": "Views\\Home\\Privacy.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "c:\\Users\\tktun\\Desktop\\HK192\\SE\\Assignment\\Submission4\\newNewBkfc\\bkfc\\Views\\Payments\\Edit.cshtml",
+      "TargetPath": "Views\\Payments\\Edit.cshtml",
       "FileKind": "mvc"
     },
     {
@@ -20561,13 +20571,28 @@
       "FileKind": "mvc"
     },
     {
+      "FilePath": "c:\\Users\\tktun\\Desktop\\HK192\\SE\\Assignment\\Submission4\\newNewBkfc\\bkfc\\Views\\Payments\\Details.cshtml",
+      "TargetPath": "Views\\Payments\\Details.cshtml",
+      "FileKind": "mvc"
+    },
+    {
       "FilePath": "c:\\Users\\tktun\\Desktop\\HK192\\SE\\Assignment\\Submission4\\newNewBkfc\\bkfc\\Views\\Foodcourt\\Edit.cshtml",
       "TargetPath": "Views\\Foodcourt\\Edit.cshtml",
       "FileKind": "mvc"
     },
     {
+      "FilePath": "c:\\Users\\tktun\\Desktop\\HK192\\SE\\Assignment\\Submission4\\newNewBkfc\\bkfc\\Views\\Payments\\Index.cshtml",
+      "TargetPath": "Views\\Payments\\Index.cshtml",
+      "FileKind": "mvc"
+    },
+    {
       "FilePath": "c:\\Users\\tktun\\Desktop\\HK192\\SE\\Assignment\\Submission4\\newNewBkfc\\bkfc\\Views\\Foodcourt\\Create.cshtml",
       "TargetPath": "Views\\Foodcourt\\Create.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "c:\\Users\\tktun\\Desktop\\HK192\\SE\\Assignment\\Submission4\\newNewBkfc\\bkfc\\Views\\Payments\\Delete.cshtml",
+      "TargetPath": "Views\\Payments\\Delete.cshtml",
       "FileKind": "mvc"
     },
     {
