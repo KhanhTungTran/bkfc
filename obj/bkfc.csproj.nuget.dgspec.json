@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\tktun\\Desktop\\HK192\\SE\\Assignment\\Submission4\\bkfc\\bkfc.csproj": {}
+    "C:\\Users\\tktun\\Desktop\\HK192\\SE\\Assignment\\Submission4\\newNewBkfc\\bkfc\\bkfc.csproj": {}
   },
   "projects": {
-    "C:\\Users\\tktun\\Desktop\\HK192\\SE\\Assignment\\Submission4\\bkfc\\bkfc.csproj": {
+    "C:\\Users\\tktun\\Desktop\\HK192\\SE\\Assignment\\Submission4\\newNewBkfc\\bkfc\\bkfc.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\tktun\\Desktop\\HK192\\SE\\Assignment\\Submission4\\bkfc\\bkfc.csproj",
+        "projectUniqueName": "C:\\Users\\tktun\\Desktop\\HK192\\SE\\Assignment\\Submission4\\newNewBkfc\\bkfc\\bkfc.csproj",
         "projectName": "bkfc",
-        "projectPath": "C:\\Users\\tktun\\Desktop\\HK192\\SE\\Assignment\\Submission4\\bkfc\\bkfc.csproj",
+        "projectPath": "C:\\Users\\tktun\\Desktop\\HK192\\SE\\Assignment\\Submission4\\newNewBkfc\\bkfc\\bkfc.csproj",
         "packagesPath": "C:\\Users\\tktun\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\tktun\\Desktop\\HK192\\SE\\Assignment\\Submission4\\bkfc\\obj\\",
+        "outputPath": "C:\\Users\\tktun\\Desktop\\HK192\\SE\\Assignment\\Submission4\\newNewBkfc\\bkfc\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Microsoft\\Xamarin\\NuGet\\"

@@ -1,5 +1,5 @@
 {
-  "FilePath": "c:\\Users\\tktun\\Desktop\\HK192\\SE\\Assignment\\Submission4\\bkfc\\bkfc.csproj",
+  "FilePath": "c:\\Users\\tktun\\Desktop\\HK192\\SE\\Assignment\\Submission4\\newNewBkfc\\bkfc\\bkfc.csproj",
   "Configuration": {
     "ConfigurationName": "MVC-3.0",
     "LanguageVersion": "3.0",
@@ -20521,73 +20521,98 @@
   "RootNamespace": "bkfc",
   "Documents": [
     {
-      "FilePath": "c:\\Users\\tktun\\Desktop\\HK192\\SE\\Assignment\\Submission4\\bkfc\\Views\\Foodcourt\\Index.cshtml",
-      "TargetPath": "Views\\Foodcourt\\Index.cshtml",
-      "FileKind": "mvc"
-    },
-    {
-      "FilePath": "c:\\Users\\tktun\\Desktop\\HK192\\SE\\Assignment\\Submission4\\bkfc\\Views\\Foodcourt\\Create.cshtml",
-      "TargetPath": "Views\\Foodcourt\\Create.cshtml",
-      "FileKind": "mvc"
-    },
-    {
-      "FilePath": "c:\\Users\\tktun\\Desktop\\HK192\\SE\\Assignment\\Submission4\\bkfc\\Views\\Foodcourt\\Details.cshtml",
-      "TargetPath": "Views\\Foodcourt\\Details.cshtml",
-      "FileKind": "mvc"
-    },
-    {
-      "FilePath": "c:\\Users\\tktun\\Desktop\\HK192\\SE\\Assignment\\Submission4\\bkfc\\Views\\HelloWorld\\Welcome.cshtml",
-      "TargetPath": "Views\\HelloWorld\\Welcome.cshtml",
-      "FileKind": "mvc"
-    },
-    {
-      "FilePath": "c:\\Users\\tktun\\Desktop\\HK192\\SE\\Assignment\\Submission4\\bkfc\\Views\\Foodcourt\\Edit.cshtml",
-      "TargetPath": "Views\\Foodcourt\\Edit.cshtml",
-      "FileKind": "mvc"
-    },
-    {
-      "FilePath": "c:\\Users\\tktun\\Desktop\\HK192\\SE\\Assignment\\Submission4\\bkfc\\Views\\Shared\\_ValidationScriptsPartial.cshtml",
-      "TargetPath": "Views\\Shared\\_ValidationScriptsPartial.cshtml",
-      "FileKind": "mvc"
-    },
-    {
-      "FilePath": "c:\\Users\\tktun\\Desktop\\HK192\\SE\\Assignment\\Submission4\\bkfc\\Views\\HelloWorld\\Index.cshtml",
-      "TargetPath": "Views\\HelloWorld\\Index.cshtml",
-      "FileKind": "mvc"
-    },
-    {
-      "FilePath": "c:\\Users\\tktun\\Desktop\\HK192\\SE\\Assignment\\Submission4\\bkfc\\Views\\Home\\Privacy.cshtml",
-      "TargetPath": "Views\\Home\\Privacy.cshtml",
-      "FileKind": "mvc"
-    },
-    {
-      "FilePath": "c:\\Users\\tktun\\Desktop\\HK192\\SE\\Assignment\\Submission4\\bkfc\\Views\\Home\\Index.cshtml",
-      "TargetPath": "Views\\Home\\Index.cshtml",
-      "FileKind": "mvc"
-    },
-    {
-      "FilePath": "c:\\Users\\tktun\\Desktop\\HK192\\SE\\Assignment\\Submission4\\bkfc\\Views\\_ViewStart.cshtml",
-      "TargetPath": "Views\\_ViewStart.cshtml",
-      "FileKind": "mvc"
-    },
-    {
-      "FilePath": "c:\\Users\\tktun\\Desktop\\HK192\\SE\\Assignment\\Submission4\\bkfc\\Views\\Shared\\Error.cshtml",
+      "FilePath": "c:\\Users\\tktun\\Desktop\\HK192\\SE\\Assignment\\Submission4\\newNewBkfc\\bkfc\\Views\\Shared\\Error.cshtml",
       "TargetPath": "Views\\Shared\\Error.cshtml",
       "FileKind": "mvc"
     },
     {
-      "FilePath": "c:\\Users\\tktun\\Desktop\\HK192\\SE\\Assignment\\Submission4\\bkfc\\Views\\Shared\\_Layout.cshtml",
-      "TargetPath": "Views\\Shared\\_Layout.cshtml",
+      "FilePath": "c:\\Users\\tktun\\Desktop\\HK192\\SE\\Assignment\\Submission4\\newNewBkfc\\bkfc\\Views\\Food\\Create.cshtml",
+      "TargetPath": "Views\\Food\\Create.cshtml",
       "FileKind": "mvc"
     },
     {
-      "FilePath": "c:\\Users\\tktun\\Desktop\\HK192\\SE\\Assignment\\Submission4\\bkfc\\Views\\Foodcourt\\Delete.cshtml",
+      "FilePath": "c:\\Users\\tktun\\Desktop\\HK192\\SE\\Assignment\\Submission4\\newNewBkfc\\bkfc\\Views\\HelloWorld\\Welcome.cshtml",
+      "TargetPath": "Views\\HelloWorld\\Welcome.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "c:\\Users\\tktun\\Desktop\\HK192\\SE\\Assignment\\Submission4\\newNewBkfc\\bkfc\\Views\\Shared\\_ValidationScriptsPartial.cshtml",
+      "TargetPath": "Views\\Shared\\_ValidationScriptsPartial.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "c:\\Users\\tktun\\Desktop\\HK192\\SE\\Assignment\\Submission4\\newNewBkfc\\bkfc\\Views\\Home\\Privacy.cshtml",
+      "TargetPath": "Views\\Home\\Privacy.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "c:\\Users\\tktun\\Desktop\\HK192\\SE\\Assignment\\Submission4\\newNewBkfc\\bkfc\\Views\\Home\\Index.cshtml",
+      "TargetPath": "Views\\Home\\Index.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "c:\\Users\\tktun\\Desktop\\HK192\\SE\\Assignment\\Submission4\\newNewBkfc\\bkfc\\Views\\Foodcourt\\Index.cshtml",
+      "TargetPath": "Views\\Foodcourt\\Index.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "c:\\Users\\tktun\\Desktop\\HK192\\SE\\Assignment\\Submission4\\newNewBkfc\\bkfc\\Views\\_ViewStart.cshtml",
+      "TargetPath": "Views\\_ViewStart.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "c:\\Users\\tktun\\Desktop\\HK192\\SE\\Assignment\\Submission4\\newNewBkfc\\bkfc\\Views\\Foodcourt\\Edit.cshtml",
+      "TargetPath": "Views\\Foodcourt\\Edit.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "c:\\Users\\tktun\\Desktop\\HK192\\SE\\Assignment\\Submission4\\newNewBkfc\\bkfc\\Views\\Foodcourt\\Create.cshtml",
+      "TargetPath": "Views\\Foodcourt\\Create.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "c:\\Users\\tktun\\Desktop\\HK192\\SE\\Assignment\\Submission4\\newNewBkfc\\bkfc\\Views\\Food\\Delete.cshtml",
+      "TargetPath": "Views\\Food\\Delete.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "c:\\Users\\tktun\\Desktop\\HK192\\SE\\Assignment\\Submission4\\newNewBkfc\\bkfc\\Views\\Foodcourt\\Delete.cshtml",
       "TargetPath": "Views\\Foodcourt\\Delete.cshtml",
       "FileKind": "mvc"
     },
     {
-      "FilePath": "c:\\Users\\tktun\\Desktop\\HK192\\SE\\Assignment\\Submission4\\bkfc\\Views\\_ViewImports.cshtml",
+      "FilePath": "c:\\Users\\tktun\\Desktop\\HK192\\SE\\Assignment\\Submission4\\newNewBkfc\\bkfc\\Views\\Food\\Index.cshtml",
+      "TargetPath": "Views\\Food\\Index.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "c:\\Users\\tktun\\Desktop\\HK192\\SE\\Assignment\\Submission4\\newNewBkfc\\bkfc\\Views\\Food\\Edit.cshtml",
+      "TargetPath": "Views\\Food\\Edit.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "c:\\Users\\tktun\\Desktop\\HK192\\SE\\Assignment\\Submission4\\newNewBkfc\\bkfc\\Views\\_ViewImports.cshtml",
       "TargetPath": "Views\\_ViewImports.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "c:\\Users\\tktun\\Desktop\\HK192\\SE\\Assignment\\Submission4\\newNewBkfc\\bkfc\\Views\\Shared\\_Layout.cshtml",
+      "TargetPath": "Views\\Shared\\_Layout.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "c:\\Users\\tktun\\Desktop\\HK192\\SE\\Assignment\\Submission4\\newNewBkfc\\bkfc\\Views\\Food\\Details.cshtml",
+      "TargetPath": "Views\\Food\\Details.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "c:\\Users\\tktun\\Desktop\\HK192\\SE\\Assignment\\Submission4\\newNewBkfc\\bkfc\\Views\\Foodcourt\\Details.cshtml",
+      "TargetPath": "Views\\Foodcourt\\Details.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "c:\\Users\\tktun\\Desktop\\HK192\\SE\\Assignment\\Submission4\\newNewBkfc\\bkfc\\Views\\HelloWorld\\Index.cshtml",
+      "TargetPath": "Views\\HelloWorld\\Index.cshtml",
       "FileKind": "mvc"
     }
   ],
