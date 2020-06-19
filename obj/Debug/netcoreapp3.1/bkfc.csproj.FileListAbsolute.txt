@@ -355,3 +355,8 @@ C:\Users\tktun\Desktop\HK192\SE\Assignment\Submission4\newNewBkfc\bkfc\obj\Debug
 C:\Users\tktun\Desktop\HK192\SE\Assignment\Submission4\newNewBkfc\bkfc\obj\Debug\netcoreapp3.1\Razor\Views\Order\Details.cshtml.g.cs
 C:\Users\tktun\Desktop\HK192\SE\Assignment\Submission4\newNewBkfc\bkfc\obj\Debug\netcoreapp3.1\Razor\Views\Order\Edit.cshtml.g.cs
 C:\Users\tktun\Desktop\HK192\SE\Assignment\Submission4\newNewBkfc\bkfc\obj\Debug\netcoreapp3.1\Razor\Views\Order\Index.cshtml.g.cs
+C:\Users\tktun\Desktop\HK192\SE\Assignment\Submission4\newNewBkfc\bkfc\obj\Debug\netcoreapp3.1\Razor\Views\Report\Create.cshtml.g.cs
+C:\Users\tktun\Desktop\HK192\SE\Assignment\Submission4\newNewBkfc\bkfc\obj\Debug\netcoreapp3.1\Razor\Views\Report\Delete.cshtml.g.cs
+C:\Users\tktun\Desktop\HK192\SE\Assignment\Submission4\newNewBkfc\bkfc\obj\Debug\netcoreapp3.1\Razor\Views\Report\Details.cshtml.g.cs
+C:\Users\tktun\Desktop\HK192\SE\Assignment\Submission4\newNewBkfc\bkfc\obj\Debug\netcoreapp3.1\Razor\Views\Report\Edit.cshtml.g.cs
+C:\Users\tktun\Desktop\HK192\SE\Assignment\Submission4\newNewBkfc\bkfc\obj\Debug\netcoreapp3.1\Razor\Views\Report\Index.cshtml.g.cs
