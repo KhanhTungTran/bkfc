@@ -20521,8 +20521,38 @@
   "RootNamespace": "bkfc",
   "Documents": [
     {
+      "FilePath": "c:\\Users\\tktun\\Desktop\\HK192\\SE\\Assignment\\Submission4\\bkfc\\Views\\Foodcourt\\Index.cshtml",
+      "TargetPath": "Views\\Foodcourt\\Index.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "c:\\Users\\tktun\\Desktop\\HK192\\SE\\Assignment\\Submission4\\bkfc\\Views\\Foodcourt\\Create.cshtml",
+      "TargetPath": "Views\\Foodcourt\\Create.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "c:\\Users\\tktun\\Desktop\\HK192\\SE\\Assignment\\Submission4\\bkfc\\Views\\Foodcourt\\Details.cshtml",
+      "TargetPath": "Views\\Foodcourt\\Details.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "c:\\Users\\tktun\\Desktop\\HK192\\SE\\Assignment\\Submission4\\bkfc\\Views\\HelloWorld\\Welcome.cshtml",
+      "TargetPath": "Views\\HelloWorld\\Welcome.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "c:\\Users\\tktun\\Desktop\\HK192\\SE\\Assignment\\Submission4\\bkfc\\Views\\Foodcourt\\Edit.cshtml",
+      "TargetPath": "Views\\Foodcourt\\Edit.cshtml",
+      "FileKind": "mvc"
+    },
+    {
       "FilePath": "c:\\Users\\tktun\\Desktop\\HK192\\SE\\Assignment\\Submission4\\bkfc\\Views\\Shared\\_ValidationScriptsPartial.cshtml",
       "TargetPath": "Views\\Shared\\_ValidationScriptsPartial.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "c:\\Users\\tktun\\Desktop\\HK192\\SE\\Assignment\\Submission4\\bkfc\\Views\\HelloWorld\\Index.cshtml",
+      "TargetPath": "Views\\HelloWorld\\Index.cshtml",
       "FileKind": "mvc"
     },
     {
@@ -20548,6 +20578,11 @@
     {
       "FilePath": "c:\\Users\\tktun\\Desktop\\HK192\\SE\\Assignment\\Submission4\\bkfc\\Views\\Shared\\_Layout.cshtml",
       "TargetPath": "Views\\Shared\\_Layout.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "c:\\Users\\tktun\\Desktop\\HK192\\SE\\Assignment\\Submission4\\bkfc\\Views\\Foodcourt\\Delete.cshtml",
+      "TargetPath": "Views\\Foodcourt\\Delete.cshtml",
       "FileKind": "mvc"
     },
     {

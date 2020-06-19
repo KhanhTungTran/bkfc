@@ -1,0 +1,64 @@
+@model bkfc.Models.VendorCategoryViewModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+<form asp-controller="Foodcourt" asp-action="Index" method="get">
+    <p>
+        <select asp-for="VendorCategories" asp-items="Model.Categories">
+            <option value="">All</option>
+        </select>
+
+        Title: <input type="Text" asp-for="SearchString">
+        <input type="submit" value="Filter"/>
+    </p>
+</form>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Vendors[0].Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Vendors[0].Logo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Vendors[0].FoodList)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Vendors[0].Categories)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Vendors) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Logo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FoodList)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Categories)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
