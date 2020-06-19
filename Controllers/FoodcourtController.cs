@@ -78,7 +78,7 @@ namespace bkfc.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,name,logo,foodList,categories")] Vendor vendor)
+        public async Task<IActionResult> Create([Bind("Id,Name,Logo,FoodList,Categories")] Vendor vendor)
         {
             if (ModelState.IsValid)
             {

@@ -11,11 +11,11 @@ namespace bkfc.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    name = table.Column<string>(nullable: true),
-                    logo = table.Column<string>(nullable: true),
-                    foodList = table.Column<string>(nullable: true),
-                    categories = table.Column<string>(nullable: true)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(nullable: true),
+                    Logo = table.Column<string>(nullable: true),
+                    FoodList = table.Column<string>(nullable: true),
+                    Categories = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {

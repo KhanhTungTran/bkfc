@@ -33,14 +33,15 @@ namespace bkfc
             {
                 var connectionString = Configuration.GetConnectionString("bkfcContext");
 
-                if (Environment.IsDevelopment())
-                {
-                    options.UseSqlite(connectionString);
-                }
-                else
-                {
-                    options.UseSqlServer(connectionString);
-                }
+                // if (Environment.IsDevelopment())
+                // {
+                //     options.UseSqlite(connectionString);
+                // }
+                // else
+                // {
+                //     options.UseSqlServer(connectionString);
+                // }
+                options.UseSqlServer(connectionString);
             });
         }
 

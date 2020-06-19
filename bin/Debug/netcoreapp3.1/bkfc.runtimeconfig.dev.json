@@ -2,7 +2,8 @@
   "runtimeOptions": {
     "additionalProbingPaths": [
       "C:\\Users\\tktun\\.dotnet\\store\\|arch|\\|tfm|",
-      "C:\\Users\\tktun\\.nuget\\packages"
+      "C:\\Users\\tktun\\.nuget\\packages",
+      "C:\\Microsoft\\Xamarin\\NuGet"
     ]
   }
 }
