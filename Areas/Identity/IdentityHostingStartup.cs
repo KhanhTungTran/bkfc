@@ -4,6 +4,7 @@ using bkfc.Data;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
+using Microsoft.CodeAnalysis.Options;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,7 +21,10 @@ namespace bkfc.Areas.Identity
                     options.UseSqlServer(
                         context.Configuration.GetConnectionString("bkfcUserContextConnection")));
 
-                services.AddDefaultIdentity<bkfcUser>(options => options.SignIn.RequireConfirmedAccount = false)
+                services.AddDefaultIdentity<bkfcUser>(options => {
+                    options.SignIn.RequireConfirmedAccount = true;
+                    //options
+                    })
                     .AddEntityFrameworkStores<bkfcUserContext>();
             });
         }

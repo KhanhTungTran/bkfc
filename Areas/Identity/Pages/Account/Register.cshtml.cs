@@ -46,6 +46,9 @@ namespace bkfc.Areas.Identity.Pages.Account
 
         public class InputModel
         {
+            [Phone]
+            [Display(Name = "Phone Number")]
+            public string PhoneNumber { get; set; }
             [Required]
             [DataType(DataType.Text)]
             [Display(Name = "First Name")]
@@ -75,6 +78,10 @@ namespace bkfc.Areas.Identity.Pages.Account
 
         public async Task OnGetAsync(string returnUrl = null)
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                Response.Redirect("/");
+            }
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         }
@@ -85,7 +92,13 @@ namespace bkfc.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = new bkfcUser { UserName = Input.Email, Email = Input.Email, FirstName=Input.FirstName, LastName=Input.LastName };
+                var user = new bkfcUser { 
+                    UserName = Input.Email,
+                    Email = Input.Email, 
+                    FirstName=Input.FirstName, 
+                    LastName=Input.LastName,
+                    PhoneNumber =Input.PhoneNumber
+                };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
