@@ -2,21 +2,19 @@
 @model List<bkfc.Models.Food>
 
 @{
+    var vendor = (bkfc.Models.Vendor)ViewData["vendor"];
+}
+
+@{
     ViewData["Title"] = "Details";
     ViewData["css"] = "profile.css";
 }
-<div class="header-profile">
-    @* <img class="logo" src= @model[0].Logo > *@
-    <div class="profile-title">
-        <h1>@Html.DisplayFor(model => model[0].Name)</h1>
-    </div>
-</div>
-
-<div class="jumbotron jumbotron-fluid">
+<div class="jumbotron jumbotron-fluid d-flex">
+    <img src=@vendor.Logo alt="vendorLogo" style="width: 100px; height: 100px" class="rounded mx-4"/>
     <div class="container">
-        <h2> <i class="fas fa-store"></i> K = FC </h2>
-        <p class="lead">We sell best chiken</p>
-        <p>mlem mlem mlem. Quán này là quán ngon nhất tháng</p>
+        <h2> <i class="fas fa-store"></i> @vendor.Name  </h2>
+        <p class="lead">@vendor.Categories</p>
+        <p>Quán này là quán ngon nhất tháng</p>
     </div>
 </div>
 

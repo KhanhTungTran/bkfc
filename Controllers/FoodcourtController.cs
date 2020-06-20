@@ -66,6 +66,7 @@ namespace bkfc.Controllers
             var foods = from f in  _context.Food
                         select f;
             foods = foods.Where(f => f.VendorId == vendor.Id) ;
+            ViewData["vendor"] = vendor;
             return View(await foods.ToListAsync());
         }
 
