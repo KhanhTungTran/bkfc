@@ -20,8 +20,16 @@ namespace bkfc.Controllers
         }
 
         // GET: Food
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? vendorId)
         {
+            ViewData["vendorId"] = vendorId;
+            if (vendorId != null)
+            {
+                var foods = from f in  _context.Food
+                            select f;
+                foods = foods.Where(f => f.VendorId == vendorId) ;
+                return View(await foods.ToListAsync());
+            }
             return View(await _context.Food.ToListAsync());
         }
 
@@ -55,12 +63,12 @@ namespace bkfc.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,VendorId,Name,Image,Description,Price,Amount,Discount")] Food food)
+        public async Task<IActionResult> Create([Bind("VendorId,Name,Image,Description,Price,Amount,Discount")] Food food)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(food);
-                await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();      
                 return RedirectToAction(nameof(Index));
             }
             return View(food);

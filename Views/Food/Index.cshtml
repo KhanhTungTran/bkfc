@@ -6,7 +6,7 @@
 }
 
 <h1>Manage your food</h1>
-<a class="btn btn-primary" asp-action="Create" asp-route-id="@(Model.ElementAt(0).VendorId)">Add new food</a>
+<a class="btn btn-primary" asp-action="Create" asp-route-id="@ViewData["vendorId"]">Add new food</a>
 
 
 @foreach (var item in Model) {
