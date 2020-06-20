@@ -1,7 +1,7 @@
 @model bkfc.Models.Food
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Delete " + @Model.Name;
     ViewData["css"] = "profile.css";
     var vendorId =  ViewData["vendorId"];
 }
