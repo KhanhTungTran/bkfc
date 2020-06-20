@@ -1,15 +1,44 @@
 @model IEnumerable<bkfc.Models.Food>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "All Food";
+    ViewData["css"] = "profile.css";
 }
 
-<h1>Index</h1>
+<h1>Manage all food</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
+@foreach (var item in Model) {
+    <div class = "food-management" >
+        <div class = "food-management-information">
+            <img src=@item.Image class="image-food">
+            <div class="food-information">
+                <div>@Html.DisplayFor(modelItem => item.Name)</div>
+                <div>Price: @Html.DisplayFor(modelItem => item.Price)</div>
+                <div>Amount: @Html.DisplayFor(modelItem => item.Amount)</div>
+                <div>Discount: @Html.DisplayFor(modelItem => item.Discount)</div>
+                <div>Vendor: @Html.DisplayFor(modelItem => item.VendorId)</div>
+            </div>
+            <div class="manage">
+                <div>
+                    <a class="btn btn-primary btn-block" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                </div>
+                @* <a asp-action="Details" asp-route-id="@item.Id">Details</a> *@
+                <div>
+                    <a class="btn btn-danger btn-block" asp-action="Delete" asp-route-id="@item.Id">Delete</a>    
+                </div>
+                
+            </div>
+        </div>
+
+        
+    </div>
+
+
+}
+@* <table class="table">
     <thead>
         <tr>
             <th>
@@ -46,7 +75,8 @@
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Image)
+                <img src=@item.Image class="image-food">
+                
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Description)
@@ -68,4 +98,4 @@
         </tr>
 }
     </tbody>
-</table>
+</table> *@
