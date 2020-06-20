@@ -19,11 +19,12 @@
 
 
 .change-page{
-    margin-top: 30px;
+    margin-top: 15px;
     float: right;
 }
 .food-management{
-    margin-bottom: 50px;
+    margin-top: 10px;
+    margin-bottom: 10px;
     border: 1px;
     border-style: solid;
     border-color: #dddddd;
@@ -58,4 +59,12 @@
     float: left;
     height: 100%;
     width: 150px;
+}
+
+.col-sm-2{
+    /* display: inline-block; */
+    overflow: scroll;
+}
+.col-sm-2::-webkit-scrollbar { 
+    display: none; 
 }

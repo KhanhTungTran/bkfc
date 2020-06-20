@@ -5,21 +5,24 @@
     ViewData["css"] = "profile.css";
 }
 
-<h1>Manage all food</h1>
+<h1>Manage your food</h1>
+<a class="btn btn-primary" asp-action="Create">Add new food</a>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+
 @foreach (var item in Model) {
+
     <div class = "food-management" >
         <div class = "food-management-information">
-            <img src=@item.Image class="image-food">
+            <a asp-action="Details" asp-route-id="@item.Id" >
+                <img src=@item.Image class="image-food">
+            </a>
+            
             <div class="food-information">
                 <div>@Html.DisplayFor(modelItem => item.Name)</div>
                 <div>Price: @Html.DisplayFor(modelItem => item.Price)</div>
                 <div>Amount: @Html.DisplayFor(modelItem => item.Amount)</div>
                 <div>Discount: @Html.DisplayFor(modelItem => item.Discount)</div>
-                <div>Vendor: @Html.DisplayFor(modelItem => item.VendorId)</div>
+                @* <div>Vendor: @Html.DisplayFor(modelItem => item.VendorId)</div> *@
             </div>
             <div class="manage">
                 <div>

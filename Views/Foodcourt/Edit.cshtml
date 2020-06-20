@@ -29,10 +29,6 @@
                 <span asp-validation-for="Logo" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="FoodList" class="control-label"></label>
-                <a asp-controller="Food" asp-route-id="@Model.Id" class="btn btn-primary btn-lg btn-block"> Edit Food</a>
-            </div>
-            <div class="form-group">
                 <label asp-for="Categories" class="control-label"></label>
                 <input asp-for="Categories" class="form-control" />
                 <span asp-validation-for="Categories" class="text-danger"></span>
@@ -44,10 +40,16 @@
     </div>
 </div>
 
-<div class="change-page">
-    <a asp-action="Delete" asp-route-id="@Model.Id">Delete</a> | 
-    <a asp-action="Details" asp-route-id="@Model.Id">Back to Details</a> | 
-    <a asp-action="Index">Back to List</a>
+<div >
+    <div style="float: left;" >
+        <a  asp-controller="Food" asp-action="Index" asp-route-id="@Model.Id" class="btn btn-primary"> Edit Food</a>
+    </div>
+    <div class="change-page" >
+        <a asp-action="Delete" asp-route-id="@Model.Id">Delete</a> | 
+        <a asp-action="Details" asp-route-id="@Model.Id">Back to Details</a> | 
+        <a asp-action="Index">Back to List</a>
+    </div>
+    
 </div>
 
 @section Scripts {
