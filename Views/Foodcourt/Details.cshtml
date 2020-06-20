@@ -1,4 +1,4 @@
-@* @model bkfc.Models.Vendor *@
+﻿@* @model bkfc.Models.Vendor *@
 @model List<bkfc.Models.Food>
 
 @{
@@ -9,46 +9,35 @@
     ViewData["Title"] = "Details";
     ViewData["css"] = "profile.css";
 }
-<div class="header-profile">
-  <img class="logo" src= ViewData["vendor"].Logo>
-  <div class="profile-title">
-    <h1>@Html.DisplayFor(model => model[0].Name)</h1>
-  </div>
+<div class="jumbotron jumbotron-fluid d-flex">
+    <img src=@vendor.Logo alt="vendorLogo" style="width: 100px; height: 100px" class="rounded mx-4"/>
+    <div class="container">
+        <h2> <i class="fas fa-store"></i> @vendor.Name  </h2>
+        <p class="lead">@vendor.Categories</p>
+        <p>Quán này là quán ngon nhất tháng</p>
+    </div>
 </div>
 
+@foreach (var foodModel in Model)
+{
+    <div class="container px-0 my-4 d-flex">
+        <img style="width: 120px; height: 140px; object-fit: cover;" src=@foodModel.Image alt="kfc1" class="rounded">
+        <div class="pl-3 d-flex flex-column justify-content-between" style="width: 100%;">
+            <div>
+                <h5>@foodModel.Name</h5>
+                <p>@foodModel.Description</p>
+            </div>
+            <div class="d-flex justify-content-end text-center">
+                <div class="font-weight-bold font-italic my-auto mr-2">@foodModel.Price VND</div>
+                <button class="btn btn-primary">Add to cart</button>
+            </div>
+        </div>
+    </div>
+}
 
-<div>
 
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model[0].Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model[0].Name)
-        </dd>
-        @* <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model[0].Logo)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model[0].Logo)
-        </dd> *@
-        @* <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model[0].FoodList)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model[0].FoodList)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model[0].Categories)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model[0].Categories)
-        </dd> *@
-    </dl>
-</div>
 <div>
     @* <a asp-action="Edit" asp-route-id="@model[0].Id">Edit</a> |
-    <a asp-action="Delete" asp-route-id="@model[0].Id">Delete</a> | *@
+        <a asp-action="Delete" asp-route-id="@model[0].Id">Delete</a> | *@
     <a asp-action="Index">Back to List</a>
 </div>
