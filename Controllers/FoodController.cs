@@ -34,8 +34,9 @@ namespace bkfc.Controllers
         }
 
         // GET: Food/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int? id, int? vendorId)
         {
+            ViewData["vendorId"] = vendorId;
             if (id == null)
             {
                 return NotFound();
@@ -69,14 +70,15 @@ namespace bkfc.Controllers
             {
                 _context.Add(food);
                 await _context.SaveChangesAsync();      
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", new{vendorid = food.VendorId});
             }
             return View(food);
         }
 
         // GET: Food/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int? id, int? vendorId)
         {
+            ViewData["vendorId"] = vendorId;
             if (id == null)
             {
                 return NotFound();
@@ -120,14 +122,15 @@ namespace bkfc.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", new{vendorid = food.VendorId});
             }
             return View(food);
         }
 
         // GET: Food/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int? id, int? vendorId)
         {
+            ViewData["vendorId"] = vendorId;
             if (id == null)
             {
                 return NotFound();
@@ -139,7 +142,7 @@ namespace bkfc.Controllers
             {
                 return NotFound();
             }
-
+            ViewData["vendorId"] = food.VendorId;
             return View(food);
         }
 
@@ -151,7 +154,7 @@ namespace bkfc.Controllers
             var food = await _context.Food.FindAsync(id);
             _context.Food.Remove(food);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index", new{vendorid = food.VendorId});
         }
 
         private bool FoodExists(int id)
