@@ -26,10 +26,10 @@ namespace bkfc.Controllers
             IQueryable<string> categoryQuery = from m in _context.Vendor
                                                orderby m.Categories
                                                select m.Categories;
-            
+
             var vendors = from m in _context.Vendor
                           select m;
-            
+
             if (!String.IsNullOrEmpty(searchString))
             {
                 vendors = vendors.Where(v => v.Name.Contains(searchString));
@@ -37,10 +37,10 @@ namespace bkfc.Controllers
 
             if (!String.IsNullOrEmpty(vendorCategory))
             {
-                vendors = vendors.Where(v=>v.Categories.Contains(vendorCategory));
+                vendors = vendors.Where(v => v.Categories.Contains(vendorCategory));
             }
 
-            var vendorCategoryVM=new VendorCategoryViewModel
+            var vendorCategoryVM = new VendorCategoryViewModel
             {
                 Categories = new SelectList(await categoryQuery.Distinct().ToListAsync()),
                 Vendors = await vendors.ToListAsync()
@@ -63,8 +63,10 @@ namespace bkfc.Controllers
             {
                 return NotFound();
             }
-
-            return View(vendor);
+            var foods = from f in  _context.Food
+                        select f;
+            foods = foods.Where(f => f.VendorId == vendor.Id) ;
+            return View(await foods.ToListAsync());
         }
 
         // GET: Foodcourt/Create

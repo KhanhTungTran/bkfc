@@ -1,13 +1,14 @@
-@model bkfc.Models.Vendor
+@* @model bkfc.Models.Vendor *@
+@model List<bkfc.Models.Food>
 
 @{
     ViewData["Title"] = "Details";
     ViewData["css"] = "profile.css";
 }
 <div class="header-profile">
-  <img class="logo" src= @Model.Logo >
+  @* <img class="logo" src= @model[0].Logo > *@
   <div class="profile-title">
-    <h1>@Html.DisplayFor(model => model.Name)</h1>
+    <h1>@Html.DisplayFor(model => model[0].Name)</h1>
   </div>
 </div>
 
@@ -17,33 +18,33 @@
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
+            @Html.DisplayNameFor(model => model[0].Name)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
+            @Html.DisplayFor(model => model[0].Name)
         </dd>
         @* <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Logo)
+            @Html.DisplayNameFor(model => model[0].Logo)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Logo)
+            @Html.DisplayFor(model => model[0].Logo)
         </dd> *@
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FoodList)
+        @* <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model[0].FoodList)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FoodList)
+            @Html.DisplayFor(model => model[0].FoodList)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Categories)
+            @Html.DisplayNameFor(model => model[0].Categories)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Categories)
-        </dd>
+            @Html.DisplayFor(model => model[0].Categories)
+        </dd> *@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Delete" asp-route-id="@Model.Id">Delete</a> |
+    @* <a asp-action="Edit" asp-route-id="@model[0].Id">Edit</a> |
+    <a asp-action="Delete" asp-route-id="@model[0].Id">Delete</a> | *@
     <a asp-action="Index">Back to List</a>
 </div>
