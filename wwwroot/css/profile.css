@@ -68,3 +68,19 @@
 .col-sm-2::-webkit-scrollbar { 
     display: none; 
 }
+.order{
+    float:None;
+    margin-bottom: 20px;
+}
+.order-number{
+    float: left;
+    font-weight: 500;
+    font-size: large;
+}
+.order-status{
+    float: none;
+    text-align: right;
+    font-weight: 700;
+    font-size: large;
+    color: #1b6ec2;
+}

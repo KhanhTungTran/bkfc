@@ -11,7 +11,6 @@
 
 
 @foreach (var item in Model) {
-
     <div class = "food-management" >
         <div class = "food-management-information">
             <a asp-action="Details" asp-route-id ="@item.Id" asp-route-vendorid=@vendorId>
@@ -36,8 +35,6 @@
                 
             </div>
         </div>
-
-        
     </div>
 }
 <div class="change-page">
