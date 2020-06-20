@@ -44,8 +44,9 @@ namespace bkfc.Controllers
         }
 
         // GET: Food/Create
-        public IActionResult Create()
+        public IActionResult Create(int? id)
         {
+            ViewData["vendorId"] = id;
             return View();
         }
 
