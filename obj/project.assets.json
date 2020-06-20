@@ -8553,24 +8553,25 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\PC\\.nuget\\packages\\": {},
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
+    "C:\\Users\\tktun\\.nuget\\packages\\": {},
+    "C:\\Microsoft\\Xamarin\\NuGet\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\PC\\Desktop\\Viet-BKU\\192\\CongNghePhanMem_CO3061\\project4\\code\\bkfc\\bkfc.csproj",
+      "projectUniqueName": "C:\\Users\\tktun\\Desktop\\HK192\\SE\\Assignment\\Submission4\\newNewBkfc\\bkfc\\bkfc.csproj",
       "projectName": "bkfc",
-      "projectPath": "C:\\Users\\PC\\Desktop\\Viet-BKU\\192\\CongNghePhanMem_CO3061\\project4\\code\\bkfc\\bkfc.csproj",
-      "packagesPath": "C:\\Users\\PC\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\PC\\Desktop\\Viet-BKU\\192\\CongNghePhanMem_CO3061\\project4\\code\\bkfc\\obj\\",
+      "projectPath": "C:\\Users\\tktun\\Desktop\\HK192\\SE\\Assignment\\Submission4\\newNewBkfc\\bkfc\\bkfc.csproj",
+      "packagesPath": "C:\\Users\\tktun\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\tktun\\Desktop\\HK192\\SE\\Assignment\\Submission4\\newNewBkfc\\bkfc\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
-        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        "C:\\Microsoft\\Xamarin\\NuGet\\"
       ],
       "configFilePaths": [
-        "C:\\Users\\PC\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "C:\\Users\\tktun\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
       ],
       "originalTargetFrameworks": [
         "netcoreapp3.1"
@@ -8630,7 +8631,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.105\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.301\\RuntimeIdentifierGraph.json"
       }
     }
   }
