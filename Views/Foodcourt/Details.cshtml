@@ -2,11 +2,15 @@
 @model List<bkfc.Models.Food>
 
 @{
+    var vendor = (bkfc.Models.Vendor)ViewData["vendor"];
+}
+
+@{
     ViewData["Title"] = "Details";
     ViewData["css"] = "profile.css";
 }
 <div class="header-profile">
-  @* <img class="logo" src= @model[0].Logo > *@
+  <img class="logo" src= ViewData["vendor"].Logo>
   <div class="profile-title">
     <h1>@Html.DisplayFor(model => model[0].Name)</h1>
   </div>
