@@ -23,8 +23,9 @@ namespace bkfc.Areas.Identity
 
                 services.AddDefaultIdentity<bkfcUser>(options => {
                     options.SignIn.RequireConfirmedAccount = false;
+                    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
                     //options
-                    })
+                })
                     .AddRoles<IdentityRole>()
                     .AddEntityFrameworkStores<bkfcUserContext>();
             });
