@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using bkfc.Data;
 using bkfc.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace bkfc.Controllers
 {
+    [Authorize]
     public class FoodcourtController : Controller
     {
         private readonly bkfcContext _context;

@@ -22,9 +22,10 @@ namespace bkfc.Areas.Identity
                         context.Configuration.GetConnectionString("bkfcUserContextConnection")));
 
                 services.AddDefaultIdentity<bkfcUser>(options => {
-                    options.SignIn.RequireConfirmedAccount = true;
+                    options.SignIn.RequireConfirmedAccount = false;
                     //options
                     })
+                    .AddRoles<IdentityRole>()
                     .AddEntityFrameworkStores<bkfcUserContext>();
             });
         }
