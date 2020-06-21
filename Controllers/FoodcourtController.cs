@@ -23,6 +23,7 @@ namespace bkfc.Controllers
         public async Task<IActionResult> Index(string vendorCategory, string searchString)
         {
             // Use LINQ to get list of categories
+            ViewData["cart"]=Cart.cart;
             IQueryable<string> categoryQuery = from m in _context.Vendor
                                                orderby m.Categories
                                                select m.Categories;
@@ -175,6 +176,60 @@ namespace bkfc.Controllers
         private bool VendorExists(int id)
         {
             return _context.Vendor.Any(e => e.Id == id);
+        }
+
+        public void AddToCart(int foodId, int vendorId)
+        {
+            var food = _context.Food.Find(foodId);
+
+            if(Cart.cart == null)
+            {
+                List<Item> cart = new List<Item>();
+                cart.Add(new Item() 
+                {
+                    food = food,
+                    quantity = 1
+                });
+                var vendor =  (bkfc.Models.Vendor)ViewData["vendor"];
+                Console.WriteLine(vendor);
+                Console.WriteLine(food.Name);
+                Cart.cart = cart;
+                Console.WriteLine(cart.Count);
+                // return new EmptyResult();  
+            }
+            else
+            {
+                List<Item> cart = Cart.cart;
+                Item product = null;
+                int productIndex = 0;
+                for (int i = 0 ; i < cart.Count; i++)
+                {
+                    if (cart[i].food == food)
+                    {
+                        product = cart[i];
+                        productIndex = i;
+                        break;
+                    }
+                }
+                if (product == null)
+                {
+                    cart.Add(new Item() 
+                    {
+                        food = food,
+                        quantity = 1
+                    });
+                }
+                else
+                {
+                    cart[productIndex].quantity+=1;
+                }
+                var vendor =  (bkfc.Models.Vendor)ViewData["vendor"];
+                Cart.cart  = cart;
+                Console.WriteLine(cart.Count);
+                // return new EmptyResult();  
+            }
+            ViewData["cart"] = Cart.cart;
+            
         }
     }
 }

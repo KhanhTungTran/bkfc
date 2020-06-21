@@ -29,7 +29,15 @@
             </div>
             <div class="d-flex justify-content-end text-center">
                 <div class="font-weight-bold font-italic my-auto mr-2">@foodModel.Price VND</div>
-                <button class="btn btn-primary">Add to cart</button>
+                @if( foodModel.Amount >0)
+                {
+                    var vendorId = vendor.Id;
+                    var foodId = foodModel.Id;
+                    <button type="submit"class="btn btn-primary" onClick="addToCart(@foodId,@vendorId)">Add to cart</button>
+                    
+                }
+                
+                
             </div>
         </div>
     </div>
@@ -41,3 +49,13 @@
     <a asp-action="Delete" asp-route-id="@vendor.Id">Delete</a> |
     <a asp-action="Index">Back to List</a>
 </div>
+
+
+@section Scripts{
+    <script type="text/javascript">
+        function addToCart(foodId,vendorId)
+        {
+            $.post('@Url.Action("AddToCart","Foodcourt")',{foodId:foodId,vendorId:vendorId });
+        }
+    </script>
+}
