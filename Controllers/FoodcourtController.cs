@@ -185,32 +185,24 @@ namespace bkfc.Controllers
             if(Cart.cart == null)
             {
                 Cart.cart = new List<Item>();
+            }
+            Item product = null;
+            for (int i = 0 ; i < Cart.cart.Count; i++)
+            {
+                if (Cart.cart[i].food.Id == food.Id)
+                {
+                    product = Cart.cart[i];
+                    Cart.cart[i].quantity+=1;
+                    break;
+                }
+            }
+            if (product == null)
+            {
                 Cart.cart.Add(new Item() 
                 {
                     food = food,
                     quantity = 1
                 });
-            }
-            else
-            {
-                Item product = null;
-                for (int i = 0 ; i < Cart.cart.Count; i++)
-                {
-                    if (Cart.cart[i].food.Id == food.Id)
-                    {
-                        product = Cart.cart[i];
-                        Cart.cart[i].quantity+=1;
-                        break;
-                    }
-                }
-                if (product == null)
-                {
-                    Cart.cart.Add(new Item() 
-                    {
-                        food = food,
-                        quantity = 1
-                    });
-                }
             }
             ViewData["cart"] = Cart.cart;
         }

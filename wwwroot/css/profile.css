@@ -84,3 +84,11 @@
     font-size: large;
     color: #1b6ec2;
 }
+
+.quantity{
+    text-align: center;
+}
+.price{
+    text-align: right;
+    width: 100px;
+}
