@@ -1,15 +1,46 @@
 @model IEnumerable<bkfc.Models.Food>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "My Food";
+    ViewData["css"] = "profile.css";
+    var vendorId = ViewData["vendorId"];
 }
 
-<h1>Index</h1>
+<h1>Manage your food</h1>
+<a class="btn btn-primary" asp-action="Create" asp-route-id=@vendorId>Add new food</a>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
+
+@foreach (var item in Model) {
+    <div class = "food-management" >
+        <div class = "food-management-information">
+            <a asp-action="Details" asp-route-id ="@item.Id" asp-route-vendorid=@vendorId>
+                <img src=@item.Image class="image-food">
+            </a>
+            
+            <div class="food-information">
+                <div>@Html.DisplayFor(modelItem => item.Name)</div>
+                <div>Price: @Html.DisplayFor(modelItem => item.Price)</div>
+                <div>Amount: @Html.DisplayFor(modelItem => item.Amount)</div>
+                <div>Discount: @Html.DisplayFor(modelItem => item.Discount)</div>
+                @* <div>Vendor: @Html.DisplayFor(modelItem => item.VendorId)</div> *@
+            </div>
+            <div class="manage">
+                <div>
+                    <a class="btn btn-primary btn-block" asp-action="Edit" asp-route-id="@item.Id" asp-route-vendorid=@vendorId>Edit</a>
+                </div>
+                @* <a asp-action="Details" asp-route-id="@item.Id">Details</a> *@
+                <div>
+                    <a class="btn btn-danger btn-block" asp-action="Delete" asp-route-id="@item.Id" asp-route-vendorid=@vendorId>Delete</a>    
+                </div>
+                
+            </div>
+        </div>
+    </div>
+}
+<div class="change-page">
+<a asp-controller="Foodcourt" asp-action="Details" asp-route-id="@vendorId" asp-route-vendorid=@vendorId>Back to your vendors</a>
+</div>
+@* <table class="table">
     <thead>
         <tr>
             <th>
@@ -46,7 +77,8 @@
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Image)
+                <img src=@item.Image class="image-food">
+                
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Description)
@@ -68,4 +100,4 @@
         </tr>
 }
     </tbody>
-</table>
+</table> *@
