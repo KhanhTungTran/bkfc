@@ -178,58 +178,41 @@ namespace bkfc.Controllers
             return _context.Vendor.Any(e => e.Id == id);
         }
 
-        public void AddToCart(int foodId, int vendorId)
+        public void AddToCart(int foodId)
         {
             var food = _context.Food.Find(foodId);
 
             if(Cart.cart == null)
             {
-                List<Item> cart = new List<Item>();
-                cart.Add(new Item() 
+                Cart.cart = new List<Item>();
+                Cart.cart.Add(new Item() 
                 {
                     food = food,
                     quantity = 1
                 });
-                var vendor =  (bkfc.Models.Vendor)ViewData["vendor"];
-                Console.WriteLine(vendor);
-                Console.WriteLine(food.Name);
-                Cart.cart = cart;
-                Console.WriteLine(cart.Count);
-                // return new EmptyResult();  
             }
             else
             {
-                List<Item> cart = Cart.cart;
                 Item product = null;
-                int productIndex = 0;
-                for (int i = 0 ; i < cart.Count; i++)
+                for (int i = 0 ; i < Cart.cart.Count; i++)
                 {
-                    if (cart[i].food == food)
+                    if (Cart.cart[i].food.Id == food.Id)
                     {
-                        product = cart[i];
-                        productIndex = i;
+                        product = Cart.cart[i];
+                        Cart.cart[i].quantity+=1;
                         break;
                     }
                 }
                 if (product == null)
                 {
-                    cart.Add(new Item() 
+                    Cart.cart.Add(new Item() 
                     {
                         food = food,
                         quantity = 1
                     });
                 }
-                else
-                {
-                    cart[productIndex].quantity+=1;
-                }
-                var vendor =  (bkfc.Models.Vendor)ViewData["vendor"];
-                Cart.cart  = cart;
-                Console.WriteLine(cart.Count);
-                // return new EmptyResult();  
             }
             ViewData["cart"] = Cart.cart;
-            
         }
     }
 }

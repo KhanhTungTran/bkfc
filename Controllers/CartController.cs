@@ -23,7 +23,7 @@ namespace bkfc.Controllers
         public ViewResult Index()
         {
             ViewData["cart"] = Cart.cart;
-            return View(Cart.cart);
+            return View();
         }
     }
 }

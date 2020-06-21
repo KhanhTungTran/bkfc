@@ -8,13 +8,35 @@
 }
 
 <h1 style="text-align: center;">My Cart</h1>
-
+@if(cart != null)
+{
+    @foreach(Item item in cart)
+    {
+        <div class="container px-0 my-4 d-flex justify-content-between align-items-center border">
+            <img style="width: 80px; height: 90px; object-fit: cover;" src=@item.food.Image alt="kfc1" class="rounded">
+            <div class="text-center d-flex flex-column justify-content-around" style="height: 90px;">
+                <h5>@item.food.Name</h5>
+                <div class="d-flex justify-content-between">
+                    <button class="btn btn-primary" type="button" name="button">
+                    +
+                    </button>
+                    <input type="text" name="name" value=@item.quantity size="2" style="text-align: center;">
+                    <button class="btn btn-danger" type="button" name="button">
+                    -
+                    </button>
+                </div>
+            </div>
+            <div>@item.food.Price VND</div>
+            <button class="btn btn-link text-danger"><i class="far fa-trash-alt"></i></button>          
+        </div>
+    }
+}
 @* foreach(Item item in cart)
 {
         <li>@item.food.Name (@item.quantity) </li>
 
 } *@
-<table class="table">
+@* <table class="table">
     <thead>
         <tr>
             <th>
@@ -26,13 +48,7 @@
             <th>
                 Price each product
             </th>
-            @* <th>
-                @Html.DisplayNameFor(model => model.PaymentId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.VendorId)
-            </th> *@
-            @* <th></th> *@
+
         </tr>
     </thead>
     <tbody>
@@ -47,18 +63,8 @@
             <td>
                 @item.food.Price
             </td>
-            @* <td>
-                @Html.DisplayFor(modelItem => item.PaymentId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.VendorId)
-            </td> *@
-            @* <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td> *@
+
         </tr>
 }
     </tbody>
-</table>
+</table> *@
