@@ -7,9 +7,7 @@
 
 @* <h1>Bach Khoa Food Court</h1> *@
 
-@* <p>
-    <a asp-action="Create">Create New</a>
-</p> *@
+
 
 <form id = "header-search" asp-controller="Foodcourt" asp-action="Index" method="get">
     
@@ -33,11 +31,11 @@
         <div class="category">
             @Html.DisplayFor(modelItem=>item.Text)
             
-            <div class="vendor-scroll">
+            <div class="item-scroll">
                 @foreach (var vendor in Model.Vendors){
                     @if(vendor.Categories == item.Text){
                     <a asp-action="Details" asp-route-id="@vendor.Id">
-                        <div class="vendor">
+                        <div class="item">
                             <div class="img">
                                 <img src= @vendor.Logo class="rounded mx-auto d-block">
                             </div>
@@ -53,6 +51,10 @@
         </div>
 
 }
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create new vendor</a>
+</p>
 @* <table class="table">
     <thead>
         <tr>
