@@ -10,6 +10,7 @@
     ViewData["Title"] = @vendor.Name;
     ViewData["css"] = "profile.css";
 }
+
 <div class="jumbotron jumbotron-fluid d-flex">
     <img src=@vendor.Logo alt="vendorLogo" style="width: 100px; height: 100px; object-fit: cover;" class="rounded mx-4"/>
     <div class="container">
@@ -27,10 +28,49 @@
         } *@
     </div>
 </div>
+<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3 ">
+    <div class="container d-flex justify-content-between">
+        <a class="navbar-brand" asp-area="" asp-controller="Foodcourt" asp-action="Index">
+            Wanna find something?
+        </a>
+        <div class=" d-flex flex-row">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".nav-find" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <svg class="bi bi-search" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z" />
+                    <path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z" />
+                </svg>
+            </button>
+        </div>
+    </div>
+    <div class="nav-find collapse d-sm-inline-flex flex-sm-row-reverse">
+        <form>
+            <div class="form-group row">
+                <div class ="col">
+                    <label>Tên</label>
+                    <input type="Text" class="form-control"  placeholder="blabla">
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col">
+                    <label >Giá từ:</label>
+                    <input type="Number" class="form-control">            
+                </div>
+                <div class="col">
+                    <label>Đến:</label>
+                    <input type="Number" class="form-control">
+                </div>
+            </div>
+            <div class = "form-row">
+                <button type="submit" class="btn btn-primary btn-block">Search now</button>
+            </div>
+        </form>
+    </div>
+</nav>
 
 @foreach (var foodModel in Model)
 {
-    <div class="container px-0 my-4 d-flex">
+    <div id = @foodModel.Id class="container px-0 my-4 d-flex">
         <img style="width: 120px; height: 140px; object-fit: cover;" src=@foodModel.Image alt="kfc1" class="rounded">
         <div class="pl-3 d-flex flex-column justify-content-between" style="width: 100%;">
             <div>
@@ -40,7 +80,6 @@
             
                 @if( foodModel.Amount >0)
                 {
-                    var vendorId = vendor.Id;
                     var foodId = foodModel.Id;
                     <div id =@foodId>
                         <div class="font-weight-bold font-italic my-auto text-right">@foodModel.Price VND</div>    
@@ -81,9 +120,21 @@
     <script type="text/javascript">
         function addToCart(foodId)
         {
+            var success = 1;
+            // implement success
             var quantity = document.getElementById(foodId).getElementsByClassName("quantity")[0].value;
+            var food = document.getElementById(foodId);
+            var foodName = food.getElementsByTagName("h5")[0].innerHTML;
             badge.innerHTML = Number(badge.innerHTML) + Number(quantity);
             $.post('@Url.Action("AddToCart","Foodcourt")',{foodId:foodId,quantity: quantity});
+            
+            if (success == 1){
+                alertify.notify('Add '+ quantity + ' "' + foodName + '" to cart successfully!', 'success', 2);
+            }
+            else
+            {
+                alertify.notify('Add '+ quantity + ' ' + foodName + ' to cart failed!', 'error', 2);
+            }
         }
         function increase(foodId,foodPrice)
         {

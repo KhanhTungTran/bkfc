@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - BK Food Court</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css"/>
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css"/>
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/semantic.min.css"/>
     <link rel="stylesheet" href="~/css/site.css" />
     <link rel="stylesheet" href="~/css/@ViewData["css"]" />
 
@@ -47,15 +50,15 @@
                 </div>
             </div>
             <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                            <ul class="navbar-nav flex-grow-1">
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Foodcourt" asp-action="Index">Home</a>
-                                </li>
-                                <li class="nav-item">
-                                    <partial name="_LoginPartial"/>
-                                </li>
-                            </ul>
-                        </div>
+                <ul class="navbar-nav flex-grow-1">
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Foodcourt" asp-action="Index">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <partial name="_LoginPartial"/>
+                    </li>
+                </ul>
+            </div>
         </nav>
     </header>
     <div class="container">
@@ -72,6 +75,11 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
     @RenderSection("Scripts", required: false)
+    <script>
+        var badge = document.getElementById("badge");
+        if (badge.innerHTML==0) badge.innerHTML="";
+    </script>
 </body>
 </html>
