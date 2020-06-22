@@ -81,7 +81,7 @@
                 @if( foodModel.Amount >0)
                 {
                     var foodId = foodModel.Id;
-                    <div id =@foodId>
+                    <div>
                         <div class="font-weight-bold font-italic my-auto text-right">@foodModel.Price VND</div>    
                         <div class="d-flex justify-content-between text-center">
                             <div class="d-flex align-items-stretch">
@@ -129,11 +129,11 @@
             $.post('@Url.Action("AddToCart","Foodcourt")',{foodId:foodId,quantity: quantity});
             
             if (success == 1){
-                alertify.notify('Add '+ quantity + ' "' + foodName + '" to cart successfully!', 'success', 2);
+                alertify.notify('Add '+ quantity + ' "' + foodName + '" to cart successfully!', 'success', 3);
             }
             else
             {
-                alertify.notify('Add '+ quantity + ' ' + foodName + ' to cart failed!', 'error', 2);
+                alertify.notify('Add '+ quantity + ' ' + foodName + ' to cart failed!', 'error', 3);
             }
         }
         function increase(foodId,foodPrice)
