@@ -185,7 +185,7 @@ namespace bkfc.Controllers
             return _context.Vendor.Any(e => e.Id == id);
         }
 
-        public void AddToCart(int foodId)
+        public void AddToCart(int foodId, int quantity)
         {
             var food = _context.Food.Find(foodId);
 
