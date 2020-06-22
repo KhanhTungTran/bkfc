@@ -4,6 +4,13 @@
 @{
     ViewData["Title"] = "Admin Page";
 }
+@model bkfc.Areas.Identity.Pages.Account.RegisterModel
 <h2>Admin Page</h2>
 <h4>hhahahaha ghê chưa nè</h4>
-<a asp-controller="Admin" asp-action="Create" class="btn btn-primary">Create new vendor manager</a>
+<form method="POST">
+    <label for="mail">Email</label>
+    <input type="text" id="mail" placeholder="Manager mail goes here" name="mail" />
+    <label for="role">Role</label>
+    <input type="text" id="role" placeholder="Role goes here" name="role"/>
+    <input type="submit" />
+</form>
