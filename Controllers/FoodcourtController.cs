@@ -79,11 +79,6 @@ namespace bkfc.Controllers
             return View(await foods.ToListAsync());
         }
 
-        
-
-
-
-
         // GET: Foodcourt/Create
         public IActionResult Create()
         {
