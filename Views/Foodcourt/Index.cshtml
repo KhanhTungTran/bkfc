@@ -28,29 +28,41 @@
 
 @foreach (var item in Model.Categories)
 {
-    <div class="category">
-        @Html.DisplayFor(modelItem => item.Text)
+    List<Vendor> vendors = new List<Vendor>();
+    @foreach (var vendor in Model.Vendors)
+    {
+        @if (vendor.Categories == item.Text)
+        {
+            vendors.Add(vendor);
+        }
+    }
+    if(vendors.Count > 0)
+    {
+        <div class="category">
+            @Html.DisplayFor(modelItem => item.Text)
 
-        <div class="item-scroll">
-            @foreach (var vendor in Model.Vendors)
-            {
-                @if (vendor.Categories == item.Text)
+            <div class="item-scroll">
+                @foreach (var vendor in vendors)
                 {
-                    <a asp-action="Details" asp-route-id="@vendor.Id">
-                        <div class="item">
-                            <div class="img">
-                                <img src=@vendor.Logo class="rounded mx-auto d-block">
+                    @if (vendor.Categories == item.Text)
+                    {
+                        <a asp-action="Details" asp-route-id="@vendor.Id">
+                            <div class="item">
+                                <div class="img">
+                                    <img src=@vendor.Logo class="rounded mx-auto d-block">
+                                </div>
+                                @Html.DisplayFor(modelItem => vendor.Name)
                             </div>
-                            @Html.DisplayFor(modelItem => vendor.Name)
-                        </div>
 
-                    </a>
+                        </a>
+                    }
                 }
-            }
+
+            </div>
 
         </div>
+    }
 
-    </div>
 
 }
     <p>

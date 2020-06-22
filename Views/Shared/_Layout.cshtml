@@ -19,9 +19,12 @@
             ViewData["cart"] = TempData["cart"] == null ? null : JsonConvert.DeserializeObject<List<Item>>(TempData["cart"] as string);
             var cart = (List<Item>)ViewData["cart"];
             var totalQuantity = 0;
-            for (var i =0 ; i < cart.Count; i++){
-                totalQuantity += cart[i].quantity;
+            if(cart != null){
+                for (var i =0 ; i < cart.Count; i++){
+                    totalQuantity += cart[i].quantity;
+                }    
             }
+            
             TempData.Keep("cart");
         }
         <nav class="navbar fixed-top navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3 ">
