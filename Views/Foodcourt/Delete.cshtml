@@ -1,0 +1,54 @@
+@model bkfc.Models.Vendor
+
+@{
+    ViewData["Title"] = "Delete " + @Model.Name ;
+    ViewData["css"] = "profile.css";
+}
+<div class="header-profile">
+  <img class="logo" src= @Model.Logo >
+  <div class="profile-title">
+    <h1>@Html.DisplayFor(model => model.Name)</h1>
+    <h4> Delete this vendor</h4>
+  </div>
+</div>
+<div>
+    <h4>Vendor</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Logo)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Logo)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.FoodList)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.FoodList)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Categories)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Categories)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Delete" class="btn btn-danger btn-lg btn-block" />
+        <div class="change-page">
+            <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> | 
+            <a asp-action="Details" asp-route-id="@Model.Id">Back to Details</a> | 
+            <a asp-action="Index">Back to List</a>
+        </div>
+        
+    </form>
+</div>

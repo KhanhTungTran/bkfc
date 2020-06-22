@@ -1,0 +1,116 @@
+@model IEnumerable<bkfc.Models.Order>
+
+@{
+    ViewData["Title"] = "Order status";
+    ViewData["css"] = "profile.css";
+
+}
+
+<h1 style="text-align: center;">Order status</h1>
+
+<p>
+    @* after payment success, system auto create orhter *@
+    <a asp-action="Create">Create New</a>
+</p>
+@{int i=1;}
+@foreach (var item in Model)
+{
+    <div class="order">
+        <div class="order-number">
+            Order #@i
+            @{i++;}
+        </div>
+        <div class="order-status">
+            @item.Status
+        </div>
+        <div class = "food-management" >
+            <div class = "food-management-information">
+                <a>
+                    <img src="" class="image-food">
+                </a>
+                
+                <div class="food-information">
+                    <div>Món 1</div>
+                    @* <div>Price: @Html.DisplayFor(modelItem => item.Price)</div> *@
+                    <div>Quantily: 03</div>
+                    @* <div>Discount: @Html.DisplayFor(modelItem => item.Discount)</div> *@
+                    @* <div>Vendor: @Html.DisplayFor(modelItem => item.VendorId)</div> *@
+                </div>
+                    
+            </div>
+        </div>
+        <div class = "food-management" >
+            <div class = "food-management-information">
+                <a>
+                    <img src="" class="image-food">
+                </a>
+                
+                <div class="food-information">
+                    <div>Món 1</div>
+                    @* <div>Price: @Html.DisplayFor(modelItem => item.Price)</div> *@
+                    <div>Quantily: 03</div>
+                    @* <div>Discount: @Html.DisplayFor(modelItem => item.Discount)</div> *@
+                    @* <div>Vendor: @Html.DisplayFor(modelItem => item.VendorId)</div> *@
+                </div>
+                    
+            </div>
+        </div>
+        <form class="form-inline" asp-action="Edit">
+            <div class="form-group mx-sm-3 mb-2">
+                <input class="form-control" />
+            </div>
+            <input type="submit" value="Update status" class="btn btn-primary mb-2" />
+            
+        </form>
+    </div>
+    
+
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FoodList)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PaymentId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.VendorId)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FoodList)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PaymentId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.VendorId)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

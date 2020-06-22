@@ -1,0 +1,57 @@
+@model bkfc.Models.Vendor
+
+@{
+    ViewData["Title"] = "Edit " + @Model.Name ;
+    ViewData["css"] = "profile.css";
+}
+<div class="header-profile">
+  <img class="logo" src= @Model.Logo >
+  <div class="profile-title">
+    <h2>@Html.DisplayFor(model => model.Name)</h2>
+    <h5> Edit vendor's information</h5>
+  </div>
+</div>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Logo" class="control-label"></label>
+                <input asp-for="Logo" class="form-control" />
+                <span asp-validation-for="Logo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Categories" class="control-label"></label>
+                <input asp-for="Categories" class="form-control" />
+                <span asp-validation-for="Categories" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary btn-lg btn-block" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div >
+    <div style="float: left;" >
+        <a  asp-controller="Food" asp-action="Index" asp-route-vendorid="@Model.Id" class="btn btn-primary"> Edit Food</a>
+    </div>
+    <div class="change-page" >
+        <a asp-action="Delete" asp-route-id="@Model.Id">Delete</a> | 
+        <a asp-action="Details" asp-route-id="@Model.Id">Back to Details</a> | 
+        <a asp-action="Index">Back to List</a>
+    </div>
+    
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

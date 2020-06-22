@@ -1,0 +1,65 @@
+@model bkfc.Models.Food
+
+@{
+    ViewData["Title"] = @Model.Name;
+    ViewData["css"] = "profile.css";
+    var vendorId = ViewData["vendorId"];
+}
+<div class="header-profile">
+  <img class="logo" src= @Model.Image >
+  <div class="profile-title">
+    <h1>@Html.DisplayFor(model => model.Name)</h1>
+  </div>
+</div>
+<div>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.VendorId)
+        </dt>
+        <dd class = "col-sm-2">
+            @Html.DisplayFor(model => model.VendorId)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class = "col-sm-2">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Image)
+        </dt>
+        <dd class = "col-sm-2">
+            @Html.DisplayFor(model => model.Image)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd class = "col-sm-2">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Price)
+        </dt>
+        <dd class = "col-sm-2">
+            @Html.DisplayFor(model => model.Price)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Amount)
+        </dt>
+        <dd class = "col-sm-2">
+            @Html.DisplayFor(model => model.Amount)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Discount)
+        </dt>
+        <dd class = "col-sm-2">
+            @Html.DisplayFor(model => model.Discount)
+        </dd>
+    </dl>
+</div>
+<div class = "change-page">
+    <a asp-action="Edit" asp-route-id="@Model.Id" asp-route-vendorid=@vendorId>Edit</a> |
+    <a asp-action="Delete" asp-route-id="@Model.Id" asp-route-vendorid=@vendorId>Delete</a> |
+    <a asp-action="Index" asp-route-id="@Model.VendorId" asp-route-vendorid=@vendorId>Back to List</a>
+</div>
