@@ -32,6 +32,7 @@ namespace bkfc
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+                    // .AddSessionStateTempDataProvider();
 
             services.AddDbContext<bkfcContext>(options =>
             {
@@ -59,7 +60,7 @@ namespace bkfc
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env,IServiceProvider services)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider services)
         {
             if (env.IsDevelopment())
             {
@@ -78,6 +79,8 @@ namespace bkfc
 
             app.UseAuthentication();
             app.UseAuthorization();
+            
+            // app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {

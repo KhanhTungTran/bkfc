@@ -1,4 +1,4 @@
-﻿@* @model bkfc.Models.Vendor *@
+﻿@using Newtonsoft.Json;
 @model List<bkfc.Models.Food>
 
 @{
@@ -15,6 +15,15 @@
         <h2> <i class="fas fa-store"></i> @vendor.Name  </h2>
         <p class="lead">@vendor.Categories</p>
         <p>Quán này là quán ngon nhất tháng</p>
+        @* @{
+            var tempCart = JsonConvert.DeserializeObject<List<Item>>(TempData["cart"] as String);
+            if (tempCart != null) {
+                <p> stupid: @tempCart[0].quantity</p>
+            }
+        }
+        @{
+            TempData.Keep("cart");
+        } *@
     </div>
 </div>
 
