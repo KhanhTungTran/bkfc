@@ -11,7 +11,8 @@
     <h5> Edit vendor's information</h5>
   </div>
 </div>
-
+@if (User.Identity.IsAuthenticated && (User.IsInRole("Admin")||User.IsInRole("FoodCourtManager")||User.IsInRole("VendorManager")))
+{    
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -45,13 +46,16 @@
         <a  asp-controller="Food" asp-action="Index" asp-route-vendorid="@Model.Id" class="btn btn-primary"> Edit Food</a>
     </div>
     <div class="change-page" >
-        <a asp-action="Delete" asp-route-id="@Model.Id">Delete</a> | 
+        @if (User.Identity.IsAuthenticated && (User.IsInRole("Admin")||User.IsInRole("FoodCourtManager")))
+        {    
+            <span><a asp-action="Delete" asp-route-id="@Model.Id">Delete</a> |</span>
+        }
         <a asp-action="Details" asp-route-id="@Model.Id">Back to Details</a> | 
         <a asp-action="Index">Back to List</a>
     </div>
     
 </div>
-
+}
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using bkfc.Data;
 using bkfc.Models;
+using Newtonsoft.Json;
 
 namespace bkfc.Controllers
 {
@@ -18,7 +19,7 @@ namespace bkfc.Controllers
         {
             _context = context;
         }
-
+        
         // GET: Food
         public async Task<IActionResult> Index(int? vendorId)
         {
@@ -37,6 +38,8 @@ namespace bkfc.Controllers
         public async Task<IActionResult> Details(int? id, int? vendorId)
         {
             ViewData["vendorId"] = vendorId;
+            ViewData["cart"] = TempData["cart"] == null ? null : JsonConvert.DeserializeObject<List<Item>>(TempData["cart"] as string);
+            TempData.Keep();
             if (id == null)
             {
                 return NotFound();
