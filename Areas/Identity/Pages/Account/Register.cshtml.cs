@@ -24,7 +24,6 @@ namespace bkfc.Areas.Identity.Pages.Account
         private readonly UserManager<bkfcUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
-
         public RegisterModel(
             UserManager<bkfcUser> userManager,
             SignInManager<bkfcUser> signInManager,
@@ -103,6 +102,8 @@ namespace bkfc.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
+                    //set normal role
+                    await _userManager.AddToRoleAsync(user, "NormalUser");
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));

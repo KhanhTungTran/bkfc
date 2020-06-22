@@ -10,6 +10,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using bkfc.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.Identity;
+using bkfc.Areas.Identity.Data;
 
 namespace bkfc
 {
@@ -45,10 +49,17 @@ namespace bkfc
             });
 
             services.AddRazorPages();
+            services.AddControllers(config =>
+            {
+                var policy = new AuthorizationPolicyBuilder()
+                         .RequireAuthenticatedUser()
+                         .Build();
+                config.Filters.Add(new AuthorizeFilter(policy));
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env,IServiceProvider services)
         {
             if (env.IsDevelopment())
             {
@@ -75,6 +86,45 @@ namespace bkfc
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
+            CreateUserRoles(services).Wait();
+        }
+        private async Task CreateUserRoles(IServiceProvider serviceProvider)
+        {
+            var RoleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            var UserManager = serviceProvider.GetRequiredService<UserManager<bkfcUser>>();
+
+
+            IdentityResult roleResult;
+            //Adding Addmin Role  
+            var roleCheck = await RoleManager.RoleExistsAsync("Admin");
+            if (!roleCheck)
+            {
+                //create the roles and seed them to the database  
+                roleResult = await RoleManager.CreateAsync(new IdentityRole("Admin"));
+            }
+            roleCheck = await RoleManager.RoleExistsAsync("FoodCourtManager");
+            if (!roleCheck)
+            {
+                //create the roles and seed them to the database  
+                roleResult = await RoleManager.CreateAsync(new IdentityRole("FoodCourtManager"));
+            }
+            roleCheck = await RoleManager.RoleExistsAsync("VendorManager");
+            if (!roleCheck)
+            {
+                //create the roles and seed them to the database  
+                roleResult = await RoleManager.CreateAsync(new IdentityRole("VendorManager"));
+            }
+            roleCheck = await RoleManager.RoleExistsAsync("NormalUser");
+            if (!roleCheck)
+            {
+                //create the roles and seed them to the database  
+                roleResult = await RoleManager.CreateAsync(new IdentityRole("NormalUser"));
+            }
+            //Assign Admin role to the main User
+
+            bkfcUser user = await UserManager.FindByEmailAsync("viet14042000@gmail.com");
+            await UserManager.AddToRoleAsync(user, "Admin");
+
         }
     }
 }

@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace bkfc.Controllers
 {
-    [Authorize]
+   
     public class FoodcourtController : Controller
     {
         private readonly bkfcContext _context;
@@ -22,6 +22,7 @@ namespace bkfc.Controllers
         }
 
         // GET: Foodcourt
+        [AllowAnonymous]
         public async Task<IActionResult> Index(string vendorCategory, string searchString)
         {
             // Use LINQ to get list of categories
@@ -84,6 +85,7 @@ namespace bkfc.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Create([Bind("Id,Name,Logo,FoodList,Categories")] Vendor vendor)
         {
             if (ModelState.IsValid)
