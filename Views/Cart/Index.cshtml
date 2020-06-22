@@ -62,7 +62,7 @@
 @section Scripts{
     <script>
         updateTotalPrice();
-
+        document.getElementById("badge").innerHTML="";
         function increase(foodId,foodPrice)
         {
             $.post('@Url.Action("increase","Cart")',{foodId:foodId });

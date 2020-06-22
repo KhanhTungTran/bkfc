@@ -3,6 +3,7 @@
 
 @{
     var vendor = (bkfc.Models.Vendor)ViewData["vendor"];
+    var cart = (List<Item>)ViewData["cart"];
 }
 
 @{
@@ -78,8 +79,6 @@
 
 @section Scripts{
     <script type="text/javascript">
-    var badge = document.getElementById("badge");
-    badge.innerHTML = ""; //collect data from cart
         function addToCart(foodId)
         {
             var quantity = document.getElementById(foodId).getElementsByClassName("quantity")[0].value;

@@ -11,6 +11,16 @@
 </head>
 <body>
     <header>
+        @{
+            @using Newtonsoft.Json;
+            ViewData["cart"] = TempData["cart"] == null ? null : JsonConvert.DeserializeObject<List<Item>>(TempData["cart"] as string);
+            var cart = (List<Item>)ViewData["cart"];
+            var totalQuantity = 0;
+            for (var i =0 ; i < cart.Count; i++){
+                totalQuantity += cart[i].quantity;
+            }
+            TempData.Keep("cart");
+        }
         <nav class="navbar fixed-top navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3 ">
             <div class="container d-flex justify-content-between">
                 <a class="navbar-brand" asp-area="" asp-controller="Foodcourt" asp-action="Index">
@@ -23,7 +33,7 @@
                             <svg class="bi bi-cart2" width="2em" height="2em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                 <path fill-rule="evenodd" d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5zM3.14 5l1.25 5h8.22l1.25-5H3.14zM5 13a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0zm9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0z"/>
                             </svg>
-                            <span id="badge" class="badge">3</span>
+                            <span id="badge" class="badge">@totalQuantity</span>
                         </a>
                     </div>
                     <div>
