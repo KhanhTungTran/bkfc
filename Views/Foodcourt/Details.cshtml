@@ -69,9 +69,12 @@
 
 @section Scripts{
     <script type="text/javascript">
-        function addToCart(foodId,vendorId)
+    var badge = document.getElementById("badge");
+    badge.innerHTML = ""; //collect data from cart
+        function addToCart(foodId)
         {
-            var quantity = document.getElementById(foodId).getElementsByClassName("quantity")[0].value
+            var quantity = document.getElementById(foodId).getElementsByClassName("quantity")[0].value;
+            badge.innerHTML = Number(badge.innerHTML) + Number(quantity);
             $.post('@Url.Action("AddToCart","Foodcourt")',{foodId:foodId,quantity: quantity});
         }
         function increase(foodId,foodPrice)
