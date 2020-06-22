@@ -182,7 +182,7 @@ namespace bkfc.Controllers
             return _context.Vendor.Any(e => e.Id == id);
         }
 
-        public void AddToCart(int foodId)
+        public void AddToCart(int foodId, int quantity)
         {
             var food = _context.Food.Find(foodId);
 
@@ -196,7 +196,7 @@ namespace bkfc.Controllers
                 if (Cart.cart[i].food.Id == food.Id)
                 {
                     product = Cart.cart[i];
-                    Cart.cart[i].quantity+=1;
+                    Cart.cart[i].quantity+=quantity;
                     break;
                 }
             }
@@ -205,7 +205,7 @@ namespace bkfc.Controllers
                 Cart.cart.Add(new Item() 
                 {
                     food = food,
-                    quantity = 1
+                    quantity = quantity
                 });
             }
             ViewData["cart"] = Cart.cart;

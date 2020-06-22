@@ -21,13 +21,14 @@
                 <div class="text-left d-flex flex-column justify-content-around" style="width: 150px;height: 100%; margin-left:10px;">
                     <h5>@item.food.Name</h5>
                     <div class="d-flex justify-content-left">
-                        <button class="btn btn-primary" style="width:35.5px !important;" type="button" name="button" onClick="increase(@foodId,@foodPrice)">
-                        +
-                        </button>
-                        <input type="number" min="1" style="width: 50px;" id="quantity" class="quantity" value=@item.quantity size="2" onchange="change(@foodId,@foodPrice)">
                         <button class="btn btn-danger" style="width:35.5px !important;" type="button" name="button" onClick="decrease(@foodId,@foodPrice)">
                         -
                         </button>
+                        <input type="number" min="1" style="width: 50px;" id="quantity" class="quantity" value=@item.quantity size="2" onchange="change(@foodId,@foodPrice)">
+                        <button class="btn btn-primary" style="width:35.5px !important;" type="button" name="button" onClick="increase(@foodId,@foodPrice)">
+                        +
+                        </button>
+                        
                     </div>
                 </div>
                 <div class="text-right d-flex flex-column justify-content-between align-items-right" style="height: 100%">
