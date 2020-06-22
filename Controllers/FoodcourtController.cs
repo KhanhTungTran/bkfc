@@ -25,13 +25,14 @@ namespace bkfc.Controllers
         public async Task<IActionResult> Index(string vendorCategory, string searchString)
         {
             // Use LINQ to get list of categories
+            ViewData["cart"]=Cart.cart;
             IQueryable<string> categoryQuery = from m in _context.Vendor
                                                orderby m.Categories
                                                select m.Categories;
-            
+
             var vendors = from m in _context.Vendor
                           select m;
-            
+
             if (!String.IsNullOrEmpty(searchString))
             {
                 vendors = vendors.Where(v => v.Name.Contains(searchString));
@@ -39,10 +40,10 @@ namespace bkfc.Controllers
 
             if (!String.IsNullOrEmpty(vendorCategory))
             {
-                vendors = vendors.Where(v=>v.Categories.Contains(vendorCategory));
+                vendors = vendors.Where(v => v.Categories.Contains(vendorCategory));
             }
 
-            var vendorCategoryVM=new VendorCategoryViewModel
+            var vendorCategoryVM = new VendorCategoryViewModel
             {
                 Categories = new SelectList(await categoryQuery.Distinct().ToListAsync()),
                 Vendors = await vendors.ToListAsync()
@@ -65,8 +66,11 @@ namespace bkfc.Controllers
             {
                 return NotFound();
             }
-
-            return View(vendor);
+            var foods = from f in  _context.Food
+                        select f;
+            foods = foods.Where(f => f.VendorId == vendor.Id) ;
+            ViewData["vendor"] = vendor;
+            return View(await foods.ToListAsync());
         }
 
         // GET: Foodcourt/Create
@@ -174,6 +178,35 @@ namespace bkfc.Controllers
         private bool VendorExists(int id)
         {
             return _context.Vendor.Any(e => e.Id == id);
+        }
+
+        public void AddToCart(int foodId)
+        {
+            var food = _context.Food.Find(foodId);
+
+            if(Cart.cart == null)
+            {
+                Cart.cart = new List<Item>();
+            }
+            Item product = null;
+            for (int i = 0 ; i < Cart.cart.Count; i++)
+            {
+                if (Cart.cart[i].food.Id == food.Id)
+                {
+                    product = Cart.cart[i];
+                    Cart.cart[i].quantity+=1;
+                    break;
+                }
+            }
+            if (product == null)
+            {
+                Cart.cart.Add(new Item() 
+                {
+                    food = food,
+                    quantity = 1
+                });
+            }
+            ViewData["cart"] = Cart.cart;
         }
     }
 }
