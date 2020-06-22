@@ -54,7 +54,8 @@ namespace bkfc.Controllers
         }
 
         // GET: Foodcourt/Details/5
-        public async Task<IActionResult> Details(int? id)   // int?: nullable type
+        //[HttpPost]
+        public async Task<IActionResult> Details(int? id, string searchString="")   // int?: nullable type
         {
             if (id == null)
             {
@@ -70,9 +71,18 @@ namespace bkfc.Controllers
             var foods = from f in  _context.Food
                         select f;
             foods = foods.Where(f => f.VendorId == vendor.Id) ;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                foods = foods.Where(v => v.Name.Contains(searchString));
+            }
             ViewData["vendor"] = vendor;
             return View(await foods.ToListAsync());
         }
+
+        
+
+
+
 
         // GET: Foodcourt/Create
         public IActionResult Create()
