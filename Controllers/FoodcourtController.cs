@@ -54,6 +54,7 @@ namespace bkfc.Controllers
         }
 
         // GET: Foodcourt/Details/5
+        [AllowAnonymous]
         public async Task<IActionResult> Details(int? id)   // int?: nullable type
         {
             if (id == null)
