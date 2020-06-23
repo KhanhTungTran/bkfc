@@ -4,12 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace bkfc
+namespace bkfc.Models
 {
-    
-    public class GlobalClass
+    public class StateClass
     {
-        static string _Mode= "On";
+        static string _Mode = "On";
         public static string Mode
         {
             get
@@ -22,6 +21,5 @@ namespace bkfc
                 _Mode = value;
             }
         }
-
     }
 }

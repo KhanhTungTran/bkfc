@@ -57,8 +57,8 @@ namespace bkfc.Areas.Identity.Pages.Account
 
         public async Task OnGetAsync(string returnUrl = null)
         {
-            ViewData["mode"] = GlobalClass.Mode;
-            if (TempData["mess"] == null || GlobalClass.Mode == "On") { TempData["mess"] = " "; }
+            ViewData["mode"] = Models.StateClass.Mode;
+            if (TempData["mess"] == null || Models.StateClass.Mode == "On") { TempData["mess"] = " "; }
             TempData.Keep("mess");
             if (User.Identity.IsAuthenticated)
             {
@@ -81,7 +81,6 @@ namespace bkfc.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
-            // if (GlobalClass.Mode == "Off")return Page();
             returnUrl = returnUrl ?? Url.Content("~/");
             if (ModelState.IsValid)
             {
@@ -92,7 +91,7 @@ namespace bkfc.Areas.Identity.Pages.Account
                 {
                     var user = await _userManager.FindByEmailAsync(Input.Email);
                     var role = await _userManager.GetRolesAsync(user);
-                    if (GlobalClass.Mode == "Off" && !role.Contains("Admin"))
+                    if (Models.StateClass.Mode == "Off" && !role.Contains("Admin"))
                     {
                         await _signInManager.SignOutAsync();
                         TempData["mess"] = "The system is in maintance mode. Please try again later.";

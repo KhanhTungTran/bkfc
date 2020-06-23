@@ -77,7 +77,7 @@ namespace bkfc.Areas.Identity.Pages.Account
 
         public async Task OnGetAsync(string returnUrl = null)
         {
-            ViewData["mode"] = GlobalClass.Mode;
+            ViewData["mode"] = Models.StateClass.Mode;
             if (User.Identity.IsAuthenticated)
             {
                 Response.Redirect("/");

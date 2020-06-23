@@ -25,14 +25,14 @@ namespace bkfc.Controllers
         public IActionResult Index()
         {
             ViewData["result"] = "nothing change";
-            ViewData["mode"] = GlobalClass.Mode;
+            ViewData["mode"] = Models.StateClass.Mode;
             return View();
         }
 
         [HttpPost]
         public IActionResult Index(string mail, string role)
         {
-            ViewData["mode"] = GlobalClass.Mode;
+            ViewData["mode"] = Models.StateClass.Mode;
             if (mail==null || role == null)
             {
                 ViewData["result"] = "Mail or role is empty";
@@ -58,9 +58,9 @@ namespace bkfc.Controllers
         }
         public IActionResult Offline()
         {
-            if (GlobalClass.Mode == "On") GlobalClass.Mode = "Off";
-            else GlobalClass.Mode = "On";
-            ViewData["mode"] = GlobalClass.Mode;
+            if (Models.StateClass.Mode == "On") Models.StateClass.Mode = "Off";
+            else Models.StateClass.Mode = "On";
+            ViewData["mode"] = Models.StateClass.Mode;
             return View("~/Views/Admin/Index.cshtml");
         }
     }
