@@ -11,7 +11,10 @@ using Microsoft.AspNetCore.Identity;
 using bkfc.Data;
 using bkfc.Models;
 using Newtonsoft.Json;
-
+using System.IO;
+using System.Text;
+using System.Net;
+using Newtonsoft.Json.Linq;
 
 namespace bkfc.Controllers
 {
@@ -27,7 +30,11 @@ namespace bkfc.Controllers
         // GET: Payment
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Payment.ToListAsync());
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var payments = from p in _context.Payment
+                                select p;
+            payments = payments.Where(payment => payment.UserId == userId);
+            return View(await payments.ToListAsync());
         }
 
         // GET: Payment/Details/5
@@ -51,10 +58,126 @@ namespace bkfc.Controllers
         // GET: Payment/Create
         public IActionResult Create()
         {
+            var cart = JsonConvert.DeserializeObject<List<Item>>(TempData["cart"] as string);
+            double money = 0;
+            foreach(Item item in cart) {
+                money += item.food.Price * item.quantity;
+            }
+
+            //request params need to request to MoMo system
+            string endpoint = "https://test-payment.momo.vn/gw_payment/transactionProcessor";
+            string partnerCode = "MOMON3WL20200623";
+            string accessKey = "0kA4tysnxO9tUKOx";
+            string serectkey = "t2xCHeQr7pbnLBHqtutz5H1bt0hinODy";
+            string orderInfo = "Đơn hàng từ Bách Khoa Food Court";
+            string returnUrl = "https://localhost:5001/payment/done";
+            string notifyurl = "https://localhost:5001/order";
+
+            string amount = money.ToString();
+            string orderid = Guid.NewGuid().ToString();
+            string requestId = Guid.NewGuid().ToString();
+            string extraData = ""; 
+
+            //Before sign HMAC SHA256 signature
+            string rawHash = "partnerCode="+ 
+                partnerCode + "&accessKey="+
+                accessKey+ "&requestId=" +
+                requestId+ "&amount=" + 
+                amount + "&orderId="+
+                orderid + "&orderInfo="+ 
+                orderInfo + "&returnUrl="+ 
+                returnUrl + "&notifyUrl=" + 
+                notifyurl + "&extraData="+
+                extraData;
+
+            //log.Debug("rawHash = "+ rawHash);
+
+            MoMoSecurity crypto = new MoMoSecurity();
+            //sign signature SHA256
+            string signature = crypto.signSHA256(rawHash, serectkey);
+            //log.Debug("Signature = " + signature);
+
+            //build body json request
+            JObject message = new JObject
+            {
+                { "partnerCode", partnerCode },
+                { "accessKey", accessKey },
+                { "requestId", requestId },
+                { "amount", amount },
+                { "orderId", orderid },
+                { "orderInfo", orderInfo },
+                { "returnUrl", returnUrl },
+                { "notifyUrl", notifyurl },
+                { "extraData", extraData },
+                { "requestType", "captureMoMoWallet" },
+                { "signature", signature }
+
+            };
+            Console.WriteLine("Json request to MoMo: " + message.ToString());
+            string responseFromMomo = PaymentRequest.sendPaymentRequest(endpoint, message.ToString());
+            Console.WriteLine(responseFromMomo);
+            JObject jmessage = JObject.Parse(responseFromMomo);
+            string payURL = responseFromMomo.Substring(207, 316);
+
+
             ViewData["cart"] = TempData["cart"] == null ? null : JsonConvert.DeserializeObject<List<Item>>(TempData["cart"] as string);
             TempData.Keep();
+            ViewData["payURL"] = payURL;
             return View();
         }
+
+        // GET: Payement/Done
+        // Momo will call this after payment succeded
+
+        public async Task<ActionResult> Done(string amount) {
+            var cart = JsonConvert.DeserializeObject<List<Item>>(TempData["cart"] as string);
+            Payment payment = new Payment();
+            payment.Date = DateTime.Now;
+            payment.UserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            payment.BalanceCharge = double.Parse(amount);
+            _context.Add(payment);
+            await _context.SaveChangesAsync();
+            // Tach Bill
+            IList<int> vendors = new List<int>();
+            foreach(Item item in cart) {
+                if (!vendors.Contains(item.food.VendorId)) {
+                    vendors.Add(item.food.VendorId);
+                }
+            }
+            foreach(int vendorId in vendors) {
+                var order = new Order();
+                order.Status = "Cooking";
+                order.Date = DateTime.Now;
+                order.UserId = payment.UserId;
+                order.PaymentId = payment.Id;
+                order.VendorId = vendorId;
+
+                // foreach(Item item in cart) {
+                //     if (item.food.VendorId == order.VendorId) {
+                //         var orderFood = new OrderFood();
+                //         orderFood.Order = order;
+                //         orderFood.Food = item.food;
+                //         _context.Add(orderFood);
+                //         await _context.SaveChangesAsync();
+                //         order.OrderFoods.Add(orderFood);
+                //     }
+                // }
+                _context.Add(order);
+                await _context.SaveChangesAsync();
+            }
+            // Xoa cart
+            TempData["cart"] = null;
+            TempData.Keep();
+            await _context.SaveChangesAsync();
+
+            // @TODO: Chinh lai cai payment voi Order cap nhat luon order food + payment food giup t nha
+            // Voi hien tai dang redirect ve trang lich su giao dich, nhung ma t nghi hien trang my order se dung hon
+
+
+            return RedirectToAction("Index", "Payment");
+        }
+
+
 
         // POST: Payment/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
@@ -63,13 +186,14 @@ namespace bkfc.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Date,BalanceCharge,UserId")] Payment payment)
         {
+            //ViewData["cart"] = TempData["cart"] == null ? null : JsonConvert.DeserializeObject<List<Item>>(TempData["cart"] as string);
+            var cart = JsonConvert.DeserializeObject<List<Item>>(TempData["cart"] as string);
             if (ModelState.IsValid)
             {
                 payment.UserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
                 payment.Date = DateTime.Now;
                 _context.Add(payment);
-
-                var cart = JsonConvert.DeserializeObject<List<Item>>(TempData["cart"] as string);
+                await _context.SaveChangesAsync();
                 // Tach Bill
                 IList<int> vendors = new List<int>();
                 foreach(Item item in cart) {
@@ -77,7 +201,6 @@ namespace bkfc.Controllers
                         vendors.Add(item.food.VendorId);
                     }
                 }
-
                 foreach(int vendorId in vendors) {
                     var order = new Order();
                     order.Status = "Cooking";
@@ -99,16 +222,12 @@ namespace bkfc.Controllers
                     _context.Add(order);
                     await _context.SaveChangesAsync();
                 }
-
-
-
-
+                // Xoa cart
                 TempData["cart"] = null;
                 TempData.Keep();
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
             }
-            return View(payment);
+            return RedirectToAction("Index", "Payment");
         }
 
         // GET: Payment/Edit/5
