@@ -2,11 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using bkfc.Data;
 using bkfc.Models;
+using Newtonsoft.Json;
+
 
 namespace bkfc.Controllers
 {
@@ -46,6 +51,8 @@ namespace bkfc.Controllers
         // GET: Payment/Create
         public IActionResult Create()
         {
+            ViewData["cart"] = TempData["cart"] == null ? null : JsonConvert.DeserializeObject<List<Item>>(TempData["cart"] as string);
+            TempData.Keep();
             return View();
         }
 
@@ -54,10 +61,14 @@ namespace bkfc.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Date,BalanceCharge,UserId,OrderId")] Payment payment)
+        public async Task<IActionResult> Create([Bind("Id,Date,BalanceCharge,UserId")] Payment payment)
         {
             if (ModelState.IsValid)
             {
+                payment.UserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                payment.Date = DateTime.Now;
+                TempData["cart"] = null;
+                TempData.Keep();
                 _context.Add(payment);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
