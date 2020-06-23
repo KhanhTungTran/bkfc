@@ -22,7 +22,7 @@ namespace bkfc.Areas.Identity.Pages.Account
         private readonly SignInManager<bkfcUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
 
-        public LoginModel(SignInManager<bkfcUser> signInManager, 
+        public LoginModel(SignInManager<bkfcUser> signInManager,
             ILogger<LoginModel> logger,
             UserManager<bkfcUser> userManager)
         {
@@ -58,7 +58,9 @@ namespace bkfc.Areas.Identity.Pages.Account
         public async Task OnGetAsync(string returnUrl = null)
         {
             ViewData["mode"] = GlobalClass.Mode;
-            if(User.Identity.IsAuthenticated)
+            if (TempData["mess"] == null || GlobalClass.Mode == "On") { TempData["mess"] = " "; }
+            TempData.Keep("mess");
+            if (User.Identity.IsAuthenticated)
             {
                 Response.Redirect("/");
             }
@@ -79,7 +81,7 @@ namespace bkfc.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
-           // if (GlobalClass.Mode == "Off")return Page();
+            // if (GlobalClass.Mode == "Off")return Page();
             returnUrl = returnUrl ?? Url.Content("~/");
             if (ModelState.IsValid)
             {
@@ -90,12 +92,18 @@ namespace bkfc.Areas.Identity.Pages.Account
                 {
                     var user = await _userManager.FindByEmailAsync(Input.Email);
                     var role = await _userManager.GetRolesAsync(user);
-                    if (GlobalClass.Mode=="Off" && !role.Contains("Admin"))
+                    if (GlobalClass.Mode == "Off" && !role.Contains("Admin"))
                     {
                         await _signInManager.SignOutAsync();
+                        TempData["mess"] = "The system is in maintance mode. Please try again later.";
+                        TempData.Keep("mess");
                         _logger.LogInformation("In maintance mode and not have admin authorization.");
+                        //MessageBox.Show("your message");
+
                         return Page();
                     }
+                    TempData["mess"] = " ";
+                    TempData.Keep("mess");
                     _logger.LogInformation("User logged in.");
                     return LocalRedirect(returnUrl);
                 }
