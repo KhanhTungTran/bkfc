@@ -46,7 +46,7 @@ namespace bkfc.Controllers
 
             var vendorCategoryVM = new VendorCategoryViewModel
             {
-                Categories = new SelectList(await categoryQuery.Distinct().ToListAsync()),
+                Category = new SelectList(await categoryQuery.Distinct().ToListAsync()),
                 Vendors = await vendors.ToListAsync()
             };
             return View(vendorCategoryVM);
