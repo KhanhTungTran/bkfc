@@ -12,7 +12,7 @@ using Newtonsoft.Json;
 
 namespace bkfc.Controllers
 {
-   
+
     public class FoodcourtController : Controller
     {
         private readonly bkfcContext _context;
@@ -25,8 +25,8 @@ namespace bkfc.Controllers
         // GET: Foodcourt
         public async Task<IActionResult> Index(string vendorCategory, string searchString)
         {
-            // Use LINQ to get list of categories
-            ViewData["cart"]= TempData["cart"] == null ? null : JsonConvert.DeserializeObject<List<Item>>(TempData["cart"] as string);
+            // Use LINQ to get list of Category
+            ViewData["cart"] = TempData["cart"] == null ? null : JsonConvert.DeserializeObject<List<Item>>(TempData["cart"] as string);
             TempData.Keep("cart");
             IQueryable<string> categoryQuery = from m in _context.Vendor
                                                orderby m.Category
@@ -56,7 +56,7 @@ namespace bkfc.Controllers
 
         // GET: Foodcourt/Details/5
         //[HttpPost]
-        public async Task<IActionResult> Details(int? id, string searchString="")   // int?: nullable type
+        public async Task<IActionResult> Details(int? id, string searchString = "")   // int?: nullable type
         {
             if (id == null)
             {
@@ -69,9 +69,9 @@ namespace bkfc.Controllers
             {
                 return NotFound();
             }
-            var foods = from f in  _context.Food
+            var foods = from f in _context.Food
                         select f;
-            foods = foods.Where(f => f.VendorId == vendor.Id) ;
+            foods = foods.Where(f => f.VendorId == vendor.Id);
             if (!String.IsNullOrEmpty(searchString))
             {
                 foods = foods.Where(v => v.Name.Contains(searchString));
@@ -98,8 +98,8 @@ namespace bkfc.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles ="FoodCourtManager,Admin")]
-        public async Task<IActionResult> Create([Bind("Id,Name,Logo,FoodList,Categories")] Vendor vendor)
+        [Authorize(Roles = "FoodCourtManager,Admin")]
+        public async Task<IActionResult> Create([Bind("Id,Name,Logo,Category")] Vendor vendor)
         {
             if (ModelState.IsValid)
             {
@@ -132,8 +132,12 @@ namespace bkfc.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+<<<<<<< HEAD
         [Authorize(Roles = "FoodCourtManager,Admin,VendorManager")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Logo,FoodList,Categories")] Vendor vendor)
+=======
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Logo,Category")] Vendor vendor)
+>>>>>>> develop
         {
             if (id != vendor.Id)
             {
@@ -204,7 +208,7 @@ namespace bkfc.Controllers
             var food = _context.Food.Find(foodId);
 
             var cart = TempData["cart"] == null ? null : JsonConvert.DeserializeObject<List<Item>>(TempData["cart"] as string);
-            if(cart == null)
+            if (cart == null)
             {
                 cart = new List<Item>();
             }
@@ -213,12 +217,14 @@ namespace bkfc.Controllers
             result = cart.Find(i => i.food.Id == food.Id);
             if (result == null)
             {
-                cart.Add(new Item(){
+                cart.Add(new Item()
+                {
                     food = food,
                     quantity = 1,
                 });
             }
-            else{
+            else
+            {
                 result.quantity += 1;
             }
             ViewData["cart"] = cart;
