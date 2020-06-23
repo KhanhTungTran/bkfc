@@ -13,7 +13,6 @@
 
     <div class="input-group">
         <div class="custom-file">
-
             <input type="Text" class="form-control" asp-for="SearchString" placeholder="What're you craving?">
         </div>
         <div class="input-group-append">
@@ -26,76 +25,49 @@
         </div>
     </div>
 </form>
-
-@foreach (var item in Model.Category)
+@if (User.Identity.IsAuthenticated && (User.IsInRole("Admin")||User.IsInRole("FoodCourtManager")))
 {
-    <div class="category">
-        @Html.DisplayFor(modelItem => item.Text)
-
-        <div class="item-scroll">
-            @foreach (var vendor in Model.Vendors)
-            {
-                @if (vendor.Category == item.Text)
-                {
-                    <a asp-action="Details" asp-route-id="@vendor.Id">
-                        <div class="item">
-                            <div class="img">
-                                <img src=@vendor.Logo class="rounded mx-auto d-block">
-                            </div>
-                            @Html.DisplayFor(modelItem => vendor.Name)
-                        </div>
-
-                    </a>
-                }
-            }
-
-        </div>
-
-    </div>
-
-}
-    <p>
+    <p class="mt-2">
         <a asp-action="Create" class="btn btn-primary">Create new vendor</a>
     </p>
-@* <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Vendors[0].Name)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Vendors[0].Logo)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Vendors[0].FoodList)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Vendors[0].Category)
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-    @foreach (var item in Model.Vendors) {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Logo)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.FoodList)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Category)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                </td>
-            </tr>
+}
+@foreach (var item in Model.Category)
+
+{
+    List<Vendor> vendors = new List<Vendor>();
+    @foreach (var vendor in Model.Vendors)
+    {
+        @if (vendor.Category == item.Text)
+        {
+            vendors.Add(vendor);
+        }
     }
-        </tbody>
-    </table> *@
+    if(vendors.Count > 0)
+    {
+        <div class="category">
+            @Html.DisplayFor(modelItem => item.Text)
+            <div class="item-scroll">
+                @foreach (var vendor in vendors)
+
+                {
+                    @if (vendor.Category == item.Text)
+                    {
+                        <a asp-action="Details" asp-route-id="@vendor.Id">
+                            <div class="item">
+                                <div class="img">
+                                    <img src=@vendor.Logo class="rounded mx-auto d-block">
+                                </div>
+                                @Html.DisplayFor(modelItem => vendor.Name)
+                            </div>
+
+                        </a>
+                    }
+                }
+
+            </div>
+
+        </div>
+    }
+
+
+}

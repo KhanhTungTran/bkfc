@@ -4,6 +4,8 @@
     ViewData["Title"] = "Delete " + @Model.Name ;
     ViewData["css"] = "profile.css";
 }
+@if (User.Identity.IsAuthenticated && (User.IsInRole("Admin")||User.IsInRole("FoodCourtManager")))
+{    
 <div class="header-profile">
   <img class="logo" src= @Model.Logo >
   <div class="profile-title">
@@ -46,3 +48,4 @@
         
     </form>
 </div>
+}

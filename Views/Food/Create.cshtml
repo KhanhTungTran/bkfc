@@ -4,7 +4,8 @@
     ViewData["Title"] = "Create new Food";
     var vendorId = ViewData["vendorId"];
 }
-
+@if (User.Identity.IsAuthenticated && (User.IsInRole("Admin")||User.IsInRole("FoodCourtManager")||User.IsInRole("VendorManager")))
+{    
 <h1>Create</h1>
 
 <h4>Food</h4>
@@ -58,7 +59,7 @@
 <div class = "change-page">
     <a asp-action="Index">Back to List</a>
 </div>
-
+}
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
