@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace bkfc.Models
 {
-    public class StateClass
+    public class State
     {
         static string _Mode = "On";
         public static string Mode

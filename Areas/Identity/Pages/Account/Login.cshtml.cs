@@ -57,8 +57,8 @@ namespace bkfc.Areas.Identity.Pages.Account
 
         public async Task OnGetAsync(string returnUrl = null)
         {
-            ViewData["mode"] = Models.StateClass.Mode;
-            if (TempData["mess"] == null || Models.StateClass.Mode == "On") { TempData["mess"] = " "; }
+            ViewData["mode"] = Models.State.Mode;
+            if (TempData["mess"] == null || Models.State.Mode == "On") { TempData["mess"] = " "; }
             TempData.Keep("mess");
             if (User.Identity.IsAuthenticated)
             {
@@ -91,12 +91,12 @@ namespace bkfc.Areas.Identity.Pages.Account
                 {
                     var user = await _userManager.FindByEmailAsync(Input.Email);
                     var role = await _userManager.GetRolesAsync(user);
-                    if (Models.StateClass.Mode == "Off" && !role.Contains("Admin"))
+                    if (Models.State.Mode == "Off" && !role.Contains("Admin"))
                     {
                         await _signInManager.SignOutAsync();
                         TempData["mess"] = "The system is in maintance mode. Please try again later.";
                         TempData.Keep("mess");
-                        _logger.LogInformation("In maintance mode and not have admin authorization.");
+                        _logger.LogInformation("In maintenance mode and not have admin authorization.");
                         //MessageBox.Show("your message");
 
                         return Page();

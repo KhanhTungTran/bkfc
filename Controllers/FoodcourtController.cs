@@ -132,12 +132,8 @@ namespace bkfc.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-<<<<<<< HEAD
         [Authorize(Roles = "FoodCourtManager,Admin,VendorManager")]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Logo,FoodList,Categories")] Vendor vendor)
-=======
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Logo,Category")] Vendor vendor)
->>>>>>> develop
         {
             if (id != vendor.Id)
             {

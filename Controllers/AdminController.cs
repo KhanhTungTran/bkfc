@@ -16,7 +16,7 @@ namespace bkfc.Controllers
         private readonly SignInManager<bkfcUser> _signInManager;
         private readonly UserManager<bkfcUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
-        public AdminController(UserManager<bkfcUser> userManager,SignInManager<bkfcUser> signInManager,RoleManager<IdentityRole> roleManager)
+        public AdminController(UserManager<bkfcUser> userManager, SignInManager<bkfcUser> signInManager, RoleManager<IdentityRole> roleManager)
         {
             _roleManager = roleManager;
             _userManager = userManager;
@@ -25,20 +25,20 @@ namespace bkfc.Controllers
         public IActionResult Index()
         {
             ViewData["result"] = "nothing change";
-            ViewData["mode"] = Models.StateClass.Mode;
+            ViewData["mode"] = Models.State.Mode;
             return View();
         }
 
         [HttpPost]
         public IActionResult Index(string mail, string role)
         {
-            ViewData["mode"] = Models.StateClass.Mode;
-            if (mail==null || role == null)
+            ViewData["mode"] = Models.State.Mode;
+            if (mail == null || role == null)
             {
                 ViewData["result"] = "Mail or role is empty";
                 return View();
             }
-            Task <int> task = AssignRoleToUserr(mail, role);
+            Task<int> task = AssignRoleToUserr(mail, role);
             task.Wait();
             var res = task.Result;
             if (res == 0) ViewData["result"] = "Success";
@@ -58,9 +58,9 @@ namespace bkfc.Controllers
         }
         public IActionResult Offline()
         {
-            if (Models.StateClass.Mode == "On") Models.StateClass.Mode = "Off";
-            else Models.StateClass.Mode = "On";
-            ViewData["mode"] = Models.StateClass.Mode;
+            if (Models.State.Mode == "On") Models.State.Mode = "Off";
+            else Models.State.Mode = "On";
+            ViewData["mode"] = Models.State.Mode;
             return View("~/Views/Admin/Index.cshtml");
         }
     }
