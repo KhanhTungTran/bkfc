@@ -28,8 +28,8 @@ namespace bkfc.Controllers
             // Use LINQ to get list of categories
             ViewData["cart"]=Cart.cart;
             IQueryable<string> categoryQuery = from m in _context.Vendor
-                                               orderby m.Categories
-                                               select m.Categories;
+                                               orderby m.Category
+                                               select m.Category;
 
             var vendors = from m in _context.Vendor
                           select m;
@@ -41,12 +41,12 @@ namespace bkfc.Controllers
 
             if (!String.IsNullOrEmpty(vendorCategory))
             {
-                vendors = vendors.Where(v => v.Categories.Contains(vendorCategory));
+                vendors = vendors.Where(v => v.Category.Contains(vendorCategory));
             }
 
             var vendorCategoryVM = new VendorCategoryViewModel
             {
-                Categories = new SelectList(await categoryQuery.Distinct().ToListAsync()),
+                Category = new SelectList(await categoryQuery.Distinct().ToListAsync()),
                 Vendors = await vendors.ToListAsync()
             };
             return View(vendorCategoryVM);
@@ -54,7 +54,8 @@ namespace bkfc.Controllers
         }
 
         // GET: Foodcourt/Details/5
-        public async Task<IActionResult> Details(int? id)   // int?: nullable type
+        //[HttpPost]
+        public async Task<IActionResult> Details(int? id, string searchString="")   // int?: nullable type
         {
             if (id == null)
             {
@@ -70,9 +71,18 @@ namespace bkfc.Controllers
             var foods = from f in  _context.Food
                         select f;
             foods = foods.Where(f => f.VendorId == vendor.Id) ;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                foods = foods.Where(v => v.Name.Contains(searchString));
+            }
             ViewData["vendor"] = vendor;
             return View(await foods.ToListAsync());
         }
+
+        
+
+
+
 
         // GET: Foodcourt/Create
         public IActionResult Create()
