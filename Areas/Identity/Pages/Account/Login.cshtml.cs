@@ -79,8 +79,8 @@ namespace bkfc.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
+           // if (GlobalClass.Mode == "Off")return Page();
             returnUrl = returnUrl ?? Url.Content("~/");
-
             if (ModelState.IsValid)
             {
                 // This doesn't count login failures towards account lockout
@@ -88,6 +88,14 @@ namespace bkfc.Areas.Identity.Pages.Account
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
+                    var user = await _userManager.FindByEmailAsync(Input.Email);
+                    var role = await _userManager.GetRolesAsync(user);
+                    if (GlobalClass.Mode=="Off" && !role.Contains("Admin"))
+                    {
+                        await _signInManager.SignOutAsync();
+                        _logger.LogInformation("In maintance mode and not have admin authorization.");
+                        return Page();
+                    }
                     _logger.LogInformation("User logged in.");
                     return LocalRedirect(returnUrl);
                 }

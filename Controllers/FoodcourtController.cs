@@ -22,7 +22,6 @@ namespace bkfc.Controllers
         }
 
         // GET: Foodcourt
-        [AllowAnonymous]
         public async Task<IActionResult> Index(string vendorCategory, string searchString)
         {
             // Use LINQ to get list of categories
@@ -55,7 +54,6 @@ namespace bkfc.Controllers
 
         // GET: Foodcourt/Details/5
         //[HttpPost]
-        [AllowAnonymous]
         public async Task<IActionResult> Details(int? id, string searchString="")   // int?: nullable type
         {
             if (id == null)
@@ -80,12 +78,13 @@ namespace bkfc.Controllers
             return View(await foods.ToListAsync());
         }
 
-        
+
 
 
 
 
         // GET: Foodcourt/Create
+        [Authorize(Roles = "FoodCourtManager,Admin,VendorManager")]
         public IActionResult Create()
         {
             return View();
@@ -96,7 +95,7 @@ namespace bkfc.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize]
+        [Authorize(Roles ="FoodCourtManager,Admin")]
         public async Task<IActionResult> Create([Bind("Id,Name,Logo,FoodList,Categories")] Vendor vendor)
         {
             if (ModelState.IsValid)
@@ -109,6 +108,7 @@ namespace bkfc.Controllers
         }
 
         // GET: Foodcourt/Edit/5
+        [Authorize(Roles = "FoodCourtManager,Admin,VendorManager")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -129,6 +129,7 @@ namespace bkfc.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "FoodCourtManager,Admin,VendorManager")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Logo,FoodList,Categories")] Vendor vendor)
         {
             if (id != vendor.Id)
@@ -160,6 +161,7 @@ namespace bkfc.Controllers
         }
 
         // GET: Foodcourt/Delete/5
+        [Authorize(Roles = "FoodCourtManager,Admin,VendorManager")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -180,6 +182,7 @@ namespace bkfc.Controllers
         // POST: Foodcourt/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "FoodCourtManager,Admin,VendorManager")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var vendor = await _context.Vendor.FindAsync(id);
