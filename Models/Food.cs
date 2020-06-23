@@ -16,5 +16,6 @@ namespace bkfc.Models
         public int Amount { get; set; }
         public double Discount { get; set; }
         public IList<PaymentFood> PaymentFoods { get; set; }
+        public IList<OrderFood> OrderFoods { get; set; }
     }
 }
