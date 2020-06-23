@@ -38,12 +38,12 @@ namespace bkfc.Controllers
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                vendors = vendors.Where(v => v.Name.Contains(searchString));
+                vendors = vendors.Where(v => (v.Name.Contains(searchString) || v.Category.Contains(searchString)));
             }
 
             if (!String.IsNullOrEmpty(vendorCategory))
             {
-                vendors = vendors.Where(v => v.Category.Contains(vendorCategory));
+                vendors = vendors.Where(v => (v.Category.Contains(vendorCategory)));
             }
 
             var vendorCategoryVM = new VendorCategoryViewModel
@@ -57,7 +57,7 @@ namespace bkfc.Controllers
 
         // GET: Foodcourt/Details/5
         //[HttpPost]
-        public async Task<IActionResult> Details(int? id, string searchString="")   // int?: nullable type
+        public async Task<IActionResult> Details(int? id, int? priceFrom, int? priceTo,int? discountFrom, string searchString = "")   // int?: nullable type
         {
             if (id == null)
             {
@@ -76,6 +76,18 @@ namespace bkfc.Controllers
             if (!String.IsNullOrEmpty(searchString))
             {
                 foods = foods.Where(v => v.Name.Contains(searchString));
+            }
+            if (priceFrom != null)
+            {
+                foods = foods.Where(f => f.Price >= priceFrom);
+            }
+            if (priceTo != null)
+            {
+                foods = foods.Where(f => f.Price <= priceTo);
+            }
+            if (discountFrom != null)
+            {
+                foods = foods.Where(f => f.Discount >= discountFrom);
             }
             ViewData["vendor"] = vendor;
             TempData.Keep("msg");
