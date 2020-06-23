@@ -55,6 +55,7 @@ namespace bkfc.Controllers
             return View(food);
         }
 
+        
         // GET: Food/Create
         public IActionResult Create(int? id)
         {

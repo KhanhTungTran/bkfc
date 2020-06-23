@@ -31,12 +31,13 @@
         <a asp-action="Create" class="btn btn-primary">Create new vendor</a>
     </p>
 }
-@foreach (var item in Model.Categories)
+@foreach (var item in Model.Category)
+
 {
     List<Vendor> vendors = new List<Vendor>();
     @foreach (var vendor in Model.Vendors)
     {
-        @if (vendor.Categories == item.Text)
+        @if (vendor.Category == item.Text)
         {
             vendors.Add(vendor);
         }
@@ -45,11 +46,11 @@
     {
         <div class="category">
             @Html.DisplayFor(modelItem => item.Text)
-
             <div class="item-scroll">
                 @foreach (var vendor in vendors)
+
                 {
-                    @if (vendor.Categories == item.Text)
+                    @if (vendor.Category == item.Text)
                     {
                         <a asp-action="Details" asp-route-id="@vendor.Id">
                             <div class="item">
