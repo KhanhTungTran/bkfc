@@ -10,7 +10,6 @@ namespace bkfc.Models
         public DateTime Date { get; set; }
         public double BalanceCharge { get; set; }
         public int UserId { get; set; }
-        public int OrderId { get; set; }
         public IList<PaymentFood> PaymentFoods { get; set; }
     }
 }
