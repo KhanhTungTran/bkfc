@@ -54,7 +54,7 @@ namespace bkfc.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Status,Date,FoodList,PaymentId,VendorId")] Order order)
+        public async Task<IActionResult> Create([Bind("Id,Status,Date,UserId,PaymentId,VendorId")] Order order)
         {
             if (ModelState.IsValid)
             {
@@ -86,7 +86,7 @@ namespace bkfc.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Status,Date,FoodList,PaymentId,VendorId")] Order order)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Status,Date,UserId,PaymentId,VendorId")] Order order)
         {
             if (id != order.Id)
             {
