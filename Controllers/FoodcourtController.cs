@@ -26,7 +26,7 @@ namespace bkfc.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Index(string vendorCategory, string searchString)
         {
-            // Use LINQ to get list of categories
+            // Use LINQ to get list of Category
             ViewData["cart"]= TempData["cart"] == null ? null : JsonConvert.DeserializeObject<List<Item>>(TempData["cart"] as string);
             TempData.Keep("cart");
             IQueryable<string> categoryQuery = from m in _context.Vendor
@@ -99,7 +99,7 @@ namespace bkfc.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> Create([Bind("Id,Name,Logo,FoodList,Categories")] Vendor vendor)
+        public async Task<IActionResult> Create([Bind("Id,Name,Logo,Category")] Vendor vendor)
         {
             if (ModelState.IsValid)
             {
@@ -131,7 +131,7 @@ namespace bkfc.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Logo,FoodList,Categories")] Vendor vendor)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Logo,Category")] Vendor vendor)
         {
             if (id != vendor.Id)
             {
