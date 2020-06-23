@@ -23,7 +23,8 @@ namespace bkfc.Controllers
         }
 
         // GET: Foodcourt
-        public async Task<IActionResult> Index(string vendorCategory, string searchString)
+        [AllowAnonymous]
+        public async Task<IActionResult> Index(string vendorCategory="", string searchString="")
         {
             // Use LINQ to get list of Category
             ViewData["cart"] = TempData["cart"] == null ? null : JsonConvert.DeserializeObject<List<Item>>(TempData["cart"] as string);
@@ -42,7 +43,7 @@ namespace bkfc.Controllers
 
             if (!String.IsNullOrEmpty(vendorCategory))
             {
-                vendors = vendors.Where(v => v.Category.Contains(vendorCategory));
+                vendors = vendors.Where(v => (v.Category.Contains(vendorCategory)));
             }
 
             var vendorCategoryVM = new VendorCategoryViewModel
@@ -56,7 +57,7 @@ namespace bkfc.Controllers
 
         // GET: Foodcourt/Details/5
         //[HttpPost]
-        public async Task<IActionResult> Details(int? id, string searchString = "")   // int?: nullable type
+        public async Task<IActionResult> Details(int? id, int? priceFrom, int? priceTo,int? discountFrom, string searchString = "")   // int?: nullable type
         {
             if (id == null)
             {
@@ -76,15 +77,22 @@ namespace bkfc.Controllers
             {
                 foods = foods.Where(v => v.Name.Contains(searchString));
             }
+            if (priceFrom != null)
+            {
+                foods = foods.Where(f => f.Price >= priceFrom);
+            }
+            if (priceTo != null)
+            {
+                foods = foods.Where(f => f.Price <= priceTo);
+            }
+            if (discountFrom != null)
+            {
+                foods = foods.Where(f => f.Discount >= discountFrom);
+            }
             ViewData["vendor"] = vendor;
             TempData.Keep("msg");
             return View(await foods.ToListAsync());
         }
-
-
-
-
-
 
         // GET: Foodcourt/Create
         [Authorize(Roles = "FoodCourtManager,Admin,VendorManager")]
