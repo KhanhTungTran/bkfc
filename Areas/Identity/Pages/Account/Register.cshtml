@@ -1,7 +1,10 @@
 ﻿@page
 @model RegisterModel
 
-@{ ViewData["Title"] = "Register"; }
+@{ ViewData["Title"] = "Register";
+
+    var mode = (String)ViewData["mode"];
+    }
 
 @{ Layout = "~/Areas/Identity/Pages/_AuthLayout.cshtml"; }
 
@@ -49,7 +52,14 @@
             <input asp-for="Input.PhoneNumber" class="form-control" />
             <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
         </div>
-        <button type="submit" class="btn btn-primary">Register</button>
+        @if (mode == "On")
+        {
+            <button type="submit" class="btn btn-primary">Register</button>
+        }
+        else
+        {
+            <button class="btn btn-primary" disabled>System is in maintenance mode</button>
+        }
     </form>
 
 @section Scripts {
