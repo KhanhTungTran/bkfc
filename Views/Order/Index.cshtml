@@ -1,17 +1,17 @@
 @model IEnumerable<bkfc.Models.Order>
 
 @{
-    ViewData["Title"] = "Order status";
+    ViewData["Title"] = "My Orders";
     ViewData["css"] = "profile.css";
 
 }
 
-<h1 style="text-align: center;">Order status</h1>
+<h1 style="text-align: center;">My Orders</h1>
 
-<p>
-    @* after payment success, system auto create orhter *@
+@* <p>
     <a asp-action="Create">Create New</a>
-</p>
+</p> *@
+
 @{int i=1;}
 @foreach (var item in Model)
 {
@@ -31,42 +31,16 @@
                 
                 <div class="food-information">
                     <div>Món 1</div>
-                    @* <div>Price: @Html.DisplayFor(modelItem => item.Price)</div> *@
                     <div>Quantily: 03</div>
-                    @* <div>Discount: @Html.DisplayFor(modelItem => item.Discount)</div> *@
-                    @* <div>Vendor: @Html.DisplayFor(modelItem => item.VendorId)</div> *@
                 </div>
                     
             </div>
         </div>
-        <div class = "food-management" >
-            <div class = "food-management-information">
-                <a>
-                    <img src="" class="image-food">
-                </a>
-                
-                <div class="food-information">
-                    <div>Món 1</div>
-                    @* <div>Price: @Html.DisplayFor(modelItem => item.Price)</div> *@
-                    <div>Quantily: 03</div>
-                    @* <div>Discount: @Html.DisplayFor(modelItem => item.Discount)</div> *@
-                    @* <div>Vendor: @Html.DisplayFor(modelItem => item.VendorId)</div> *@
-                </div>
-                    
-            </div>
-        </div>
-        <form class="form-inline" asp-action="Edit">
-            <div class="form-group mx-sm-3 mb-2">
-                <input class="form-control" />
-            </div>
-            <input type="submit" value="Update status" class="btn btn-primary mb-2" />
-            
-        </form>
     </div>
     
 
 }
-<table class="table">
+@* <table class="table">
     <thead>
         <tr>
             <th>
@@ -113,4 +87,4 @@
         </tr>
 }
     </tbody>
-</table>
+</table> *@

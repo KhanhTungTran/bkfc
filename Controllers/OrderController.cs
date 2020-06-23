@@ -2,9 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using bkfc.Data;
 using bkfc.Models;
 
@@ -20,9 +23,13 @@ namespace bkfc.Controllers
         }
 
         // GET: Order
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string userId)
         {
-            return View(await _context.Order.ToListAsync());
+            userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var orders = from m in _context.Order
+                            select m;
+            orders = orders.Where(orders => orders.UserId == userId);
+            return View(await orders.ToListAsync());
         }
 
         // GET: Order/Details/5
@@ -54,10 +61,13 @@ namespace bkfc.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Status,Date,UserId,PaymentId,VendorId")] Order order)
+        public async Task<IActionResult> Create([Bind("Id,Status,Date,UserId,PaymentId,VendorId, OrderFoods")] Order order)
         {
             if (ModelState.IsValid)
             {
+                order.Status = "Cooking";
+                order.Date = DateTime.Now;
+                order.UserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
                 _context.Add(order);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

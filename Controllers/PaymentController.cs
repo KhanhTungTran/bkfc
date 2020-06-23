@@ -67,9 +67,44 @@ namespace bkfc.Controllers
             {
                 payment.UserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
                 payment.Date = DateTime.Now;
+                _context.Add(payment);
+
+                var cart = JsonConvert.DeserializeObject<List<Item>>(TempData["cart"] as string);
+                // Tach Bill
+                IList<int> vendors = new List<int>();
+                foreach(Item item in cart) {
+                    if (!vendors.Contains(item.food.VendorId)) {
+                        vendors.Add(item.food.VendorId);
+                    }
+                }
+
+                foreach(int vendorId in vendors) {
+                    var order = new Order();
+                    order.Status = "Cooking";
+                    order.Date = DateTime.Now;
+                    order.UserId = payment.UserId;
+                    order.PaymentId = payment.Id;
+                    order.VendorId = vendorId;
+
+                    // foreach(Item item in cart) {
+                    //     if (item.food.VendorId == order.VendorId) {
+                    //         var orderFood = new OrderFood();
+                    //         orderFood.Order = order;
+                    //         orderFood.Food = item.food;
+                    //         _context.Add(orderFood);
+                    //         await _context.SaveChangesAsync();
+                    //         order.OrderFoods.Add(orderFood);
+                    //     }
+                    // }
+                    _context.Add(order);
+                    await _context.SaveChangesAsync();
+                }
+
+
+
+
                 TempData["cart"] = null;
                 TempData.Keep();
-                _context.Add(payment);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
