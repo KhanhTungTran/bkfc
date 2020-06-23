@@ -5,6 +5,8 @@
     ViewData["css"] = "profile.css";
     var vendorId =  ViewData["vendorId"];
 }
+@if (User.Identity.IsAuthenticated && (User.IsInRole("Admin")||User.IsInRole("FoodCourtManager")||User.IsInRole("VendorManager")))
+{    
 <div class="header-profile">
   <img class="logo" src= @Model.Image >
   <div class="profile-title">
@@ -69,3 +71,4 @@
         </div>
     </form>
 </div>
+}

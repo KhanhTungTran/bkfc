@@ -25,7 +25,12 @@
         </div>
     </div>
 </form>
-
+@if (User.Identity.IsAuthenticated && (User.IsInRole("Admin")||User.IsInRole("FoodCourtManager")))
+{
+    <p class="mt-2">
+        <a asp-action="Create" class="btn btn-primary">Create new vendor</a>
+    </p>
+}
 @foreach (var item in Model.Categories)
 {
     List<Vendor> vendors = new List<Vendor>();
@@ -65,48 +70,3 @@
 
 
 }
-    <p>
-        <a asp-action="Create" class="btn btn-primary">Create new vendor</a>
-    </p>
-@* <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Vendors[0].Name)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Vendors[0].Logo)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Vendors[0].FoodList)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Vendors[0].Categories)
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-    @foreach (var item in Model.Vendors) {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Logo)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.FoodList)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Categories)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                </td>
-            </tr>
-    }
-        </tbody>
-    </table> *@
