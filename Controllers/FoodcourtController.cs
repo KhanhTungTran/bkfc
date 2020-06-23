@@ -24,7 +24,7 @@ namespace bkfc.Controllers
 
         // GET: Foodcourt
         [AllowAnonymous]
-        public async Task<IActionResult> Index(string vendorCategory, string searchString)
+        public async Task<IActionResult> Index(string vendorCategory="", string searchString="")
         {
             // Use LINQ to get list of categories
             ViewData["cart"]= TempData["cart"] == null ? null : JsonConvert.DeserializeObject<List<Item>>(TempData["cart"] as string);
@@ -38,7 +38,7 @@ namespace bkfc.Controllers
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                vendors = vendors.Where(v => (v.Name.Contains(searchString) || v.Category.Contains(searchString)));
+                vendors = vendors.Where(v => v.Name.Contains(searchString));
             }
 
             if (!String.IsNullOrEmpty(vendorCategory))
