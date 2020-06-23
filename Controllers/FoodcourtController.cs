@@ -28,8 +28,8 @@ namespace bkfc.Controllers
             // Use LINQ to get list of categories
             ViewData["cart"]=Cart.cart;
             IQueryable<string> categoryQuery = from m in _context.Vendor
-                                               orderby m.Categories
-                                               select m.Categories;
+                                               orderby m.Category
+                                               select m.Category;
 
             var vendors = from m in _context.Vendor
                           select m;
@@ -41,7 +41,7 @@ namespace bkfc.Controllers
 
             if (!String.IsNullOrEmpty(vendorCategory))
             {
-                vendors = vendors.Where(v => v.Categories.Contains(vendorCategory));
+                vendors = vendors.Where(v => v.Category.Contains(vendorCategory));
             }
 
             var vendorCategoryVM = new VendorCategoryViewModel
