@@ -211,11 +211,11 @@ namespace bkfc.Controllers
             {
                 cart.Add(new Item(){
                     food = food,
-                    quantity = 1,
+                    quantity = quantity,
                 });
             }
             else{
-                result.quantity += 1;
+                result.quantity += quantity;
             }
             ViewData["cart"] = cart;
             TempData["cart"] = JsonConvert.SerializeObject(cart);
