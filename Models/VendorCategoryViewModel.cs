@@ -6,8 +6,8 @@ namespace bkfc.Models
     public class VendorCategoryViewModel
     {
         public List<Vendor> Vendors { get; set; }
-        public SelectList Categories { get; set; }
-        public string VendorCategories { get; set; }
+        public SelectList Category { get; set; }
+        public string VendorCategory { get; set; }
         public string SearchString { get; set; }
     }
 }

@@ -27,7 +27,7 @@
     </div>
 </form>
 
-@foreach (var item in Model.Categories)
+@foreach (var item in Model.Category)
 {
     <div class="category">
         @Html.DisplayFor(modelItem => item.Text)
@@ -35,7 +35,7 @@
         <div class="item-scroll">
             @foreach (var vendor in Model.Vendors)
             {
-                @if (vendor.Categories == item.Text)
+                @if (vendor.Category == item.Text)
                 {
                     <a asp-action="Details" asp-route-id="@vendor.Id">
                         <div class="item">
@@ -70,7 +70,7 @@
                     @Html.DisplayNameFor(model => model.Vendors[0].FoodList)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Vendors[0].Categories)
+                    @Html.DisplayNameFor(model => model.Vendors[0].Category)
                 </th>
                 <th></th>
             </tr>
@@ -88,7 +88,7 @@
                     @Html.DisplayFor(modelItem => item.FoodList)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Categories)
+                    @Html.DisplayFor(modelItem => item.Category)
                 </td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
