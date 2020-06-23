@@ -120,11 +120,18 @@ namespace bkfc
                 //create the roles and seed them to the database  
                 roleResult = await RoleManager.CreateAsync(new IdentityRole("NormalUser"));
             }
+            roleCheck = await RoleManager.RoleExistsAsync("Staff");
+            if (!roleCheck)
+            {
+                //create the roles and seed them to the database  
+                roleResult = await RoleManager.CreateAsync(new IdentityRole("Staff"));
+            }
             //Assign Admin role to the main User
 
             bkfcUser user = await UserManager.FindByEmailAsync("viet14042000@gmail.com");
             await UserManager.AddToRoleAsync(user, "Admin");
-
+            user = await UserManager.FindByEmailAsync("Admin@gmail.com");
+            await UserManager.AddToRoleAsync(user, "Admin");
         }
     }
 }

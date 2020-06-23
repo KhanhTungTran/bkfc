@@ -24,17 +24,27 @@ namespace bkfc.Controllers
         }
         public IActionResult Index()
         {
-            
+            ViewData["result"] = "nothing change";
+            ViewData["mode"] = GlobalClass.Mode;
             return View();
         }
 
         [HttpPost]
         public IActionResult Index(string mail, string role)
         {
+            ViewData["mode"] = GlobalClass.Mode;
+            if (mail==null || role == null)
+            {
+                ViewData["result"] = "Mail or role is empty";
+                return View();
+            }
             Task <int> task = AssignRoleToUserr(mail, role);
             task.Wait();
             var res = task.Result;
-            return Content($"{res}  ");
+            if (res == 0) ViewData["result"] = "Success";
+            if (res == 1) ViewData["result"] = $"Fail - can't find role: {role}";
+            if (res == 2) ViewData["result"] = $"Fail - can't find email: {mail}";
+            return View();
         }
         private async Task<int> AssignRoleToUserr(string mail, string role)
         {
@@ -45,6 +55,13 @@ namespace bkfc.Controllers
             if (user == null) return 2;
             await _userManager.AddToRoleAsync(user, role);
             return 0;
+        }
+        public IActionResult Offline()
+        {
+            if (GlobalClass.Mode == "On") GlobalClass.Mode = "Off";
+            else GlobalClass.Mode = "On";
+            ViewData["mode"] = GlobalClass.Mode;
+            return View("~/Views/Admin/Index.cshtml");
         }
     }
 }
