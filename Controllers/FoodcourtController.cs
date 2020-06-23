@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using bkfc.Data;
 using bkfc.Models;
 using Microsoft.AspNetCore.Authorization;
+using Newtonsoft.Json;
 
 namespace bkfc.Controllers
 {
@@ -26,7 +27,8 @@ namespace bkfc.Controllers
         public async Task<IActionResult> Index(string vendorCategory, string searchString)
         {
             // Use LINQ to get list of categories
-            ViewData["cart"]=Cart.cart;
+            ViewData["cart"]= TempData["cart"] == null ? null : JsonConvert.DeserializeObject<List<Item>>(TempData["cart"] as string);
+            TempData.Keep("cart");
             IQueryable<string> categoryQuery = from m in _context.Vendor
                                                orderby m.Category
                                                select m.Category;
@@ -76,6 +78,7 @@ namespace bkfc.Controllers
                 foods = foods.Where(v => v.Name.Contains(searchString));
             }
             ViewData["vendor"] = vendor;
+            TempData.Keep("msg");
             return View(await foods.ToListAsync());
         }
 
@@ -192,33 +195,31 @@ namespace bkfc.Controllers
             return _context.Vendor.Any(e => e.Id == id);
         }
 
-        public void AddToCart(int foodId)
+        public void AddToCart(int foodId, int quantity)
         {
             var food = _context.Food.Find(foodId);
 
-            if(Cart.cart == null)
+            var cart = TempData["cart"] == null ? null : JsonConvert.DeserializeObject<List<Item>>(TempData["cart"] as string);
+            if(cart == null)
             {
-                Cart.cart = new List<Item>();
+                cart = new List<Item>();
             }
-            Item product = null;
-            for (int i = 0 ; i < Cart.cart.Count; i++)
+            // var cart = TempData["cart"] as List<Item>;
+            Item result = null;
+            result = cart.Find(i => i.food.Id == food.Id);
+            if (result == null)
             {
-                if (Cart.cart[i].food.Id == food.Id)
-                {
-                    product = Cart.cart[i];
-                    Cart.cart[i].quantity+=1;
-                    break;
-                }
-            }
-            if (product == null)
-            {
-                Cart.cart.Add(new Item() 
-                {
+                cart.Add(new Item(){
                     food = food,
-                    quantity = 1
+                    quantity = 1,
                 });
             }
-            ViewData["cart"] = Cart.cart;
+            else{
+                result.quantity += 1;
+            }
+            ViewData["cart"] = cart;
+            TempData["cart"] = JsonConvert.SerializeObject(cart);
+            TempData.Keep("cart");
         }
     }
 }

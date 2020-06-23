@@ -3,7 +3,8 @@
 @{
     ViewData["Title"] = "Create new Vendor";
 }
-
+@if (User.Identity.IsAuthenticated && (User.IsInRole("Admin")||User.IsInRole("FoodCourtManager")))
+{    
 <h1>Create</h1>
 
 <h4>Vendor</h4>
@@ -37,7 +38,7 @@
 <div class = "change-page">
     <a asp-action="Index">Back to List</a>
 </div>
-
+}
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
