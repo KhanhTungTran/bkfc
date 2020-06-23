@@ -140,7 +140,7 @@
 {    
 
     <span><a asp-action="Edit" asp-route-id="@vendor.Id">Edit information</a> | </span>
-    <span><a asp-controller="Food" asp-action="Index" asp-route-id="@vendor.Id">Edit food</a> | </span>
+    <span><a asp-controller="Food" asp-action="Index" asp-route-vendorid="@vendor.Id">Edit food</a> | </span>
     @if(User.IsInRole("Admin")||User.IsInRole("FoodCourtManager"))
     {
         <span><a asp-action="Delete" asp-route-id="@vendor.Id">Delete</a> | </span>
