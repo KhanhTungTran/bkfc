@@ -22,7 +22,7 @@ namespace bkfc.Areas.Identity.Pages.Account
         private readonly SignInManager<bkfcUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
 
-        public LoginModel(SignInManager<bkfcUser> signInManager, 
+        public LoginModel(SignInManager<bkfcUser> signInManager,
             ILogger<LoginModel> logger,
             UserManager<bkfcUser> userManager)
         {
@@ -57,7 +57,10 @@ namespace bkfc.Areas.Identity.Pages.Account
 
         public async Task OnGetAsync(string returnUrl = null)
         {
-            if(User.Identity.IsAuthenticated)
+            ViewData["mode"] = Models.State.Mode;
+            if (TempData["mess"] == null || Models.State.Mode == "On") { TempData["mess"] = " "; }
+            TempData.Keep("mess");
+            if (User.Identity.IsAuthenticated)
             {
                 Response.Redirect("/");
             }
@@ -79,7 +82,6 @@ namespace bkfc.Areas.Identity.Pages.Account
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             returnUrl = returnUrl ?? Url.Content("~/");
-
             if (ModelState.IsValid)
             {
                 // This doesn't count login failures towards account lockout
@@ -87,6 +89,20 @@ namespace bkfc.Areas.Identity.Pages.Account
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
+                    var user = await _userManager.FindByEmailAsync(Input.Email);
+                    var role = await _userManager.GetRolesAsync(user);
+                    if (Models.State.Mode == "Off" && !role.Contains("Admin"))
+                    {
+                        await _signInManager.SignOutAsync();
+                        TempData["mess"] = "The system is in maintance mode. Please try again later.";
+                        TempData.Keep("mess");
+                        _logger.LogInformation("In maintenance mode and not have admin authorization.");
+                        //MessageBox.Show("your message");
+
+                        return Page();
+                    }
+                    TempData["mess"] = " ";
+                    TempData.Keep("mess");
                     _logger.LogInformation("User logged in.");
                     return LocalRedirect(returnUrl);
                 }

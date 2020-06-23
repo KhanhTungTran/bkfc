@@ -1,0 +1,27 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = "Admin Page";
+    var statusAddRole = (String)ViewData["result"];
+    var currentMode = (String)ViewData["mode"];
+}
+@model bkfc.Areas.Identity.Pages.Account.RegisterModel
+<h2>Admin Page</h2>
+<form method="POST" asp-controller="Admin" asp-action="Index">
+    <div class="form-group">
+        <h4>Current status: @statusAddRole</h4>
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <div class="input-group-text">
+                    <i class="fas fa-envelope"></i>
+                </div>
+            </div>
+            <input type="text" class="form-control" placeholder="Email Address" name="mail" />
+            <input type="text" class="form-control" placeholder="Role" name="role" />
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+</form>
+<h4>Current mode: @currentMode</h4>
+<a asp-controller="Admin" asp-action="Offline" class="btn btn-primary">Change maintanance mode: On/ Off</a>
