@@ -9,6 +9,7 @@ namespace bkfc.Models
         public int Id { get; set; }
         public string Status { get; set; }
         public DateTime Date { get; set; }
+        public int UserId { get; set; }
         public int PaymentId { get; set; }
         public int VendorId { get; set; }
         public IList<OrderFood> OrderFoods { get; set; }
