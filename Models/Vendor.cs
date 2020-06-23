@@ -8,7 +8,6 @@ namespace bkfc.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public string Logo { get; set; }
-        [Display(Name = "List of Food and Drinks")]
         public string Category { get; set; }
     }
 }

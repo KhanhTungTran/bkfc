@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using bkfc.Data;
 using bkfc.Models;
+using Newtonsoft.Json;
 
 namespace bkfc.Controllers
 {
@@ -22,65 +23,85 @@ namespace bkfc.Controllers
         // GET: Food
         public ViewResult Index()
         {
-            ViewData["cart"] = Cart.cart;
+            ViewData["cart"] = TempData["cart"] == null ? null : JsonConvert.DeserializeObject<List<Item>>(TempData["cart"] as string);
+            TempData.Keep();
             return View();
         }
         public int increase(int foodId)
         {
-            for (int i =0 ; i<Cart.cart.Count ; i++)
+            var cart = TempData["cart"] == null ? null : JsonConvert.DeserializeObject<List<Item>>(TempData["cart"] as string);
+            int returnVal = -1;
+            for (int i =0 ; i<cart.Count ; i++)
             {
-                if (foodId == Cart.cart[i].food.Id)
+                if (foodId == cart[i].food.Id)
                 {
-                    Cart.cart[i].quantity++;
-                    ViewData["cart"]=Cart.cart;
-                    return Cart.cart[i].quantity;
+                    cart[i].quantity++;
+                    returnVal = cart[i].quantity;
+                    break;
                 }
             }
-            return -1;
+            TempData["cart"] = JsonConvert.SerializeObject(cart);
+            ViewData["cart"] = cart;
+            TempData.Keep();
+            return returnVal;
         }
         public int decrease(int foodId)
         {
-            for (int i =0 ; i<Cart.cart.Count ; i++)
+            var cart = TempData["cart"] == null ? null : JsonConvert.DeserializeObject<List<Item>>(TempData["cart"] as string);
+            int returnVal = -1;
+            for (int i =0 ; i<cart.Count ; i++)
             {
-                if (foodId == Cart.cart[i].food.Id)
+                if (foodId == cart[i].food.Id)
                 {
-                    if(Cart.cart[i].quantity == 1)
+                    if(cart[i].quantity == 1)
                     {
                         remove(foodId);
-                        return 0;
+                        returnVal = 0;
+                        break;
                     }
                     else
                     {
-                        Cart.cart[i].quantity-- ;
-                        ViewData["cart"]=Cart.cart;
-                        return Cart.cart[i].quantity;
-                    }
-                    
+                        cart[i].quantity-- ;
+                        ViewData["cart"]=cart;
+                        returnVal = cart[i].quantity;
+                        break;
+                    }       
                 }
             }
-            return -1;
+            TempData["cart"] = JsonConvert.SerializeObject(cart);
+            ViewData["cart"] = cart;
+            TempData.Keep();
+            return returnVal;
         }
         public void change(int foodId, int quantity)
         {
-            for (int i =0 ; i<Cart.cart.Count ; i++)
+            var cart = TempData["cart"] == null ? null : JsonConvert.DeserializeObject<List<Item>>(TempData["cart"] as string);
+            for (int i =0 ; i<cart.Count ; i++)
             {
-                if (foodId == Cart.cart[i].food.Id)
+                if (foodId == cart[i].food.Id)
                 {
-                    Cart.cart[i].quantity = quantity;
-                    return;
+                    cart[i].quantity = quantity;
+                    break;
                 }
             }
+            TempData["cart"] = JsonConvert.SerializeObject(cart);
+            ViewData["cart"] = cart;
+            TempData.Keep();
         }
         public void remove(int foodId)
         {
-            for (int i =0 ; i<Cart.cart.Count ; i++)
+            var cart = TempData["cart"] == null ? null : JsonConvert.DeserializeObject<List<Item>>(TempData["cart"] as string);
+            for (int i =0 ; i<cart.Count ; i++)
             {
-                if (foodId == Cart.cart[i].food.Id)
+                if (foodId == cart[i].food.Id)
                 {
-                    Cart.cart.Remove(Cart.cart[i]);
-                    return;
+                    cart.Remove(cart[i]);
+                    break;
                 }
             }
+            TempData["cart"] = JsonConvert.SerializeObject(cart);
+            ViewData["cart"] = cart;
+            TempData.Keep();
         }
     }
 }
