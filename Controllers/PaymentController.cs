@@ -129,52 +129,57 @@ namespace bkfc.Controllers
         // GET: Payement/Done
         // Momo will call this after payment succeded
 
-        public async Task<ActionResult> Done(string amount) {
-            var cart = JsonConvert.DeserializeObject<List<Item>>(TempData["cart"] as string);
-            Payment payment = new Payment();
-            payment.Date = DateTime.Now;
-            payment.UserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            payment.BalanceCharge = double.Parse(amount);
-            _context.Add(payment);
-            await _context.SaveChangesAsync();
-            // Tach Bill
-            IList<int> vendors = new List<int>();
-            foreach(Item item in cart) {
-                if (!vendors.Contains(item.food.VendorId)) {
-                    vendors.Add(item.food.VendorId);
-                }
-            }
-            foreach(int vendorId in vendors) {
-                var order = new Order();
-                order.Status = "Cooking";
-                order.Date = DateTime.Now;
-                order.UserId = payment.UserId;
-                order.PaymentId = payment.Id;
-                order.VendorId = vendorId;
-
-                // foreach(Item item in cart) {
-                //     if (item.food.VendorId == order.VendorId) {
-                //         var orderFood = new OrderFood();
-                //         orderFood.Order = order;
-                //         orderFood.Food = item.food;
-                //         _context.Add(orderFood);
-                //         await _context.SaveChangesAsync();
-                //         order.OrderFoods.Add(orderFood);
-                //     }
-                // }
-                _context.Add(order);
+        public async Task<ActionResult> Done(string amount, string errorCode) {
+            if (errorCode == "0") {
+                var cart = JsonConvert.DeserializeObject<List<Item>>(TempData["cart"] as string);
+                Payment payment = new Payment();
+                payment.Date = DateTime.Now;
+                payment.UserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                payment.BalanceCharge = double.Parse(amount);
+                _context.Add(payment);
                 await _context.SaveChangesAsync();
+                // Tach Bill
+                IList<int> vendors = new List<int>();
+                foreach(Item item in cart) {
+                    if (!vendors.Contains(item.food.VendorId)) {
+                        vendors.Add(item.food.VendorId);
+                    }
+                }
+                foreach(int vendorId in vendors) {
+                    var order = new Order();
+                    order.Status = "Cooking";
+                    order.Date = DateTime.Now;
+                    order.UserId = payment.UserId;
+                    order.PaymentId = payment.Id;
+                    order.VendorId = vendorId;
+
+                    // foreach(Item item in cart) {
+                    //     if (item.food.VendorId == order.VendorId) {
+                    //         var orderFood = new OrderFood();
+                    //         orderFood.Order = order;
+                    //         orderFood.Food = item.food;
+                    //         _context.Add(orderFood);
+                    //         await _context.SaveChangesAsync();
+                    //         order.OrderFoods.Add(orderFood);
+                    //     }
+                    // }
+                    _context.Add(order);
+                    await _context.SaveChangesAsync();
+                }
+                // Xoa cart
+                TempData["cart"] = null;
+                TempData.Keep();
+                await _context.SaveChangesAsync();
+
+                // @TODO: Chinh lai cai payment voi Order cap nhat luon order food + payment food giup t nha
+                // Voi hien tai dang redirect ve trang lich su giao dich, nhung ma t nghi hien trang my order se dung hon
+
+
+                return RedirectToAction("Index", "Payment");
+            } else {
+                return RedirectToAction("Create", "Payment");
             }
-            // Xoa cart
-            TempData["cart"] = null;
-            TempData.Keep();
-            await _context.SaveChangesAsync();
-
-            // @TODO: Chinh lai cai payment voi Order cap nhat luon order food + payment food giup t nha
-            // Voi hien tai dang redirect ve trang lich su giao dich, nhung ma t nghi hien trang my order se dung hon
-
-
-            return RedirectToAction("Index", "Payment");
+           
         }
 
 

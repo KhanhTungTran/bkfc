@@ -7,9 +7,6 @@ using System.Text;
 using System.Net;
 
 using Newtonsoft.Json.Linq;
-using System;
-using System.Security.Cryptography;
-using System.Text;
 using System.Text.RegularExpressions;
 namespace bkfc.Controllers
 { 
