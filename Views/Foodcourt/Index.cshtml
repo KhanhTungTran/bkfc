@@ -7,8 +7,46 @@
 
 @* <h1>Bach Khoa Food Court</h1> *@
 
+<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+    <div class="container d-flex justify-content-between">
+        <h2 class="navbar-brand">
+            What're you craving?
+        </h2>
+        <div class=" d-flex flex-row">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".nav-find" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <svg class="bi bi-search" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z" />
+                    <path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z" />
+                </svg>
+            </button>
+        </div>
+    </div>
 
+    <div class="nav-find collapse d-sm-inline-flex flex-sm-row-reverse">
+        <form method="get" asp-controller="Foodcourt" asp-action="Index">
+            <div class="form-group row">
+                <div class="col">
+                    <label>Vendor category</label>
+                    <input name="vendorCategory" type="Text" class="form-control" placeholder="Vendor category">
+                </div>
+            </div>
 
+            <div class="form-group row">
+                <div class="col">
+                    <label>Vendor name</label>
+                    <input name="searchString" type="Text" class="form-control" placeholder="Vendor name">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <button type="submit" class="btn btn-primary btn-block" >Search now</button>
+            </div>
+
+        </form>
+    </div>
+</nav>
+@*
 <form id="header-search" asp-controller="Foodcourt" asp-action="Index" method="get">
 
     <div class="input-group">
@@ -25,6 +63,7 @@
         </div>
     </div>
 </form>
+*@
 @if (User.Identity.IsAuthenticated && (User.IsInRole("Admin")||User.IsInRole("FoodCourtManager")))
 {
     <p class="mt-2">

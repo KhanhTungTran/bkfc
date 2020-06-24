@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using bkfc.Data;
 
 namespace bkfc.Migrations
 {
     [DbContext(typeof(bkfcContext))]
-    partial class bkfcContextModelSnapshot : ModelSnapshot
+    [Migration("20200623063747_PaymentUpdate")]
+    partial class PaymentUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -62,14 +64,17 @@ namespace bkfc.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("FoodList")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("PaymentId")
                         .HasColumnType("int");
 
                     b.Property<string>("Status")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
                     b.Property<int>("VendorId")
                         .HasColumnType("int");
@@ -77,21 +82,6 @@ namespace bkfc.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Order");
-                });
-
-            modelBuilder.Entity("bkfc.Models.OrderFood", b =>
-                {
-                    b.Property<int>("OrderId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("FoodId")
-                        .HasColumnType("int");
-
-                    b.HasKey("OrderId", "FoodId");
-
-                    b.HasIndex("FoodId");
-
-                    b.ToTable("OrderFoods");
                 });
 
             modelBuilder.Entity("bkfc.Models.Payment", b =>
@@ -107,8 +97,11 @@ namespace bkfc.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -127,7 +120,7 @@ namespace bkfc.Migrations
 
                     b.HasIndex("FoodId");
 
-                    b.ToTable("PaymentFoods");
+                    b.ToTable("PaymentFood");
                 });
 
             modelBuilder.Entity("bkfc.Models.Report", b =>
@@ -176,21 +169,6 @@ namespace bkfc.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Vendor");
-                });
-
-            modelBuilder.Entity("bkfc.Models.OrderFood", b =>
-                {
-                    b.HasOne("bkfc.Models.Food", "Food")
-                        .WithMany("OrderFoods")
-                        .HasForeignKey("FoodId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("bkfc.Models.Order", "Order")
-                        .WithMany("OrderFoods")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("bkfc.Models.PaymentFood", b =>

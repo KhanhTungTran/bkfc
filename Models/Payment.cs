@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
 
 namespace bkfc.Models
 {
@@ -8,7 +9,7 @@ namespace bkfc.Models
         public int Id { get; set; }
         public DateTime Date { get; set; }
         public double BalanceCharge { get; set; }
-        public int UserId { get; set; }
-        public int OrderId { get; set; }
+        public string UserId { get; set; }
+        public IList<PaymentFood> PaymentFoods { get; set; }
     }
 }
