@@ -32,7 +32,7 @@ namespace bkfc.Controllers
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             var payments = from p in _context.Payment
-                                select p;
+                           select p;
             payments = payments.Where(payment => payment.UserId == userId);
             return View(await payments.ToListAsync());
         }
@@ -60,7 +60,8 @@ namespace bkfc.Controllers
         {
             var cart = JsonConvert.DeserializeObject<List<Item>>(TempData["cart"] as string);
             double money = 0;
-            foreach(Item item in cart) {
+            foreach (Item item in cart)
+            {
                 money += item.food.Price * item.quantity;
             }
 
@@ -76,18 +77,18 @@ namespace bkfc.Controllers
             string amount = money.ToString();
             string orderid = Guid.NewGuid().ToString();
             string requestId = Guid.NewGuid().ToString();
-            string extraData = ""; 
+            string extraData = "";
 
             //Before sign HMAC SHA256 signature
-            string rawHash = "partnerCode="+ 
-                partnerCode + "&accessKey="+
-                accessKey+ "&requestId=" +
-                requestId+ "&amount=" + 
-                amount + "&orderId="+
-                orderid + "&orderInfo="+ 
-                orderInfo + "&returnUrl="+ 
-                returnUrl + "&notifyUrl=" + 
-                notifyurl + "&extraData="+
+            string rawHash = "partnerCode=" +
+                partnerCode + "&accessKey=" +
+                accessKey + "&requestId=" +
+                requestId + "&amount=" +
+                amount + "&orderId=" +
+                orderid + "&orderInfo=" +
+                orderInfo + "&returnUrl=" +
+                returnUrl + "&notifyUrl=" +
+                notifyurl + "&extraData=" +
                 extraData;
 
             //log.Debug("rawHash = "+ rawHash);
@@ -125,12 +126,57 @@ namespace bkfc.Controllers
             ViewData["payURL"] = payURL;
             return View();
         }
-
+        private async Task<int> SaveOrderByVendor(List<Item> cart, Payment payment)
+        {
+            Dictionary<int, int> VendorOrderIndex = new Dictionary<int, int>();
+            List<Order> Orders = new List<Order>();
+            int i = 0;
+            foreach (Item item in cart)
+            {
+                try
+                {
+                    int index = VendorOrderIndex[item.food.VendorId];
+                }
+                catch (KeyNotFoundException)
+                {
+                    VendorOrderIndex[item.food.VendorId] = i++;
+                    Order order = new Order();
+                    order.Status = "Cooking";
+                    order.Date = DateTime.Now;
+                    order.UserId = payment.UserId;
+                    order.PaymentId = payment.Id;
+                    order.VendorId = item.food.VendorId;
+                    _context.Add(order);
+                    await _context.SaveChangesAsync();
+                    Orders.Add(order);
+                }
+            }
+            foreach (Item item in cart)
+            {
+                int ind = VendorOrderIndex[item.food.VendorId];
+                Order order = Orders[ind];
+                Food food = await _context.Food.FindAsync(item.food.Id);
+                if (food.OrderFoods == null) food.OrderFoods = new List<OrderFood>();
+                food.OrderFoods.Add
+                (
+                    new OrderFood
+                    {
+                        Order = order,
+                        Food = food,
+                        Amount = item.quantity
+                    }
+                );
+                await _context.SaveChangesAsync();
+            }
+            return 0;
+        }
         // GET: Payement/Done
         // Momo will call this after payment succeded
-
-        public async Task<ActionResult> Done(string amount, string errorCode) {
-            if (errorCode == "0") {
+        public async Task<ActionResult> Done(string amount, string errorCode)
+        {
+            if (errorCode == "0")
+            {
+                // food <=> payment
                 var cart = JsonConvert.DeserializeObject<List<Item>>(TempData["cart"] as string);
                 Payment payment = new Payment();
                 payment.Date = DateTime.Now;
@@ -138,48 +184,35 @@ namespace bkfc.Controllers
                 payment.BalanceCharge = double.Parse(amount);
                 _context.Add(payment);
                 await _context.SaveChangesAsync();
-                // Tach Bill
-                IList<int> vendors = new List<int>();
-                foreach(Item item in cart) {
-                    if (!vendors.Contains(item.food.VendorId)) {
-                        vendors.Add(item.food.VendorId);
-                    }
-                }
-                foreach(int vendorId in vendors) {
-                    var order = new Order();
-                    order.Status = "Cooking";
-                    order.Date = DateTime.Now;
-                    order.UserId = payment.UserId;
-                    order.PaymentId = payment.Id;
-                    order.VendorId = vendorId;
-
-                    // foreach(Item item in cart) {
-                    //     if (item.food.VendorId == order.VendorId) {
-                    //         var orderFood = new OrderFood();
-                    //         orderFood.Order = order;
-                    //         orderFood.Food = item.food;
-                    //         _context.Add(orderFood);
-                    //         await _context.SaveChangesAsync();
-                    //         order.OrderFoods.Add(orderFood);
-                    //     }
-                    // }
-                    _context.Add(order);
+                foreach (Item foodItem in cart)
+                {
+                    Food food = await _context.Food.FindAsync(foodItem.food.Id);
+                    if (food.PaymentFoods == null) food.PaymentFoods = new List<PaymentFood>();
+                    food.PaymentFoods.Add
+                    (
+                        new PaymentFood
+                        {
+                            Payment = payment,
+                            Food = food,
+                            Amount = foodItem.quantity
+                        }
+                    );
                     await _context.SaveChangesAsync();
                 }
+
+                // food <=> order
+                await SaveOrderByVendor(cart, payment);
                 // Xoa cart
                 TempData["cart"] = null;
                 TempData.Keep();
                 await _context.SaveChangesAsync();
-
-                // @TODO: Chinh lai cai payment voi Order cap nhat luon order food + payment food giup t nha
-                // Voi hien tai dang redirect ve trang lich su giao dich, nhung ma t nghi hien trang my order se dung hon
-
-
-                return RedirectToAction("Index", "Payment");
-            } else {
+                return RedirectToAction("Index", "Order");
+            }
+            else
+            {
                 return RedirectToAction("Create", "Payment");
             }
-           
+
         }
 
 
@@ -201,12 +234,15 @@ namespace bkfc.Controllers
                 await _context.SaveChangesAsync();
                 // Tach Bill
                 IList<int> vendors = new List<int>();
-                foreach(Item item in cart) {
-                    if (!vendors.Contains(item.food.VendorId)) {
+                foreach (Item item in cart)
+                {
+                    if (!vendors.Contains(item.food.VendorId))
+                    {
                         vendors.Add(item.food.VendorId);
                     }
                 }
-                foreach(int vendorId in vendors) {
+                foreach (int vendorId in vendors)
+                {
                     var order = new Order();
                     order.Status = "Cooking";
                     order.Date = DateTime.Now;

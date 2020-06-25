@@ -23,13 +23,40 @@ namespace bkfc.Controllers
         }
 
         // GET: Order
+        ///**** fix cho nayy
         public async Task<IActionResult> Index(string userId)
         {
             userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             var orders = from m in _context.Order
-                            select m;
-            orders = orders.Where(orders => orders.UserId == userId);
-            return View(await orders.ToListAsync());
+                         select m;
+            orders = orders.Where(orders => orders.UserId == userId && orders.Status == "Cooking");
+            await orders.ToListAsync();
+            List<Order> orderList = orders.ToList();
+            List<MyOrderFood> myOrderFoods = new List<MyOrderFood>();
+            foreach (Order order in orderList)
+            {
+                var particularOder = from m in _context.OrderFoods
+                                     select m;
+                particularOder = particularOder.Where(particularOder => particularOder.OrderId == order.Id);
+                List<OrderFood> particularOderList = particularOder.ToList();
+                List<Food> foodList = new List<Food>();
+                foreach (OrderFood pOrder in particularOderList)
+                {
+                    Food foodToAdd = await _context.Food.FindAsync(pOrder.FoodId);
+                    foodToAdd.Amount = pOrder.Amount;
+                    foodList.Add(foodToAdd);
+                }
+                myOrderFoods.Add
+                (
+                    new MyOrderFood
+                    {
+                        Id = order.Id,
+                        Status = order.Status,
+                        Foods = foodList
+                    }
+                );
+            }
+            return View(myOrderFoods);
         }
 
         // GET: Order/Details/5
