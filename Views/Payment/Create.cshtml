@@ -1,42 +1,65 @@
 @model bkfc.Models.Payment
-
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Make Payment";
+    var cart = (List<Item>)ViewData["cart"];
+    var payURL = ViewData["payURL"];
 }
+@{
+    double balanceCharge = 0;
+    foreach(Item item in cart) {
+        balanceCharge += item.food.Price * item.quantity;
+    } 
+}
+<h1 class="text-center">Make Payment</h1>
+<p class="my-3 lead">
+    You are making payment for the order you has just made
+</p>
 
-<h1>Create</h1>
+<table class="table">
+    <thead>
+        <tr>
+        <th scope="col">#</th>
+        <th scope="col">Food</th>
+        <th scope="col">Quantity</th>
+        <th scope="col">Price (VND)</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{int i = 1;}
+        @foreach (Item item in cart) {
+            <tr>
+                <th scope="row">@i</th>
+                @{i++;}
+                <td>@item.food.Name</td>
+                <td>@item.quantity</td>
+                <td>@item.food.Price</td>
+            </tr>
+        }
+    </tbody>
+    
+</table>
+<hr>
+<div class="d-flex justify-content-end">
+    <span class="font-weight-bold"> Total: &nbsp </span>
+    <span> @balanceCharge VND </span>
+</div>
 
-<h4>Payment</h4>
-<hr />
-<div class="row">
+<a href=@payURL class="btn btn-primary">Proceed</a>
+@* <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Date" class="control-label"></label>
-                <input asp-for="Date" class="form-control" />
-                <span asp-validation-for="Date" class="text-danger"></span>
-            </div>
-            <div class="form-group">
+            <div class="form-group d-none">
                 <label asp-for="BalanceCharge" class="control-label"></label>
-                <input asp-for="BalanceCharge" class="form-control" />
+                <input asp-for="BalanceCharge" class="form-control" value="@balanceCharge" disabled="true"/>
                 <span asp-validation-for="BalanceCharge" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="UserId" class="control-label"></label>
-                <input asp-for="UserId" class="form-control" />
-                <span asp-validation-for="UserId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Proceed " class="btn btn-primary" />
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+</div> *@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

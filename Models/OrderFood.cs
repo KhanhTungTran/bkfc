@@ -9,5 +9,6 @@ namespace bkfc.Models
         public Order Order { get; set; }
         public int FoodId { get; set; }
         public Food Food { get; set; }
+        public int Amount { get; set; }
     }
 }
