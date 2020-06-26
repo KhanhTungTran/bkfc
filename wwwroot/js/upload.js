@@ -3,7 +3,7 @@ var feedback = function(res) {
         var get_link = res.data.link.replace(/^http:\/\//i, 'https://');
         document.querySelector('.status').classList.add('bg-success');
         document.querySelector('.status').innerHTML =
-            '<img class="img" alt="Imgur-Upload" src=\"' + get_link + '\"/>';
+            '<img class="img-up" alt="Imgur-Upload" src=\"' + get_link + '\"/>';
         document.getElementById("upload-img").value=get_link;
         document.getElementById("upload-img").readOnly=true;
 
