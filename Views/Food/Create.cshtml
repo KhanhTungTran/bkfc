@@ -12,8 +12,18 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
+        <div class="d-flex flex-row">
+            <div class="dropzone">
+                <div class="info"></div>
+            </div>
+        </div>
         <form asp-action="Create" >
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Image" class="control-label">Or paste your URL of image here</label>
+                <input id="upload-img" asp-for="Image" class="form-control" />
+                <span asp-validation-for="Image" class="text-danger"></span>
+            </div>
             <div class="form-group" hidden>
                 <label asp-for="VendorId" class="control-label"></label>
                 <input asp-for="VendorId" class="form-control" value=@vendorId />
@@ -23,11 +33,6 @@
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Image" class="control-label"></label>
-                <input asp-for="Image" class="form-control" />
-                <span asp-validation-for="Image" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
