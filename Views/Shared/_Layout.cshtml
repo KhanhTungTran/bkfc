@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css"/>
     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/semantic.min.css"/>
     <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/upload.css" />
     <link rel="stylesheet" href="~/css/@ViewData["css"]" />
 
 </head>
@@ -35,12 +36,19 @@
                 </a>
                 <div class=" d-flex flex-row">
                     <div>
+                        @if(User.Identity.IsAuthenticated)
+                        {
                         <a class="nav-link text-dark margin notification" asp-area="" asp-controller="Cart" asp-action="Index">
                             <svg class="bi bi-cart2" width="2em" height="2em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                 <path fill-rule="evenodd" d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5zM3.14 5l1.25 5h8.22l1.25-5H3.14zM5 13a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0zm9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0z"/>
                             </svg>
                             <span id="badge" class="badge">@totalQuantity</span>
                         </a>
+                        }
+                        else
+                        {
+                            <a class="nav-link text-dark margin notification" href='/Identity/Account/Login'>Login</a>
+                        }
                     </div>
                     <div>
                         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -51,16 +59,17 @@
                     </div>
                 
                 </div>
-            </div>
-            <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                <ul class="navbar-nav flex-grow-1">
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Foodcourt" asp-action="Index">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <partial name="_LoginPartial"/>
-                    </li>
-                </ul>
+            
+                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Foodcourt" asp-action="Index">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <partial name="_LoginPartial"/>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </nav>
     </header>
@@ -79,6 +88,8 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+    <script src="~/js/imgur.js"></script>
+    <script src="~/js/upload.js"></script>
     @RenderSection("Scripts", required: false)
     <script>
         var badge = document.getElementById("badge");
