@@ -93,3 +93,44 @@
     margin-right: 10px;
     width: 100px;
 }
+
+.product-removed {
+    /* position: absolute!important; */
+    -webkit-animation: disapear 1s;
+    -webkit-animation-fill-mode: forwards; 
+    animation: disapear 1s;
+    animation-fill-mode: forwards;
+    margin-top:-5px!important;
+    margin-bottom:0px!important;
+    height:150px;
+    border: 0px!important;
+  }
+  
+  @-webkit-keyframes disapear{
+    20% {
+      
+      -webkit-transform: translateX(-5%);
+      transform: translateX(-5%);
+    }
+    
+    100% {
+      -webkit-transform: translateX(200%);
+      transform: translateX(200%); 
+      height:0px;
+    }    
+  }
+  
+  @keyframes disapear{
+  
+    20% {
+      -webkit-transform: translateX(-5%);
+      transform: translateX(-5%);
+    }
+    
+    100% {
+      -webkit-transform: translateX(-100%);
+      transform: translateX(-100%); 
+      opacity: 0%;
+      height: 0px;
+    }    
+  }
