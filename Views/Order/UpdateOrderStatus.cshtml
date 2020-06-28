@@ -1,0 +1,80 @@
+@model IEnumerable<bkfc.Models.MyOrderFood>
+
+@{
+    ViewData["Title"] = "My Orders";
+    ViewData["css"] = "profile.css";
+}
+
+<h1 style="text-align: center;">Update Order Status</h1>
+
+@* <p>
+    <a asp-action="Create">Create New</a>
+</p> *@
+
+@foreach (var item in Model)
+{
+    @if (item.Status == "Completed" || item.Status=="Cancelled")
+        continue;
+    <div class="order py-2">
+        <div class="order-number ml-3">
+            Order #@item.Id
+        </div>
+        <div class="order-status mr-3">
+            @item.Status
+        </div>
+
+            @{int i=1;}
+            @foreach (var food in item.Foods)
+            {
+            <div class = "food-management d-flex flex-row align-items-center" >
+                <div class = "food-management-information">
+                    <a>
+                        <img src=@food.Image class="image-food">
+                    </a>
+                    
+                </div>
+                <div class="food-information d-flex flex-column ml-3">
+                    <div>Food order number: @i @{i++;}</div>
+                    <div>Food name: @food.Name</div>
+                    <div>Quantity: @food.Amount</div>
+                </div>
+            </div>    
+            } 
+        <form method="POST" class="form-row">
+            <input type="text" name="orderId" value=@item.Id hidden>
+            <div class="col">
+                @if(item.Status=="Cooking")
+                {
+                    <select class="custom-select" id="inputGroupSelect01" name="status">
+                        <option value="To Receive">To Receive</option>
+                        <option value="Completed">Completed</option>
+                        <option value="Cancelled">Cancelled</option>
+                    </select>
+                }
+                else if(item.Status=="To Receive")
+                {
+                    <select class="custom-select" id="inputGroupSelect01" name="status">
+                        <option value="Completed">Completed</option>
+                        <option value="To Receive">To Receive</option>
+                        <option value="Cancelled">Cancelled</option>
+                    </select>
+                }
+                else
+                {
+                    <select class="custom-select" id="inputGroupSelect01" name="status">
+                        <option value="Completed">Completed</option>
+                        <option value="To Receive">To Receive</option>
+                        <option value="Cancelled">Cancelled</option>
+                    </select>
+                }
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-primary">Update status</button>
+            </div>
+            
+        </form>
+    </div>
+    
+
+}
+

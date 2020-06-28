@@ -24,12 +24,12 @@ namespace bkfc.Controllers
 
         // GET: Order
         ///**** fix cho nayy
-        public async Task<IActionResult> Index(string userId)
+        public async Task<IActionResult> Index()
         {
-            userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             var orders = from m in _context.Order
                          select m;
-            orders = orders.Where(orders => orders.UserId == userId && orders.Status == "Cooking");
+            orders = orders.Where(orders => orders.UserId == userId);
             await orders.ToListAsync();
             List<Order> orderList = orders.ToList();
             List<MyOrderFood> myOrderFoods = new List<MyOrderFood>();
@@ -101,6 +101,65 @@ namespace bkfc.Controllers
             }
             return View(order);
         }
+        // GET: Oder/UpdateOrderStatus
+        public async Task<IActionResult> UpdateOrderStatus(int? vendorId)
+        {
+            
+            var orders = from m in _context.Order
+                         select m;
+            if (vendorId!=null)
+            {
+                orders = orders.Where(orders => orders.VendorId == vendorId);
+            }
+            await orders.ToListAsync();
+            List<Order> orderList = orders.ToList();
+            List<MyOrderFood> myOrderFoods = new List<MyOrderFood>();
+            foreach (Order order in orderList)
+            {
+                var particularOder = from m in _context.OrderFoods
+                                     select m;
+                particularOder = particularOder.Where(particularOder => particularOder.OrderId == order.Id);
+                List<OrderFood> particularOderList = particularOder.ToList();
+                List<Food> foodList = new List<Food>();
+                foreach (OrderFood pOrder in particularOderList)
+                {
+                    Food foodToAdd = await _context.Food.FindAsync(pOrder.FoodId);
+                    foodToAdd.Amount = pOrder.Amount;
+                    foodList.Add(foodToAdd);
+                }
+                myOrderFoods.Add
+                (
+                    new MyOrderFood
+                    {
+                        Id = order.Id,
+                        Status = order.Status,
+                        Foods = foodList
+                    }
+                );
+            }
+            return View(myOrderFoods);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        //POST: Order/UpdateOrderStatus?orderId=orderId&status=status
+        public async Task<IActionResult> UpdateOrderStatus(int? orderId, string status)
+        {
+            if (orderId == null || status == null)
+            {
+                return NotFound();
+            }
+
+            var order = await _context.Order.FindAsync(orderId);
+            if (order == null)
+            {
+                return NotFound();
+            }
+            order.Status = status;
+            _context.Update(order);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("UpdateOrderStatus",new{vendorId = order.VendorId});
+
+        }
 
         // GET: Order/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -117,6 +176,7 @@ namespace bkfc.Controllers
             }
             return View(order);
         }
+        
 
         // POST: Order/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
