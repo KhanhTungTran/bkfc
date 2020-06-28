@@ -8,6 +8,9 @@
 }
 
 <h1 style="text-align: center;">My Cart</h1>
+@if(cart!=null){
+    if (cart.Count == 0) cart = null;
+}
 @if(cart != null)
 {
     @foreach(Item item in cart)
@@ -55,11 +58,13 @@
         }
         
     }
+    <div id = "payment">
     <hr>
     <div class="d-flex justify-content-end">
         <div class="text-right my-auto"> <span class="font-weight-bold" style="font-size: 20px;">Total: <span id="totalPrice" class="vnMoney"></span></div>
     </div>
     <a type="submit" class="btn btn-primary btn-lg btn-block" asp-controller="Payment" asp-action="Create"> Payment </a>
+    </div>
 
 } 
 else 
@@ -128,7 +133,17 @@ else
             pricetext = removeEl.getElementsByClassName("vnMoney")[0].innerHTML;
             pricetext = pricetext.replace(",","");
             price = Number(pricetext);
-            
+            products = document.getElementsByClassName("product");
+            isEmpty = true;
+            for (var i = 0; i < Number(products.length);i++){
+                if (!(hasClass(products[i],"product-removed"))){
+                    isEmpty=false;
+                }
+            }
+            if (isEmpty){
+                document.getElementById("payment").innerHTML= "<p class=\"lead text-center\"> Your Cart is empty, let's go shopping! </p>";
+            }
+
             updateTotalPrice(-price);
             }
         }
