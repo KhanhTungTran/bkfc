@@ -86,7 +86,7 @@ namespace bkfc
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "bkfc/{controller=Foodcourt}/{action=Index}/{id?}");
+                    pattern: "{controller=Foodcourt}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
             CreateUserRoles(services).Wait();
