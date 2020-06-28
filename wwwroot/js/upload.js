@@ -1,9 +1,15 @@
 var feedback = function(res) {
     if (res.success === true) {
         var get_link = res.data.link.replace(/^http:\/\//i, 'https://');
-        document.querySelector('.status').classList.add('bg-success');
-        document.querySelector('.status').innerHTML =
-            '<img class="img-up" alt="Imgur-Upload" src=\"' + get_link + '\"/>';
+        img = document.getElementById("img-up");
+        if (img==null){
+            document.querySelector('.status').classList.add('bg-success');
+            document.querySelector('.status').innerHTML =
+                '<img id="img-up" class="img-up" alt="Imgur-Upload" src=\"' + get_link + '\"/>';
+        }
+        else{
+            img.src=get_link;
+        }
         document.getElementById("upload-img").value=get_link;
         document.getElementById("upload-img").readOnly=true;
 
