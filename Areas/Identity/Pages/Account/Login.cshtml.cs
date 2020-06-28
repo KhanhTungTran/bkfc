@@ -94,7 +94,7 @@ namespace bkfc.Areas.Identity.Pages.Account
                     if (Models.State.Mode == "Off" && !role.Contains("Admin"))
                     {
                         await _signInManager.SignOutAsync();
-                        TempData["mess"] = "The system is in maintance mode. Please try again later.";
+                        TempData["mess"] = "The system is in maintenance mode. Please try again later.";
                         TempData.Keep("mess");
                         _logger.LogInformation("In maintenance mode and not have admin authorization.");
                         //MessageBox.Show("your message");
