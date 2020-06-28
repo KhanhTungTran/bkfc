@@ -56,7 +56,7 @@ namespace bkfc.Controllers
             await _userManager.AddToRoleAsync(user, role);
             return 0;
         }
-        public IActionResult Offline()
+        public IActionResult ChangeSystemState()
         {
             if (Models.State.Mode == "On") Models.State.Mode = "Off";
             else Models.State.Mode = "On";
