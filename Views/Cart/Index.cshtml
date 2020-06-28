@@ -8,6 +8,9 @@
 }
 
 <h1 style="text-align: center;">My Cart</h1>
+@if(cart!=null){
+    if (cart.Count == 0) cart = null;
+}
 @if(cart != null)
 {
     @foreach(Item item in cart)
@@ -16,7 +19,7 @@
         {
             var foodId = item.food.Id;
             var foodPrice = item.food.Price;
-            <div id = @item.food.Id class="container px-0 my-4 d-flex border rounded">
+            <div id = @item.food.Id class="container px-0 my-4 d-flex border rounded product">
                 <img style="width: 120px; height: 100px; object-fit: cover;" src=@item.food.Image>
                 <div class="pl-3 d-flex flex-column justify-content-between" style="width: 100%;">
                     <div class="d-flex justify-content-between text-center">
@@ -55,11 +58,13 @@
         }
         
     }
+    <div id = "payment">
     <hr>
     <div class="d-flex justify-content-end">
         <div class="text-right my-auto"> <span class="font-weight-bold" style="font-size: 20px;">Total: <span id="totalPrice" class="vnMoney"></span></div>
     </div>
     <a type="submit" class="btn btn-primary btn-lg btn-block" asp-controller="Payment" asp-action="Create"> Payment </a>
+    </div>
 
 } 
 else 
@@ -68,6 +73,15 @@ else
 }
 @section Scripts{
     <script>
+        function removeElement(event) {
+
+        if (event.animationName === 'disapear') {
+            event.target.parentNode.removeChild(event.target);
+        }
+        }
+
+        document.body.addEventListener('animationend',removeElement);
+        document.body.addEventListener('webkitAnimationEnd', removeElement);        
         updateTotalPrice();
         function formatMoney(){
             $('.vnMoney').each(function () {
@@ -109,13 +123,33 @@ else
         }
         function remove(foodId,foodPrice)
         {
+            removeEl = document.getElementById(foodId);
+            if (!(hasClass(removeEl,'product-removed'))){
             $.post('@Url.Action("remove","Cart")',{foodId:foodId });
-            document.getElementById(foodId).remove();
-            updateTotalPrice();
+            //document.getElementById(foodId).remove();
+            removeEl = document.getElementById(foodId);
+            removeEl.classList.add("product-removed");
+            //$('#'+foodId).animate({height:"0px",margin:"0px"});
+            pricetext = removeEl.getElementsByClassName("vnMoney")[0].innerHTML;
+            pricetext = pricetext.replace(",","");
+            price = Number(pricetext);
+            products = document.getElementsByClassName("product");
+            isEmpty = true;
+            for (var i = 0; i < Number(products.length);i++){
+                if (!(hasClass(products[i],"product-removed"))){
+                    isEmpty=false;
+                }
+            }
+            if (isEmpty){
+                document.getElementById("payment").innerHTML= "<p class=\"lead text-center\"> Your Cart is empty, let's go shopping! </p>";
+            }
 
+            updateTotalPrice(-price);
+            }
         }
-        function updateTotalPrice()
+        function updateTotalPrice(change = null)
         {
+            if (change == null){
             prices = document.getElementsByClassName("price");
             var totalprice = 0;
             for (var i=0; i < prices.length; i++)
@@ -125,7 +159,16 @@ else
                 totalprice += Number(num);
             }
             document.getElementById("totalPrice").innerHTML = totalprice;
+            }
+            else{
+                totalel = document.getElementById("totalPrice");
+                pricetext = totalel.innerHTML;
+                pricetext = pricetext.replace(",","");
+                totalprice = Number(pricetext);
+                totalel.innerHTML=totalprice+change;
+            }
             formatMoney();
         }
     </script>
+    
 }
