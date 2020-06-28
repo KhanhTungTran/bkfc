@@ -98,3 +98,28 @@ body {
   background: red;
   color: white;
 }
+.login-form-icon{
+  position: relative;
+  text-align: center;
+  width:100%;
+}
+.login-form-icon h1{
+  font-style: normal;
+  font-weight: 700!important;
+  font-size: 30px;
+
+  text-transform: uppercase;
+  color: #1488db;
+}
+.login-form-icon img{
+  width: 80%;
+}
+#SignupNow{
+  text-align: center;
+  padding-top: 100px;
+  padding-bottom: 20px;
+}
+
+.vnMoney::after {
+  content:" VND";
+}
