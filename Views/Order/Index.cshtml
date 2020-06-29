@@ -15,11 +15,12 @@
 }
 @functions{
     void renderOrder(MyOrderFood item){
-        <div class="order-number ml-3">
-            Order #@item.Id
+        <div class="d-flex flex-row d-flex justify-content-between align-items-center">
+            <div class="order-number ml-3">Order #@item.Id</div>
+            <div class="text-muted">@item.Date</div>
+            <div class="order-status mr-3">@item.Status</div>
         </div>
-        <div class="order-status mr-3">@item.Status</div>
-        var i =1;
+        int i =1;
         
         @foreach (var food in item.Foods)
         {
@@ -46,24 +47,12 @@
     <option value="All">All</option>
 </select>
 <div id="list-order">
-@foreach (var item in Model)
+@foreach (var item in Model.Reverse())
 {
-    TimeSpan timeDifference = item.Date.Subtract(DateTime.Now);
-    if(timeDifference.Days==0){
-        <div class="order py-2 order-0 order-7">
-            @{renderOrder(item);}
-        </div>
-    }
-    else if(timeDifference.Days == 7){
-        <div class="order py-2 order-7" hidden>
-            @{renderOrder(item);}
-        </div>        
-    }
-    else{
-        <div class="order py-2" hidden>
-            @{renderOrder(item);}
-        </div>        
-    }
+    TimeSpan timeDifference = DateTime.Now.Subtract(item.Date);
+    <div class="order py-2 @(timeDifference.Days==0? "order-0":"") @(timeDifference.Days<7? "order-7": "")" @(timeDifference.Days!=0? "hidden":"")>
+    @{renderOrder(item);}
+    </div>
 }
 </div>
 @section Scripts{
@@ -72,6 +61,9 @@
             if ($(this).text()=="To Receive"){
                 $(this)[0].classList.add("text-success");
             }
+            if ($(this).text()=="Cancelled"){
+                $(this)[0].classList.add("text-danger");
+            }            
         });
         function renderOrder(DaySelect){
             var value = DaySelect.value;
