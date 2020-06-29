@@ -52,7 +52,8 @@ namespace bkfc.Controllers
                     {
                         Id = order.Id,
                         Status = order.Status,
-                        Foods = foodList
+                        Foods = foodList,
+                        Date = order.Date
                     }
                 );
             }
@@ -133,7 +134,8 @@ namespace bkfc.Controllers
                     {
                         Id = order.Id,
                         Status = order.Status,
-                        Foods = foodList
+                        Foods = foodList,
+                        Date = order.Date
                     }
                 );
             }

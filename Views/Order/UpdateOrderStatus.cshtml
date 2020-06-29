@@ -7,15 +7,9 @@
 
 <h1 style="text-align: center;">Update Order Status</h1>
 
-@* <p>
-    <a asp-action="Create">Create New</a>
-</p> *@
+@functions{
+    void renderOrder(MyOrderFood item){
 
-@foreach (var item in Model)
-{
-    @if (item.Status == "Completed" || item.Status=="Cancelled")
-        continue;
-    <div class="order py-2">
         <div class="order-number ml-3">
             Order #@item.Id
         </div>
@@ -23,24 +17,38 @@
             @item.Status
         </div>
 
-            @{int i=1;}
-            @foreach (var food in item.Foods)
-            {
-            <div class = "food-management d-flex flex-row align-items-center" >
-                <div class = "food-management-information">
-                    <a>
-                        <img src=@food.Image class="image-food">
-                    </a>
-                    
-                </div>
-                <div class="food-information d-flex flex-column ml-3">
-                    <div>Food order number: @i @{i++;}</div>
-                    <div>Food name: @food.Name</div>
-                    <div>Quantity: @food.Amount</div>
-                </div>
-            </div>    
-            } 
-        <form method="POST" class="form-row">
+        int i=1;
+        @foreach (var food in item.Foods)
+        {
+        <div class = "food-management d-flex flex-row align-items-center" >
+            <div class = "food-management-information">
+                <a>
+                    <img src=@food.Image class="image-food">
+                </a>
+                
+            </div>
+            <div class="food-information d-flex flex-column ml-3">
+                <div>Food order number: @i @{i++;}</div>
+                <div>Food name: @food.Name</div>
+                <div>Quantity: @food.Amount</div>
+            </div>
+        </div>    
+        } 
+        return;
+    }
+}
+<select class="custom-select mb-2" id="DaySelect" onchange="renderOrder(this)">
+    <option value="ToDay">Today</option>
+    <option value="7Day">7 days ago</option>
+    <option value="All">All</option>
+</select>
+@foreach (var item in Model)
+{
+    TimeSpan timeDifference = item.Date.Subtract(DateTime.Now);
+    if(timeDifference.Days==0){
+        <div class="order py-2 order-0 order-7">
+            @{renderOrder(item);}
+            <form method="POST" class="form-row">
             <input type="text" name="orderId" value=@item.Id hidden>
             <div class="col">
                 @if(item.Status=="Cooking")
@@ -73,8 +81,119 @@
             </div>
             
         </form>
-    </div>
+        </div>
+    }
+    else if(timeDifference.Days == 7){
+        <div class="order py-2 order-7" hidden>
+            @{renderOrder(item);}
+            <form method="POST" class="form-row">
+            <input type="text" name="orderId" value=@item.Id hidden>
+            <div class="col">
+                @if(item.Status=="Cooking")
+                {
+                    <select class="custom-select" id="inputGroupSelect01" name="status">
+                        <option value="To Receive">To Receive</option>
+                        <option value="Completed">Completed</option>
+                        <option value="Cancelled">Cancelled</option>
+                    </select>
+                }
+                else if(item.Status=="To Receive")
+                {
+                    <select class="custom-select" id="inputGroupSelect01" name="status">
+                        <option value="Completed">Completed</option>
+                        <option value="To Receive">To Receive</option>
+                        <option value="Cancelled">Cancelled</option>
+                    </select>
+                }
+                else
+                {
+                    <select class="custom-select" id="inputGroupSelect01" name="status">
+                        <option value="Completed">Completed</option>
+                        <option value="To Receive">To Receive</option>
+                        <option value="Cancelled">Cancelled</option>
+                    </select>
+                }
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-primary">Update status</button>
+            </div>
+            
+        </form>
+        </div>        
+    }
+    else{
+        <div class="order py-2" hidden>
+            @{renderOrder(item);}
+            <form method="POST" class="form-row">
+            <input type="text" name="orderId" value=@item.Id hidden>
+            <div class="col">
+                @if(item.Status=="Cooking")
+                {
+                    <select class="custom-select" id="inputGroupSelect01" name="status">
+                        <option value="To Receive">To Receive</option>
+                        <option value="Completed">Completed</option>
+                        <option value="Cancelled">Cancelled</option>
+                    </select>
+                }
+                else if(item.Status=="To Receive")
+                {
+                    <select class="custom-select" id="inputGroupSelect01" name="status">
+                        <option value="Completed">Completed</option>
+                        <option value="To Receive">To Receive</option>
+                        <option value="Cancelled">Cancelled</option>
+                    </select>
+                }
+                else
+                {
+                    <select class="custom-select" id="inputGroupSelect01" name="status">
+                        <option value="Completed">Completed</option>
+                        <option value="To Receive">To Receive</option>
+                        <option value="Cancelled">Cancelled</option>
+                    </select>
+                }
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-primary">Update status</button>
+            </div>
+            
+        </form>
+        </div>        
+    }
     
 
 }
 
+@section Scripts{
+    <script>
+        $(".order-status").each(function(){
+            if ($(this).text()=="To Receive"){
+                $(this)[0].classList.add("text-success");
+            }
+        });
+        function renderOrder(DaySelect){
+            var value = DaySelect.value;
+            if (value=="ToDay"){
+                $('.order').each(function(){
+                    $(this)[0].hidden=true;
+                })
+                $('.order-0').each(function(){
+                    $(this)[0].hidden=false;
+                })
+            }
+            else if (value=="7Day"){
+                $('.order').each(function(){
+                    $(this)[0].hidden=true;
+                })
+                $('.order-7').each(function(){
+                    $(this)[0].hidden=false;
+                })
+            }
+            else if (value=="All"){
+                $('.order').each(function(){
+                    $(this)[0].hidden=false;
+                })
+            }
+        }
+    </script>
+
+}

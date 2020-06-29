@@ -13,34 +13,59 @@
     <a asp-action="UpdateOrderStatus" class="btn btn-primary">Update order's status</a>
 </p>
 }
-@foreach (var item in Model)
-{
-    <div class="order py-2">
+@functions{
+    void renderOrder(MyOrderFood item){
         <div class="order-number ml-3">
             Order #@item.Id
         </div>
         <div class="order-status mr-3">@item.Status</div>
-
-            @{int i=1;}
-            @foreach (var food in item.Foods)
-            {
-            <div class = "food-management d-flex flex-row align-items-center" >
-                <div class = "food-management-information">
-                    <a>
-                        <img src=@food.Image class="image-food">
-                    </a>
-                    
-                </div>
-                <div class="food-information d-flex flex-column ml-3">
-                    <div>Food order number: @i @{i++;}</div>
-                    <div>Food name: @food.Name</div>
-                    <div>Quantity: @food.Amount</div>
-                </div>
-            </div>    
-            } 
-
-    </div>
+        var i =1;
+        
+        @foreach (var food in item.Foods)
+        {
+        <div class = "food-management d-flex flex-row align-items-center" >
+            <div class = "food-management-information">
+                <a>
+                    <img src=@food.Image class="image-food">
+                </a>
+                
+            </div>
+            <div class="food-information d-flex flex-column ml-3">
+                <div>Food order number: @i @{i++;}</div>
+                <div>Food name: @food.Name</div>
+                <div>Quantity: @food.Amount</div>
+            </div>
+        </div>    
+        } 
+        return;
+    }
 }
+<select class="custom-select mb-2" id="DaySelect" onchange="renderOrder(this)">
+    <option value="ToDay">Today</option>
+    <option value="7Day">7 days ago</option>
+    <option value="All">All</option>
+</select>
+<div id="list-order">
+@foreach (var item in Model)
+{
+    TimeSpan timeDifference = item.Date.Subtract(DateTime.Now);
+    if(timeDifference.Days==0){
+        <div class="order py-2 order-0 order-7">
+            @{renderOrder(item);}
+        </div>
+    }
+    else if(timeDifference.Days == 7){
+        <div class="order py-2 order-7" hidden>
+            @{renderOrder(item);}
+        </div>        
+    }
+    else{
+        <div class="order py-2" hidden>
+            @{renderOrder(item);}
+        </div>        
+    }
+}
+</div>
 @section Scripts{
     <script>
         $(".order-status").each(function(){
@@ -48,7 +73,30 @@
                 $(this)[0].classList.add("text-success");
             }
         });
-
+        function renderOrder(DaySelect){
+            var value = DaySelect.value;
+            if (value=="ToDay"){
+                $('.order').each(function(){
+                    $(this)[0].hidden=true;
+                })
+                $('.order-0').each(function(){
+                    $(this)[0].hidden=false;
+                })
+            }
+            else if (value=="7Day"){
+                $('.order').each(function(){
+                    $(this)[0].hidden=true;
+                })
+                $('.order-7').each(function(){
+                    $(this)[0].hidden=false;
+                })
+            }
+            else if (value=="All"){
+                $('.order').each(function(){
+                    $(this)[0].hidden=false;
+                })
+            }
+        }
     </script>
 
 }
