@@ -56,8 +56,15 @@ namespace bkfc.Controllers
             await _userManager.AddToRoleAsync(user, role);
             return 0;
         }
-        public IActionResult Offline()
+        public IActionResult ChangeSystemStage()
         {
+            DateTime localDate = DateTime.Now;
+            int currentHour= localDate.Hour;
+            if(Models.State.Mode=="On" && (currentHour <0 || currentHour>5))
+            {
+                ViewData["mode"]=Models.State.Mode+ " ---System can only be changed to maintenance mode during 00:00 AM - 04:59 AM---";
+                return View("~/Views/Admin/Index.cshtml");
+            }
             if (Models.State.Mode == "On") Models.State.Mode = "Off";
             else Models.State.Mode = "On";
             ViewData["mode"] = Models.State.Mode;

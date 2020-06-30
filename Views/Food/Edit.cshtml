@@ -8,7 +8,7 @@
 @if (User.Identity.IsAuthenticated && (User.IsInRole("Admin")||User.IsInRole("FoodCourtManager")||User.IsInRole("VendorManager")))
 {   
 <div class="header-profile">
-  <img class="logo" src= @Model.Image >
+  <img id="img-up" class="logo" src= @Model.Image >
   <div class="profile-title">
     <h1>@Html.DisplayFor(model => model.Name)</h1>
     <h4> Edit Food</h4>
