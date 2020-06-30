@@ -1,14 +1,42 @@
 @model IEnumerable<bkfc.Models.Report>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Report";
 }
 
-<h1>Index</h1>
+<h1>View your vendor report</h1>
 
-<p>
+@* <p>
     <a asp-action="Create">Create New</a>
-</p>
+</p> *@
+
+<form asp-action="Create">
+    <div class="form-group row">
+        <div class="col">
+        <select id="day-select" class="form-control">
+            <option value="Today">Today</option>
+            <option value="Yesterday">Yesterday</option>
+            <option value="ThisMonth">ThisMonth</option>
+            <option value="LastMonth">LastMonth</option>
+            <option value="Custom">Custom</option>    
+        </select>
+        </div>
+        <div class="col">
+            <button class="btn btn-primary btn-block" type="submit">View Report</button>
+        </div>
+    </div>
+    <div id="custom-day" class="form-group row" style="display: none;">
+        <div class="col-6">
+            <label class="control-label" >From</label>
+            <input id="dateFrom" type="date" name="dateFrom" class="col-auto" style="width: 100%">
+        </div>
+        <div class="col-6">
+            <label class="control-label" >To</label>
+            <input id="dateTo" type="date" name="dateTo" class="col-auto" style="width: 100%">
+        </div>
+    </div>
+
+</form>
 <table class="table">
     <thead>
         <tr>
@@ -18,9 +46,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.Date)
             </th>
-            <th>
+            @* <th>
                 @Html.DisplayNameFor(model => model.FoodSold)
-            </th>
+            </th> *@
             <th>
                 @Html.DisplayNameFor(model => model.Income)
             </th>
@@ -39,9 +67,9 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Date)
             </td>
-            <td>
+            @* <td>
                 @Html.DisplayFor(modelItem => item.FoodSold)
-            </td>
+            </td> *@
             <td>
                 @Html.DisplayFor(modelItem => item.Income)
             </td>
@@ -57,3 +85,63 @@
 }
     </tbody>
 </table>
+@section Scripts{
+    <script>
+        today = new Date()
+        dayInput = dateToInputType(today);
+        $('#dateTo').val(dayInput);
+        $('#dateFrom').val(dayInput);
+        $('#day-select').on('change',function(){
+            var optionSelected = $("option:selected", this);
+            var valueSelected = this.value;
+            switch(valueSelected){
+                case "Today":
+                    today = new Date()
+                    dayInput = dateToInputType(today);
+                    $('#dateTo').val(dayInput);
+                    $('#dateFrom').val(dayInput);
+                    $('#custom-day').hide();
+                    break;
+                case "Yesterday":
+                    var day = new Date(new Date().setDate(new Date().getDate()-1));
+                    dayInput = dateToInputType(day);
+                    $('#dateTo').val(dayInput);
+                    $('#dateFrom').val(dayInput);
+                    $('#custom-day').hide();
+                    break;
+                case "ThisMonth":
+                    today = new Date()
+                    fromday = new Date(new Date().setDate(1));
+                    todayInput = dateToInputType(today);
+                    fromdayInput = dateToInputType(fromday);
+                    $('#dateTo').val(todayInput);
+                    $('#dateFrom').val(fromdayInput);
+                    $('#custom-day').hide();
+                    break;
+                case "LastMonth":
+                    today = new Date(new Date().setDate(0));
+                    fromday = new Date(new Date(new Date().setDate(0)).setDate(1));
+                    todayInput = dateToInputType(today);
+                    fromdayInput = dateToInputType(fromday);
+                    $('#dateTo').val(todayInput);
+                    $('#dateFrom').val(fromdayInput);
+                    $('#custom-day').hide();
+                    break;
+                case "Custom":
+                    $('#custom-day').show();
+                    break;
+            }
+        })
+        function dateToInputType(date){
+            var dd = date.getDate();
+            var mm = date.getMonth()+1; //January is 0!
+
+            var yyyy = date.getFullYear();
+            if(dd<10){dd='0'+dd} 
+            if(mm<10){mm='0'+mm} 
+            inputtype = yyyy+'-'+mm+'-'+dd;
+            return inputtype
+        }
+    </script>
+    
+}
