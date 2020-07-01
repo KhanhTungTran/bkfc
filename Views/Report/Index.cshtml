@@ -12,7 +12,7 @@
     <a asp-action="Create">Create New</a>
 </p> *@
 
-<form method="POST">
+<form onsubmit="return validateForm()" method="POST">
     @if(User.IsInRole("Admin")){
         <div class="form-group">
         <select id="vendorId" class="form-control" name="VendorId">
@@ -52,8 +52,10 @@
 </form>
 <hr>
 @if(Model != null){
-    <h2 class="text-center">Report @Model.dayStartString - @Model.dayEndString</h2>
-    var fulltotal =0.0;
+<div id="report">
+    @if(Model.dayStart==Model.dayEnd){<h2 class="text-center">Report @Model.dayStartString</h2>}
+    else{<h2 class="text-center">Report @Model.dayStartString - @Model.dayEndString</h2>}
+    @{var fulltotal =0.0;}
     @foreach(var report in Model.reports){
         @if (report.listFood.Count >0){
             var total = 0.0;
@@ -99,6 +101,8 @@
         <hr>
         <div class="text-right vnMoney font-weight-bold" style="font-size: 20px;">@fulltotal</div>
     }
+</div>
+<button class="btn btn-primary btn-block mt-2" onclick="PrintElem()">Print Report</button>
 }
 else{
     <p class="lead text-center"> Click View Report button to view your report. </p>
@@ -150,6 +154,21 @@ else{
                     break;
             }
         })
+        function validateForm(){
+            var dateTo = document.getElementById("dateTo");
+            var dateFrom = document.getElementById("dateFrom");
+            var dateToValue = Date.parse(dateTo.value);
+            var dateFromValue = Date.parse(dateFrom.value);
+            if(dateFromValue>dateToValue){
+                alertify.notify('The "day from" must be before the "day to". Please try again', 'error', 5);
+                return false;
+            }
+            else{
+                alertify.notify('We are making your report. Please wait', 'success', 5);
+                return true;
+            } 
+            return true;
+        }
         function dateToInputType(date){
             var dd = date.getDate();
             var mm = date.getMonth()+1; //January is 0!
@@ -159,6 +178,27 @@ else{
             if(mm<10){mm='0'+mm} 
             inputtype = yyyy+'-'+mm+'-'+dd;
             return inputtype
+        }
+        function PrintElem()
+        {
+            var mywindow = window.open('', 'PRINT', 'height=400,width=600');
+
+            mywindow.document.write('<html><head><title>' + document.title  + '</title>');
+            mywindow.document.write('<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">');
+            mywindow.document.write('</head><style>.vnMoney::after{content:" VND";}</style><body>');
+            mywindow.document.write('<div class="container">');
+            mywindow.document.write('<main role="main" class="pb-3" style="margin-top: 100px;">');
+            mywindow.document.write(document.getElementById("report").innerHTML);
+            mywindow.document.write('</main>');
+            mywindow.document.write('</div>');
+            mywindow.document.write('</body></html>');
+
+            mywindow.document.close(); // necessary for IE >= 10
+            mywindow.focus(); // necessary for IE >= 10*/
+
+            mywindow.print();
+
+            return true;
         }
     </script>
     
