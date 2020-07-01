@@ -1,16 +1,29 @@
-@model IEnumerable<bkfc.Models.Report>
+@model bkfc.Models.ReportView
 
 @{
     ViewData["Title"] = "Report";
+    ViewData["css"] = "profile.css";
+    var listVendor = (List<Vendor>)ViewData["listVendor"];
 }
 
-<h1>View your vendor report</h1>
+<h1>Report</h1>
 
 @* <p>
     <a asp-action="Create">Create New</a>
 </p> *@
 
-<form asp-action="Create">
+<form method="POST">
+    @if(User.IsInRole("Admin")){
+        <div class="form-group">
+        <select id="vendorId" class="form-control" name="VendorId">
+            <option value="-1">Whole food court</option>
+            @foreach (var vendor in listVendor)
+            {
+                <option value="@vendor.Id">@vendor.Name</option>
+            }
+        </select>
+        </div>
+    }
     <div class="form-group row">
         <div class="col">
         <select id="day-select" class="form-control">
@@ -37,54 +50,59 @@
     </div>
 
 </form>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Date)
-            </th>
-            @* <th>
-                @Html.DisplayNameFor(model => model.FoodSold)
-            </th> *@
-            <th>
-                @Html.DisplayNameFor(model => model.Income)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.VendorId)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Date)
-            </td>
-            @* <td>
-                @Html.DisplayFor(modelItem => item.FoodSold)
-            </td> *@
-            <td>
-                @Html.DisplayFor(modelItem => item.Income)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.VendorId)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
+<hr>
+@if(Model != null){
+    <h2 class="text-center">Report @Model.dayStartString - @Model.dayEndString</h2>
+    var fulltotal =0.0;
+    @foreach(var report in Model.reports){
+        @if (report.listFood.Count >0){
+            var total = 0.0;
+            <h3>@report.vendorName</h3>
+            <table class="table table-striped">
+                <thead> 
+                    <tr>
+                        <th>
+                            Food name
+                        </th>
+                        <th>
+                            Sold
+                        </th>
+                        <th>
+                            Price
+                        </th> 
+                    </tr>
+                </thead>
+                <tbody>
+            @foreach (var food in report.listFood) {
+                <tr>
+                    <td class="col">
+                        @food.Name
+                    </td>
+                    <td style="width:20px">
+                        @food.Amount
+                    </td>
+                    <td style="width:200px">
+                        @{var price = food.Amount*food.Price;}
+                        <span class="vnMoney-withoutVND">@price</span>
+                    </td> 
+                </tr>
+                total+=price;
+            }
+                </tbody>
+            </table>
+            <div class="text-right font-weight-bold vnMoney">@total</div>
+            fulltotal+=total;
+        }
+    }
+    
+    @if(Model.reports.Count>1){
+        <hr>
+        <div class="text-right vnMoney font-weight-bold" style="font-size: 20px;">@fulltotal</div>
+    }
 }
-    </tbody>
-</table>
+else{
+    <p class="lead text-center"> Click View Report button to view your report. </p>
+}
 @section Scripts{
     <script>
         today = new Date()
