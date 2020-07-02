@@ -7,37 +7,94 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using bkfc.Data;
 using bkfc.Models;
+using Microsoft.AspNetCore.Authorization;
 using Newtonsoft.Json;
 
 namespace bkfc.Controllers
 {
-    public class FoodController : Controller
+    public class VendorController : Controller
     {
         private readonly bkfcContext _context;
 
-        public FoodController(bkfcContext context)
+        public VendorController(bkfcContext context)
         {
             _context = context;
         }
         
-        // GET: Food
-        public async Task<IActionResult> Index(int? vendorId)
+        // GET: Index
+        public async Task<IActionResult> Index(int? id)
         {
-            ViewData["vendorId"] = vendorId;
-            if (vendorId != null)
-            {
-                var foods = from f in  _context.Food
-                            select f;
-                foods = foods.Where(f => f.VendorId == vendorId) ;
-                return View(await foods.ToListAsync());
+            // check permission here
+            var vendor = await _context.Vendor.FindAsync(id);
+            if (vendor == null){
+                return NotFound();
             }
-            return View(await _context.Food.ToListAsync());
+            
+            var foods = from f in  _context.Food
+                        select f;
+            foods = foods.Where(f => f.VendorId == id) ;
+            ViewData["food"] = foods.ToList();
+            return View(vendor);
+        }
+         // GET: Foodcourt/Edit/5
+        [Authorize(Roles = "FoodCourtManager,Admin,VendorManager")]
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var vendor = await _context.Vendor.FindAsync(id);
+            if (vendor == null)
+            {
+                return NotFound();
+            }
+            return View(vendor);
         }
 
-        // GET: Food/Details/5
-        public async Task<IActionResult> Details(int? id, int? vendorId)
+        // POST: Foodcourt/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
+        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "FoodCourtManager,Admin,VendorManager")]
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Logo,Category")] Vendor vendor)
         {
-            ViewData["vendorId"] = vendorId;
+            if (id != vendor.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(vendor);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!VendorExists(vendor.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction("Index",new {id=id});
+            }
+            return View(vendor);
+        }
+
+        
+
+        // GET: Vendor/DetailsFood/5
+        public async Task<IActionResult> DetailsFood(int? id)
+        {
+            ViewData["vendorId"] = id;
             ViewData["cart"] = TempData["cart"] == null ? null : JsonConvert.DeserializeObject<List<Item>>(TempData["cart"] as string);
             TempData.Keep();
             if (id == null)
@@ -57,9 +114,9 @@ namespace bkfc.Controllers
 
         
         // GET: Food/Create
-        public IActionResult Create(int? id)
+        public IActionResult CreateFood(int? id)
         {
-            ViewData["vendorId"] = id;
+            ViewData["vendorid"] = id;
             return View();
         }
 
@@ -68,21 +125,20 @@ namespace bkfc.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("VendorId,Name,Image,Description,Price,Amount,Discount")] Food food)
+        public async Task<IActionResult> CreateFood([Bind("VendorId,Name,Image,Description,Price,Amount,Discount")] Food food)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(food);
                 await _context.SaveChangesAsync();      
-                return RedirectToAction("Index", new{vendorid = food.VendorId});
+                return RedirectToAction("Index", new{id = food.VendorId});
             }
             return View(food);
         }
 
         // GET: Food/Edit/5
-        public async Task<IActionResult> Edit(int? id, int? vendorId)
+        public async Task<IActionResult> EditFood(int? id)
         {
-            ViewData["vendorId"] = vendorId;
             if (id == null)
             {
                 return NotFound();
@@ -101,7 +157,7 @@ namespace bkfc.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,VendorId,Name,Image,Description,Price,Amount,Discount")] Food food)
+        public async Task<IActionResult> EditFood(int id, [Bind("Id,VendorId,Name,Image,Description,Price,Amount,Discount")] Food food)
         {
             if (id != food.Id)
             {
@@ -119,6 +175,7 @@ namespace bkfc.Controllers
                 {
                     if (!FoodExists(food.Id))
                     {
+                        Console.WriteLine("ASDasdasdasda");
                         return NotFound();
                     }
                     else
@@ -126,15 +183,16 @@ namespace bkfc.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction("Index", new{vendorid = food.VendorId});
+                return RedirectToAction("Index", new{id = food.VendorId});
             }
-            return View(food);
+            return RedirectToAction("Index", new{id = food.VendorId});
         }
 
         // GET: Food/Delete/5
-        public async Task<IActionResult> Delete(int? id, int? vendorId)
+        public async Task<IActionResult> DeleteFood(int? id, int? vendorId)
         {
             ViewData["vendorId"] = vendorId;
+            ViewData["vendor"] = _context.Vendor.Find(vendorId);
             if (id == null)
             {
                 return NotFound();
@@ -151,19 +209,24 @@ namespace bkfc.Controllers
         }
 
         // POST: Food/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost, ActionName("DeleteFood")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var food = await _context.Food.FindAsync(id);
             _context.Food.Remove(food);
             await _context.SaveChangesAsync();
-            return RedirectToAction("Index", new{vendorid = food.VendorId});
+            return RedirectToAction("Index", new{id = food.VendorId});
         }
 
         private bool FoodExists(int id)
         {
             return _context.Food.Any(e => e.Id == id);
+        }
+
+        private bool VendorExists(int id)
+        {
+            return _context.Vendor.Any(e => e.Id == id);
         }
     }
 }

@@ -107,16 +107,10 @@
     </div>
 }
 <div class = "change-page">
-@if (User.Identity.IsAuthenticated && (User.IsInRole("Admin")||User.IsInRole("FoodCourtManager")||User.IsInRole("VendorManager")))
-{    
-
-    <span><a asp-action="Edit" asp-route-id="@vendor.Id">Edit information</a> | </span>
-    <span><a asp-controller="Food" asp-action="Index" asp-route-vendorid="@vendor.Id">Edit food</a> | </span>
-    @if(User.IsInRole("Admin")||User.IsInRole("FoodCourtManager"))
-    {
-        <span><a asp-action="Delete" asp-route-id="@vendor.Id">Delete</a> | </span>
-    }
-
+@if(User.IsInRole("FoodCourtManager"))
+{
+    <span><a asp-controller="Vendor" asp-action="Index" asp-route-id="@vendor.Id">Manage vendor</a> | </span>
+    <span><a asp-action="Delete" asp-route-id="@vendor.Id">Delete</a> | </span>
 }
     <a asp-action="Index">Back to List</a>
 </div>    

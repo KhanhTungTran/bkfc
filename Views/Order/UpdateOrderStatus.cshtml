@@ -75,6 +75,9 @@
             if ($(this).text()=="Cancelled"){
                 $(this)[0].classList.add("text-danger");
             }
+            if ($(this).text() == "Cooking"){
+                $(this)[0].classList.add("text-warning");
+            }      
         });
 
         function renderOrder(DaySelect){

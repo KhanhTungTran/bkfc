@@ -1,0 +1,57 @@
+@model bkfc.Models.Vendor
+
+@{
+    ViewData["Title"] = "My Food";
+    ViewData["css"] = "profile.css";
+    var food = (List<Food>)ViewData["food"];
+}
+
+
+<div class="header-profile">
+  <img id="img-up" class="logo" src= "@Model.Logo" >
+  <div class="profile-title">
+    <h2>@Model.Name - @Model.Category</h2>
+    <h5> Information</h5>
+    <a class="btn btn-primary" asp-controller="Vendor" asp-action="Edit" asp-route-id="@Model.Id">Edit @Model.Name's information</a>
+    <a class="btn btn-primary" asp-controller="Report" asp-action="Index" asp-route-id="@Model.Id">View Report</a>
+  </div>
+</div>
+@if (User.Identity.IsAuthenticated && (User.IsInRole("Admin")||User.IsInRole("FoodCourtManager")||User.IsInRole("VendorManager")))
+{   
+<hr>
+<div class="d-flex flex-row justify-content-between">
+    <a class="btn btn-primary" asp-action="CreateFood" asp-route-id="@Model.Id">Add new food</a>
+    <a class="btn btn-primary" asp-controller="Order" asp-action="UpdateOrderStatus" asp-route-vendorid="@Model.Id">Update order's status</a>
+</div>
+@foreach (var item in food) {
+    <div class = "food-management" >
+        <div class = "food-management-information d-flex flex-row align-items-center justify-content-between">
+            <div class="d-flex flex-row align-items-center content-start">
+                <a asp-action="DetailsFood" asp-route-id ="@item.Id" asp-route-vendorid="@Model.Id">
+                    <img src=@item.Image class="image-food">
+                </a>
+                
+                <div class="food-information ml-2">
+                    <div class="font-weight-bold">@item.Name</div>
+                    <div>Description: @item.Description </div>
+                    <div>Price: <span class="vnMoney">@item.Price</span></div>
+                    @* <div>Amount: @item.Amount</div> *@
+                    @* <div>Discount: @item.Discount</div> *@
+                    @* <div>Vendor: @Html.DisplayFor(modelItem => item.VendorId)</div> *@
+                </div>
+            </div>
+            <div class="manage">
+                <div>
+                    <a class="btn btn-primary btn-block" asp-action="EditFood" asp-route-id="@item.Id" asp-route-vendorid="@Model.Id">Edit</a>
+                </div>
+                @* <a asp-action="Details" asp-route-id="@item.Id">Details</a> *@
+                <div>
+                    <a class="btn btn-danger btn-block" asp-action="DeleteFood" asp-route-id="@item.Id" asp-route-vendorid="@Model.Id">Delete</a>    
+                </div>
+                
+            </div>
+            
+        </div>
+    </div>
+}
+}

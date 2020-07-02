@@ -21,15 +21,16 @@ namespace bkfc.Controllers
         }
 
         // GET: Report
-        public async Task<IActionResult> Index()
+        public IActionResult Index(int? id)
         {
             // ReportView myreport = new Repo
             ViewData["listVendor"] = _context.Vendor.ToList();
+            ViewData["vendorid"] = id;
             return View(null);
         }
         // POST: Report
         [HttpPost]
-        public async Task<IActionResult> Index(DateTime dateFrom, DateTime dateTo, int? VendorId){
+        public async Task<IActionResult> Index(int? id, DateTime dateFrom, DateTime dateTo, int? vendorId){
             DateTime MINDATE = new DateTime(2020,06,15);
             if (dateFrom<MINDATE) dateFrom = MINDATE; //protect database
             if (dateTo < dateFrom || dateTo > DateTime.Now.Date)
@@ -37,8 +38,12 @@ namespace bkfc.Controllers
                 return NotFound();
             }
             int type = -1;
-            if (VendorId != null){
-                type = (int)VendorId;
+            if (vendorId != null){
+                type = (int)vendorId;
+            }
+            if (id != null){
+                type = (int)id;
+                ViewData["vendorid"] = id;
             }
             else{
                 // type = VendorManager.VendorId !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -70,13 +75,13 @@ namespace bkfc.Controllers
             {
                 List<Food> listFood = new List<Food>();
                 double income = 0;
-                var vendorId = vendorReport.vendorId;
+                var vendorID = vendorReport.vendorId;
                 for(DateTime date = dateFrom; date <= dateTo; date=date.AddDays(1)){
-                    var re = await reports.Where(r => r.Date == date && r.VendorId == vendorId).ToListAsync();
+                    var re = await reports.Where(r => r.Date == date && r.VendorId == vendorID).ToListAsync();
                     Report report = new Report();
                     if (re.Count==0 || date == DateTime.Now.Date)
                     {
-                        report = createReport(date,vendorId);
+                        report = createReport(date,vendorID);
                     }
                     else
                     {

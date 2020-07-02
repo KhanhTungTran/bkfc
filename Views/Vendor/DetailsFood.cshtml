@@ -3,7 +3,6 @@
 @{
     ViewData["Title"] = @Model.Name;
     ViewData["css"] = "profile.css";
-    var vendorId = ViewData["vendorId"];
 }
 <div class="header-profile">
   <img class="logo" src= @Model.Image >
@@ -14,12 +13,12 @@
 <div>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+        @* <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.VendorId)
         </dt>
         <dd class = "col-sm-2">
             @Html.DisplayFor(model => model.VendorId)
-        </dd>
+        </dd> *@
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Name)
         </dt>
@@ -57,12 +56,13 @@
             @Html.DisplayFor(model => model.Discount)
         </dd>
     </dl>
+    @if (User.Identity.IsAuthenticated && (User.IsInRole("Admin")||User.IsInRole("FoodCourtManager")||User.IsInRole("VendorManager")))
+    {   
+    <div class = "change-page">
+        <a asp-action="EditFood" asp-route-id="@Model.Id" asp-route-vendorid="@Model.VendorId">Edit</a> |
+        <a asp-action="DeleteFood" asp-route-id="@Model.Id" asp-route-vendorid="@Model.VendorId">Delete</a> |
+        <a asp-action="Index" asp-route-id="@Model.VendorId">Back to List</a>
+    </div>
+    }
 </div>
-@if (User.Identity.IsAuthenticated && (User.IsInRole("Admin")||User.IsInRole("FoodCourtManager")||User.IsInRole("VendorManager")))
-{   
-<div class = "change-page">
-    <a asp-action="Edit" asp-route-id="@Model.Id" asp-route-vendorid=@vendorId>Edit</a> |
-    <a asp-action="Delete" asp-route-id="@Model.Id" asp-route-vendorid=@vendorId>Delete</a> |
-    <a asp-action="Index" asp-route-vendorid=@vendorId>Back to List</a>
-</div>
-}
+
