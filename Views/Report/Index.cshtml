@@ -1,59 +1,205 @@
-@model IEnumerable<bkfc.Models.Report>
+@model bkfc.Models.ReportView
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Report";
+    ViewData["css"] = "profile.css";
+    var listVendor = (List<Vendor>)ViewData["listVendor"];
 }
 
-<h1>Index</h1>
+<h1>Report</h1>
 
-<p>
+@* <p>
     <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Date)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FoodSold)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Income)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.VendorId)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Date)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FoodSold)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Income)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.VendorId)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
+</p> *@
+
+<form onsubmit="return validateForm()" method="POST">
+    @if(User.IsInRole("Admin")){
+        <div class="form-group">
+        <select id="vendorId" class="form-control" name="VendorId">
+            <option value="-1">Whole food court</option>
+            @foreach (var vendor in listVendor)
+            {
+                <option value="@vendor.Id">@vendor.Name</option>
+            }
+        </select>
+        </div>
+    }
+    <div class="form-group row">
+        <div class="col">
+        <select id="day-select" class="form-control">
+            <option value="Today">Today</option>
+            <option value="Yesterday">Yesterday</option>
+            <option value="ThisMonth">ThisMonth</option>
+            <option value="LastMonth">LastMonth</option>
+            <option value="Custom">Custom</option>    
+        </select>
+        </div>
+        <div class="col">
+            <button class="btn btn-primary btn-block" type="submit">View Report</button>
+        </div>
+    </div>
+    <div id="custom-day" class="form-group row" style="display: none;">
+        <div class="col-6">
+            <label class="control-label" >From</label>
+            <input id="dateFrom" type="date" name="dateFrom" class="col-auto" style="width: 100%">
+        </div>
+        <div class="col-6">
+            <label class="control-label" >To</label>
+            <input id="dateTo" type="date" name="dateTo" class="col-auto" style="width: 100%">
+        </div>
+    </div>
+
+</form>
+<hr>
+@if(Model != null){
+<div id="report">
+    @if(Model.dayStart==Model.dayEnd){<h2 class="text-center">Report @Model.dayStartString</h2>}
+    else{<h2 class="text-center">Report @Model.dayStartString - @Model.dayEndString</h2>}
+    @{var fulltotal =0.0;}
+    @foreach(var report in Model.reports){
+        @if (report.listFood.Count >0){
+            var total = 0.0;
+            <h3>@report.vendorName</h3>
+            <table class="table table-striped">
+                <thead> 
+                    <tr>
+                        <th>
+                            Food name
+                        </th>
+                        <th>
+                            Sold
+                        </th>
+                        <th>
+                            Price
+                        </th> 
+                    </tr>
+                </thead>
+                <tbody>
+            @foreach (var food in report.listFood) {
+                <tr>
+                    <td class="col">
+                        @food.Name
+                    </td>
+                    <td style="width:20px">
+                        @food.Amount
+                    </td>
+                    <td style="width:200px">
+                        @{var price = food.Amount*food.Price;}
+                        <span class="vnMoney-withoutVND">@price</span>
+                    </td> 
+                </tr>
+                total+=price;
+            }
+                </tbody>
+            </table>
+            <div class="text-right font-weight-bold vnMoney">@total</div>
+            fulltotal+=total;
+        }
+    }
+    
+    @if(Model.reports.Count>1){
+        <hr>
+        <div class="text-right vnMoney font-weight-bold" style="font-size: 20px;">@fulltotal</div>
+    }
+</div>
+<button class="btn btn-primary btn-block mt-2" onclick="PrintElem()">Print Report</button>
 }
-    </tbody>
-</table>
+else{
+    <p class="lead text-center"> Click View Report button to view your report. </p>
+}
+@section Scripts{
+    <script>
+        today = new Date()
+        dayInput = dateToInputType(today);
+        $('#dateTo').val(dayInput);
+        $('#dateFrom').val(dayInput);
+        $('#day-select').on('change',function(){
+            var optionSelected = $("option:selected", this);
+            var valueSelected = this.value;
+            switch(valueSelected){
+                case "Today":
+                    today = new Date()
+                    dayInput = dateToInputType(today);
+                    $('#dateTo').val(dayInput);
+                    $('#dateFrom').val(dayInput);
+                    $('#custom-day').hide();
+                    break;
+                case "Yesterday":
+                    var day = new Date(new Date().setDate(new Date().getDate()-1));
+                    dayInput = dateToInputType(day);
+                    $('#dateTo').val(dayInput);
+                    $('#dateFrom').val(dayInput);
+                    $('#custom-day').hide();
+                    break;
+                case "ThisMonth":
+                    today = new Date()
+                    fromday = new Date(new Date().setDate(1));
+                    todayInput = dateToInputType(today);
+                    fromdayInput = dateToInputType(fromday);
+                    $('#dateTo').val(todayInput);
+                    $('#dateFrom').val(fromdayInput);
+                    $('#custom-day').hide();
+                    break;
+                case "LastMonth":
+                    today = new Date(new Date().setDate(0));
+                    fromday = new Date(new Date(new Date().setDate(0)).setDate(1));
+                    todayInput = dateToInputType(today);
+                    fromdayInput = dateToInputType(fromday);
+                    $('#dateTo').val(todayInput);
+                    $('#dateFrom').val(fromdayInput);
+                    $('#custom-day').hide();
+                    break;
+                case "Custom":
+                    $('#custom-day').show();
+                    break;
+            }
+        })
+        function validateForm(){
+            var dateTo = document.getElementById("dateTo");
+            var dateFrom = document.getElementById("dateFrom");
+            var dateToValue = Date.parse(dateTo.value);
+            var dateFromValue = Date.parse(dateFrom.value);
+            if(dateFromValue>dateToValue){
+                alertify.notify('The "day from" must be before the "day to". Please try again', 'error', 5);
+                return false;
+            }
+            else{
+                alertify.notify('We are making your report. Please wait', 'success', 5);
+                return true;
+            } 
+            return true;
+        }
+        function dateToInputType(date){
+            var dd = date.getDate();
+            var mm = date.getMonth()+1; //January is 0!
+
+            var yyyy = date.getFullYear();
+            if(dd<10){dd='0'+dd} 
+            if(mm<10){mm='0'+mm} 
+            inputtype = yyyy+'-'+mm+'-'+dd;
+            return inputtype
+        }
+        function PrintElem()
+        {
+            var mywindow = window.open('', 'PRINT', 'height=400,width=600');
+
+            mywindow.document.write('<html><head><title>' + document.title  + '</title>');
+            mywindow.document.write('<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">');
+            mywindow.document.write('</head><style>.vnMoney::after{content:" VND";}</style><body>');
+            mywindow.document.write('<div class="container">');
+            mywindow.document.write('<main role="main" class="pb-3" style="margin-top: 100px;">');
+            mywindow.document.write(document.getElementById("report").innerHTML);
+            mywindow.document.write('</main>');
+            mywindow.document.write('</div>');
+            mywindow.document.write('</body></html>');
+
+            mywindow.document.close(); // necessary for IE >= 10
+            mywindow.focus(); // necessary for IE >= 10*/
+
+            mywindow.print();
+
+            return true;
+        }
+    </script>
+    
+}
