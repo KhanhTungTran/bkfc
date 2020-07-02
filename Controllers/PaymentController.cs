@@ -71,8 +71,8 @@ namespace bkfc.Controllers
             string accessKey = "0kA4tysnxO9tUKOx";
             string serectkey = "t2xCHeQr7pbnLBHqtutz5H1bt0hinODy";
             string orderInfo = "Đơn hàng từ Bách Khoa Food Court";
-            string returnUrl = "bkfc.azurewebsites.net/payment/done";
-            string notifyurl = "bkfc.azurewebsites.net/order";
+            string returnUrl = "https://bkfc.azurewebsites.net/payment/done";
+            string notifyurl = "https://bkfc.azurewebsites.net/order";
             // string returnUrl = "https://localhost:5001/payment/done";
             // string notifyurl = "https://localhost:5001/order";
 
