@@ -9,34 +9,39 @@ using bkfc.Data;
 using bkfc.Models;
 using Microsoft.AspNetCore.Authorization;
 using Newtonsoft.Json;
+using bkfc.Areas.Identity.Data;
+using Microsoft.AspNetCore.Identity;
 
 namespace bkfc.Controllers
 {
     public class VendorController : Controller
     {
         private readonly bkfcContext _context;
+        private readonly UserManager<bkfcUser> _userManager;
 
-        public VendorController(bkfcContext context)
+        public VendorController(bkfcContext context, UserManager<bkfcUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
-        
+
         // GET: Index
         public async Task<IActionResult> Index(int? id)
         {
             // check permission here
             var vendor = await _context.Vendor.FindAsync(id);
-            if (vendor == null){
+            if (vendor == null)
+            {
                 return NotFound();
             }
-            
-            var foods = from f in  _context.Food
+
+            var foods = from f in _context.Food
                         select f;
-            foods = foods.Where(f => f.VendorId == id) ;
+            foods = foods.Where(f => f.VendorId == id);
             ViewData["food"] = foods.ToList();
             return View(vendor);
         }
-         // GET: Foodcourt/Edit/5
+        // GET: Foodcourt/Edit/5
         [Authorize(Roles = "FoodCourtManager,Admin,VendorManager")]
         public async Task<IActionResult> Edit(int? id)
         {
@@ -84,12 +89,12 @@ namespace bkfc.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction("Index",new {id=id});
+                return RedirectToAction("Index", new { id = id });
             }
             return View(vendor);
         }
 
-        
+
 
         // GET: Vendor/DetailsFood/5
         public async Task<IActionResult> DetailsFood(int? id)
@@ -112,7 +117,7 @@ namespace bkfc.Controllers
             return View(food);
         }
 
-        
+
         // GET: Food/Create
         public IActionResult CreateFood(int? id)
         {
@@ -130,8 +135,8 @@ namespace bkfc.Controllers
             if (ModelState.IsValid)
             {
                 _context.Add(food);
-                await _context.SaveChangesAsync();      
-                return RedirectToAction("Index", new{id = food.VendorId});
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Index", new { id = food.VendorId });
             }
             return View(food);
         }
@@ -183,9 +188,9 @@ namespace bkfc.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction("Index", new{id = food.VendorId});
+                return RedirectToAction("Index", new { id = food.VendorId });
             }
-            return RedirectToAction("Index", new{id = food.VendorId});
+            return RedirectToAction("Index", new { id = food.VendorId });
         }
 
         // GET: Food/Delete/5
@@ -216,9 +221,47 @@ namespace bkfc.Controllers
             var food = await _context.Food.FindAsync(id);
             _context.Food.Remove(food);
             await _context.SaveChangesAsync();
-            return RedirectToAction("Index", new{id = food.VendorId});
+            return RedirectToAction("Index", new { id = food.VendorId });
         }
 
+        // GET: Vendor/StaffManagement/:id
+        public async Task<IActionResult> StaffManagement(int? id)
+        {
+            // check permission here
+            var vendor = await _context.Vendor.FindAsync(id);
+            if (vendor == null)
+            {
+                return NotFound();
+            }
+            ViewData["result"] = " ";
+            return View(vendor);
+        }
+        [HttpPost]
+        public async Task<IActionResult> StaffManagementAsync(int vendorId, string mail)
+        {
+            var vendor = await _context.Vendor.FindAsync(vendorId);
+            if (vendor == null)
+            {
+                return NotFound();
+            }
+            if (mail == null)
+            {
+                ViewData["result"] = "mail is empty";
+                return View(vendor);
+            }
+            Task<int> task = AddStaff(mail, vendorId);
+            task.Wait();
+            var res = task.Result;
+            ViewData["result"] = "Add successfully";
+            return View(vendor);
+        }
+        public async Task<int> AddStaff(string mail, int vendorId)
+        {
+            bkfcUser user = await _userManager.FindByEmailAsync(mail);
+            if (user == null) return 2;
+            await _userManager.AddToRoleAsync(user, "Staff");
+            return 0;
+        }
         private bool FoodExists(int id)
         {
             return _context.Food.Any(e => e.Id == id);

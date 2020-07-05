@@ -11,9 +11,13 @@
   <img id="img-up" class="logo" src= "@Model.Logo" >
   <div class="profile-title">
     <h2>@Model.Name - @Model.Category</h2>
-    <h5> Information</h5>
-    <a class="btn btn-primary" asp-controller="Vendor" asp-action="Edit" asp-route-id="@Model.Id">Edit @Model.Name's information</a>
-    <a class="btn btn-primary" asp-controller="Report" asp-action="Index" asp-route-id="@Model.Id">View Report</a>
+    @if (User.Identity.IsAuthenticated && (User.IsInRole("Admin")||User.IsInRole("FoodCourtManager")||User.IsInRole("VendorManager")))
+    {
+        <h5> Information</h5>
+        <a class="btn btn-primary" asp-controller="Vendor" asp-action="Edit" asp-route-id="@Model.Id">Edit @Model.Name's information</a>
+        <a class="btn btn-primary" asp-controller="Report" asp-action="Index" asp-route-id="@Model.Id">View Report</a>
+        <a class="btn btn-primary" asp-controller="Vendor" asp-action="StaffManagement" asp-route-id="@Model.Id">Staff Management</a>
+    }
   </div>
 </div>
 @if (User.Identity.IsAuthenticated && (User.IsInRole("Admin")||User.IsInRole("FoodCourtManager")||User.IsInRole("VendorManager")))
