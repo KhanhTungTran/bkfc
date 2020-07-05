@@ -41,19 +41,18 @@ namespace bkfc.Migrations
                 name: "UserVendors",
                 columns: table => new
                 {
-                    UserId = table.Column<int>(nullable: false),
-                    VendorId = table.Column<int>(nullable: false),
-                    UserId1 = table.Column<string>(nullable: true)
+                    UserId = table.Column<string>(nullable: false),
+                    VendorId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_UserVendors", x => new { x.UserId, x.VendorId });
                     table.ForeignKey(
-                        name: "FK_UserVendors_bkfcUser_UserId1",
-                        column: x => x.UserId1,
+                        name: "FK_UserVendors_bkfcUser_UserId",
+                        column: x => x.UserId,
                         principalTable: "bkfcUser",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_UserVendors_Vendor_VendorId",
                         column: x => x.VendorId,
@@ -61,11 +60,6 @@ namespace bkfc.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UserVendors_UserId1",
-                table: "UserVendors",
-                column: "UserId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserVendors_VendorId",

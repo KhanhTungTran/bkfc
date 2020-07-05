@@ -252,14 +252,28 @@ namespace bkfc.Controllers
             Task<int> task = AddStaff(mail, vendorId);
             task.Wait();
             var res = task.Result;
-            ViewData["result"] = "Add successfully";
+            if (res == 0) ViewData["result"] = "Add successfully";
+            if (res == 1) ViewData["result"] = $"Fail - can't find email: {mail}";
+            if (res == 2) ViewData["result"] = $"Fail - can't find vendorId: {vendorId}";
             return View(vendor);
         }
         public async Task<int> AddStaff(string mail, int vendorId)
         {
             bkfcUser user = await _userManager.FindByEmailAsync(mail);
-            if (user == null) return 2;
+            if (user == null) return 1;
             await _userManager.AddToRoleAsync(user, "Staff");
+            Vendor vendor = await _context.Vendor.FindAsync(vendorId);
+            if (vendor == null) return 2;
+            if (vendor.UserVendor == null) vendor.UserVendor = new List<UserVendor>();
+            vendor.UserVendor.Add
+            (
+                new UserVendor
+                {
+                    Vendor = vendor,
+                    User = user
+                }
+            );
+            await _context.SaveChangesAsync();
             return 0;
         }
         private bool FoodExists(int id)

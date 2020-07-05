@@ -232,18 +232,13 @@ namespace bkfc.Migrations
 
             modelBuilder.Entity("bkfc.Models.UserVendor", b =>
                 {
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("VendorId")
                         .HasColumnType("int");
 
-                    b.Property<string>("UserId1")
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("UserId", "VendorId");
-
-                    b.HasIndex("UserId1");
 
                     b.HasIndex("VendorId");
 
@@ -305,7 +300,9 @@ namespace bkfc.Migrations
                 {
                     b.HasOne("bkfc.Areas.Identity.Data.bkfcUser", "User")
                         .WithMany("UserVendor")
-                        .HasForeignKey("UserId1");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("bkfc.Models.Vendor", "Vendor")
                         .WithMany("UserVendor")
