@@ -28,6 +28,7 @@ namespace bkfc.Controllers
         public IActionResult Index()
         {
             ViewData["result"] = "nothing change";
+            ViewData["listVendor"] = _context.Vendor.ToList();
             ViewData["mode"] = Models.State.Mode;
             return View();
         }
@@ -36,6 +37,7 @@ namespace bkfc.Controllers
         public IActionResult Index(string mail, string role, int vendorId)
         {
             ViewData["mode"] = Models.State.Mode;
+            ViewData["listVendor"] = _context.Vendor.ToList();
             if (mail == null || role == null)
             {
                 ViewData["result"] = "Mail or role is empty";

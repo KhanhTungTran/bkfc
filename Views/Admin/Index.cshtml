@@ -5,12 +5,13 @@
     ViewData["Title"] = "Admin Page";
     var statusAddRole = (String)ViewData["result"];
     var currentMode = (String)ViewData["mode"];
+    var listVendor = (List<Vendor>)ViewData["listVendor"];
 }
 @model bkfc.Areas.Identity.Pages.Account.RegisterModel
 <h2>Admin Page</h2>
 <form method="POST" asp-controller="Admin" asp-action="Index">
     <div class="form-group">
-        <h4>Current status: @statusAddRole</h4>
+        <h4>Current status: <span id="status">@statusAddRole</span></h4>
         <div class="input-group">
             <div class="input-group-prepend">
                 <div class="input-group-text">
@@ -18,11 +19,42 @@
                 </div>
             </div>
             <input type="text" class="form-control" placeholder="Email Address" name="mail" />
-            <input type="text" class="form-control" placeholder="Role" name="role" />
-            <input type="text" class="form-control" placeholder="Vendor Name" name="vendorId" />
+            <select type="text" class="form-control" name="role" onchange="renderVendorId(this.value)"/>
+                <option value = "FoodCourtManager">FoodCourtManager</option>
+                <option selected value = "VendorManager">VendorManager</option>
+                <option value="User">User</option>
+            </select>
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
     </div>
+    <div class="form-group">
+        <div>
+            <select id="vendorId" class="form-control" name="vendorId">
+                @foreach (var vendor in listVendor)
+                {
+                    <option value="@vendor.Id">@vendor.Name</option>
+                }
+            </select>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary btn-lg btn-block">Submit</button>
 </form>
 <h4>Current mode: @currentMode</h4>
 <a asp-controller="Admin" asp-action="ChangeSystemStage" class="btn btn-primary">Change maintenance mode: On/ Off</a>
+@section Scripts{
+    <script>
+        if(document.getElementById("status").innerHTML == "Success"){
+            document.getElementById("status").classList.add("text-success");
+        }
+        else if (document.getElementById("status").innerHTML != "nothing change"){
+            document.getElementById("status").classList.add("text-danger");
+        }
+        function renderVendorId(value){
+            if(value == "VendorManager"){
+                document.getElementById("vendorId").hidden = false;
+            }
+            else{
+                document.getElementById("vendorId").hidden = true;
+            }
+        }
+    </script>
+}
