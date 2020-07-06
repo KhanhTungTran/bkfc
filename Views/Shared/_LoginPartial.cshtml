@@ -21,7 +21,7 @@
             <a id="manage" class="nav-link text-dark" asp-controller="Admin" asp-action="Index">Admin</a>
         </li>
     }
-    @if(User.Identity.IsAuthenticated && User.IsInRole("VendorManager"))
+    @if(User.Identity.IsAuthenticated && (User.IsInRole("VendorManager")||User.IsInRole("Staff")))
     {
         <li class="nav-item">
             <a class="nav-link text-dark" asp-controller="Vendor" asp-action="Index" asp-route-id=@user.vendorid>My Vendor</a>

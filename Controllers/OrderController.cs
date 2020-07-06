@@ -10,16 +10,18 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using bkfc.Data;
 using bkfc.Models;
-
+using bkfc.Areas.Identity.Data;
 namespace bkfc.Controllers
 {
     public class OrderController : Controller
     {
         private readonly bkfcContext _context;
+        private readonly UserManager<bkfcUser> _userManager;
 
-        public OrderController(bkfcContext context)
+        public OrderController(bkfcContext context, UserManager<bkfcUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Order
@@ -103,16 +105,14 @@ namespace bkfc.Controllers
             return View(order);
         }
         // GET: Oder/UpdateOrderStatus
-        public async Task<IActionResult> UpdateOrderStatus(int? vendorId)
+        [Authorize(Roles = "VendorManager,Staff")]
+        public async Task<IActionResult> UpdateOrderStatus()
         {
-            
+            var user =  await _userManager.GetUserAsync(User);
+            int vendorId = user.vendorid;
             var orders = from m in _context.Order
                          select m;
-            if (vendorId!=null)
-            {
-                orders = orders.Where(orders => orders.VendorId == vendorId);
-            }
-            await orders.ToListAsync();
+            orders = orders.Where(order => order.VendorId == vendorId);
             List<Order> orderList = orders.ToList();
             List<MyOrderFood> myOrderFoods = new List<MyOrderFood>();
             foreach (Order order in orderList)

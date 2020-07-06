@@ -4,10 +4,6 @@
     ViewData["Title"] = "Report";
     ViewData["css"] = "profile.css";
     var listVendor = (List<Vendor>)ViewData["listVendor"];
-    int vendorid =-1;
-    if(ViewData["vendorid"] != null){
-        vendorid = (int)ViewData["vendorid"];
-    }
 
 }
 
@@ -18,7 +14,7 @@
 </p> *@
 
 <form onsubmit="return validateForm()" method="POST">
-    @if(User.IsInRole("FoodCourtManager") && vendorid == -1){
+    @if(User.IsInRole("FoodCourtManager")){
         <div class="form-group">
         <select id="vendorId" class="form-control" name="vendorId">
             <option value="-1">Whole food court</option>

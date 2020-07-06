@@ -24,11 +24,15 @@ namespace bkfc.Controllers
             _context = context;
             _userManager = userManager;
         }
-
         // GET: Index
+        [Authorize(Roles = "FoodCourtManager,VendorManager,Staff")]
         public async Task<IActionResult> Index(int? id)
         {
             // check permission here
+            if(!authenticateVendorId(id).Result)
+            {
+                return NotFound();
+            }
             var vendor = await _context.Vendor.FindAsync(id);
             if (vendor == null)
             {
@@ -42,9 +46,13 @@ namespace bkfc.Controllers
             return View(vendor);
         }
         // GET: Foodcourt/Edit/5
-        [Authorize(Roles = "FoodCourtManager,Admin,VendorManager")]
+        [Authorize(Roles = "FoodCourtManager,VendorManager")]
         public async Task<IActionResult> Edit(int? id)
         {
+            if(!authenticateVendorId(id).Result)
+            {
+                return NotFound();
+            }
             if (id == null)
             {
                 return NotFound();
@@ -63,9 +71,13 @@ namespace bkfc.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "FoodCourtManager,Admin,VendorManager")]
+        [Authorize(Roles = "FoodCourtManager,VendorManager")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Logo,Category")] Vendor vendor)
         {
+            if(!authenticateVendorId(id).Result)
+            {
+                return NotFound();
+            }
             if (id != vendor.Id)
             {
                 return NotFound();
@@ -109,6 +121,10 @@ namespace bkfc.Controllers
 
             var food = await _context.Food
                 .FirstOrDefaultAsync(m => m.Id == id);
+            if(!authenticateVendorId(food.VendorId).Result)
+            {
+                return NotFound();
+            }
             if (food == null)
             {
                 return NotFound();
@@ -119,8 +135,13 @@ namespace bkfc.Controllers
 
 
         // GET: Food/Create
+        [Authorize(Roles = "FoodCourtManager,VendorManager")]
         public IActionResult CreateFood(int? id)
         {
+            if(!authenticateVendorId(id).Result)
+            {
+                return NotFound();
+            }
             ViewData["vendorid"] = id;
             return View();
         }
@@ -134,6 +155,10 @@ namespace bkfc.Controllers
         {
             if (ModelState.IsValid)
             {
+                if(!authenticateVendorId(food.VendorId).Result)
+                {
+                    return NotFound();
+                }
                 _context.Add(food);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index", new { id = food.VendorId });
@@ -142,6 +167,7 @@ namespace bkfc.Controllers
         }
 
         // GET: Food/Edit/5
+        [Authorize(Roles = "FoodCourtManager,VendorManager")]
         public async Task<IActionResult> EditFood(int? id)
         {
             if (id == null)
@@ -150,6 +176,10 @@ namespace bkfc.Controllers
             }
 
             var food = await _context.Food.FindAsync(id);
+            if(!authenticateVendorId(food.VendorId).Result)
+            {
+                return NotFound();
+            }
             if (food == null)
             {
                 return NotFound();
@@ -168,7 +198,10 @@ namespace bkfc.Controllers
             {
                 return NotFound();
             }
-
+            if(!authenticateVendorId(food.VendorId).Result)
+            {
+                return NotFound();
+            }
             if (ModelState.IsValid)
             {
                 try
@@ -194,8 +227,13 @@ namespace bkfc.Controllers
         }
 
         // GET: Food/Delete/5
+        [Authorize(Roles = "FoodCourtManager,VendorManager")]
         public async Task<IActionResult> DeleteFood(int? id, int? vendorId)
         {
+            if(!authenticateVendorId(vendorId).Result)
+            {
+                return NotFound();
+            }
             ViewData["vendorId"] = vendorId;
             ViewData["vendor"] = _context.Vendor.Find(vendorId);
             if (id == null)
@@ -219,15 +257,24 @@ namespace bkfc.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var food = await _context.Food.FindAsync(id);
+            if(!authenticateVendorId(food.VendorId).Result)
+            {
+                return NotFound();
+            }
             _context.Food.Remove(food);
             await _context.SaveChangesAsync();
             return RedirectToAction("Index", new { id = food.VendorId });
         }
 
         // GET: Vendor/StaffManagement/:id
+        [Authorize(Roles = "FoodCourtManager,VendorManager")]
         public async Task<IActionResult> StaffManagement(int? id)
         {
             // check permission here
+            if(!authenticateVendorId(id).Result)
+            {
+                return NotFound();
+            }
             var vendor = await _context.Vendor.FindAsync(id);
             if (vendor == null)
             {
@@ -239,6 +286,10 @@ namespace bkfc.Controllers
         [HttpPost]
         public async Task<IActionResult> StaffManagementAsync(int vendorId, string mail)
         {
+            if(!authenticateVendorId(vendorId).Result)
+            {
+                return NotFound();
+            }
             var vendor = await _context.Vendor.FindAsync(vendorId);
             if (vendor == null)
             {
@@ -277,6 +328,21 @@ namespace bkfc.Controllers
         private bool VendorExists(int id)
         {
             return _context.Vendor.Any(e => e.Id == id);
+        }
+        private async Task<bool> authenticateVendorId(int? id)
+        {
+            var user =  await _userManager.GetUserAsync(User);
+            if (id == null)
+            {
+                return false;
+            }
+            else{
+                if (user.vendorid != id && !User.IsInRole("FoodCourtManager"))
+                {
+                    return false;
+                }
+            }
+            return true;
         }
     }
 }

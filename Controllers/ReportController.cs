@@ -9,31 +9,33 @@ using bkfc.Data;
 using bkfc.Models;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Authorization;
-
+using bkfc.Areas.Identity.Data;
+using Microsoft.AspNetCore.Identity;
 namespace bkfc.Controllers
 {
-    [Authorize(Roles = "VendorManager, Admin")]
+    [Authorize(Roles = "VendorManager, FoodCourtManager")]
     public class ReportController : Controller
     {
         private readonly bkfcContext _context;
-
-        public ReportController(bkfcContext context)
+        private readonly UserManager<bkfcUser> _userManager;
+        public ReportController(bkfcContext context, UserManager<bkfcUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Report
-        public IActionResult Index(int? id)
+        public IActionResult Index()
         {
             // ReportView myreport = new Repo
             ViewData["listVendor"] = _context.Vendor.ToList();
-            ViewData["vendorid"] = id;
             return View(null);
         }
         // POST: Report
         [HttpPost]
-        public async Task<IActionResult> Index(int? id, DateTime dateFrom, DateTime dateTo, int? vendorId)
+        public async Task<IActionResult> Index(DateTime dateFrom, DateTime dateTo, int? vendorId)
         {
+            var user =  await _userManager.GetUserAsync(User);
             DateTime MINDATE = new DateTime(2020, 06, 15);
             if (dateFrom < MINDATE) dateFrom = MINDATE; //protect database
             if (dateTo < dateFrom || dateTo > DateTime.Now.Date)
@@ -45,14 +47,9 @@ namespace bkfc.Controllers
             {
                 type = (int)vendorId;
             }
-            if (id != null)
+            if(User.IsInRole("VendorManager"))
             {
-                type = (int)id;
-                ViewData["vendorid"] = id;
-            }
-            else
-            {
-                // type = VendorManager.VendorId !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                type = user.vendorid;
             }
             List<ReportEachVendor> vendorsReport = new List<ReportEachVendor>();
             if (type == -1) //whole food court 
