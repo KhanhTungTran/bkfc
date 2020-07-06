@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using bkfc.Models;
 using Microsoft.AspNetCore.Identity;
@@ -27,7 +28,8 @@ namespace bkfc.Areas.Identity.Data
         [PersonalData]
         [Column(TypeName = "int")]
         public int Balance { get; set; }
-
-        public IList<UserVendor> UserVendor { get; set; }
+        [PersonalData]
+        [Column(TypeName = "int")]
+        public int vendorid { get; set; }
     }
 }

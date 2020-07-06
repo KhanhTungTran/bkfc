@@ -264,15 +264,8 @@ namespace bkfc.Controllers
             await _userManager.AddToRoleAsync(user, "Staff");
             Vendor vendor = await _context.Vendor.FindAsync(vendorId);
             if (vendor == null) return 2;
-            if (vendor.UserVendor == null) vendor.UserVendor = new List<UserVendor>();
-            vendor.UserVendor.Add
-            (
-                new UserVendor
-                {
-                    Vendor = vendor,
-                    User = user
-                }
-            );
+            user.vendorid = vendorId;
+            await _userManager.UpdateAsync(user);
             await _context.SaveChangesAsync();
             return 0;
         }
