@@ -43,7 +43,7 @@
         </form>
     </div>
 </div>
-@if (User.Identity.IsAuthenticated && (User.IsInRole("Admin")||User.IsInRole("FoodCourtManager")))
+@if (User.Identity.IsAuthenticated && (User.IsInRole("FoodCourtManager")))
 {
     <p class="mt-2">
         <a asp-action="Create" class="btn btn-primary">Create new vendor</a>

@@ -7,12 +7,12 @@
 
 <h1 style="text-align: center;">My Orders</h1>
 
-@if (User.Identity.IsAuthenticated && (!User.IsInRole("User")))
+@* @if (User.Identity.IsAuthenticated && (User.IsInRole("FoodCourtManager")))
 {    
 <p>
     <a asp-action="UpdateOrderStatus" class="btn btn-primary">Update order's status</a>
 </p>
-}
+} *@
 @functions{
     void renderOrder(MyOrderFood item){
         <div class="d-flex flex-row d-flex justify-content-between align-items-center">
@@ -63,7 +63,10 @@
             }
             if ($(this).text()=="Cancelled"){
                 $(this)[0].classList.add("text-danger");
-            }            
+            }
+            if ($(this).text() == "Cooking"){
+                $(this)[0].classList.add("text-warning");
+            }      
         });
         function renderOrder(DaySelect){
             var value = DaySelect.value;

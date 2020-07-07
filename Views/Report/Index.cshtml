@@ -4,6 +4,7 @@
     ViewData["Title"] = "Report";
     ViewData["css"] = "profile.css";
     var listVendor = (List<Vendor>)ViewData["listVendor"];
+
 }
 
 <h1>Report</h1>
@@ -13,9 +14,9 @@
 </p> *@
 
 <form onsubmit="return validateForm()" method="POST">
-    @if(User.IsInRole("Admin")){
+    @if(User.IsInRole("FoodCourtManager")){
         <div class="form-group">
-        <select id="vendorId" class="form-control" name="VendorId">
+        <select id="vendorId" class="form-control" name="vendorId">
             <option value="-1">Whole food court</option>
             @foreach (var vendor in listVendor)
             {

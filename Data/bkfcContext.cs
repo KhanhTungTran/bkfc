@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using bkfc.Models;
-
+using bkfc.Areas.Identity.Data;
+using Microsoft.EntityFrameworkCore.Internal;
 namespace bkfc.Data
 {
     public class bkfcContext : DbContext

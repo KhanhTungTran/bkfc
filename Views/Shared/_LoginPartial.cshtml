@@ -3,7 +3,9 @@
 
 @inject SignInManager<bkfcUser> SignInManager
 @inject UserManager<bkfcUser> UserManager
-
+@{
+    var user = await UserManager.GetUserAsync(User);
+}
 <ul class="navbar-nav">
 @if (SignInManager.IsSignedIn(User))
 {
@@ -11,12 +13,18 @@
         <a id="manage" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">My Account</a>
     </li>
     <li>
-        <a id="manage" class="nav-link text-dark" asp-controller="Order" asp-action="Index">Order</a>
+        <a id="manage" class="nav-link text-dark" asp-controller="Order" asp-action="Index">My Order</a>
     </li>
     @if(User.Identity.IsAuthenticated && User.IsInRole("Admin"))
     {
         <li class="nav-item">
             <a id="manage" class="nav-link text-dark" asp-controller="Admin" asp-action="Index">Admin</a>
+        </li>
+    }
+    @if(User.Identity.IsAuthenticated && (User.IsInRole("VendorManager")||User.IsInRole("Staff")))
+    {
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-controller="Vendor" asp-action="Index" asp-route-id=@user.vendorid>My Vendor</a>
         </li>
     }
     <li class="nav-item">

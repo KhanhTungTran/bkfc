@@ -11,7 +11,7 @@
   <img class="logo" src= @Model.Image >
   <div class="profile-title">
     <h1>@Html.DisplayFor(model => model.Name)</h1>
-    <h4> Delete this Food</h4>
+    <h4> Delete food</h4>
   </div>
 </div>
 <div>
@@ -61,14 +61,13 @@
         </dd>
     </dl>
     
-    <form asp-action="Delete">
+    <form asp-action="DeleteFood">
         <input type="hidden" asp-for="Id" />
         <input type="submit" value="Delete" class="btn btn-danger btn-lg btn-block" />
-        <div class="change-page">
-            <a asp-action="Edit" asp-route-id="@Model.Id" asp-route-vendorid=@vendorId >Edit</a> | 
-            <a asp-action="Details" asp-route-id="@Model.Id" asp-route-vendorid=@vendorId >Back to Details</a> | 
-            <a asp-action="Index" asp-route-id="@Model.VendorId" asp-route-vendorid=@vendorId>Back to List</a>
-        </div>
     </form>
+    <div class="change-page">
+        <a asp-action="EditFood" asp-route-id="@Model.Id" asp-route-vendorid="@Model.VendorId" >Edit</a> | 
+        <a asp-action="Index" asp-route-id="@Model.VendorId">Back to vendor</a>
+    </div>
 </div>
 }
