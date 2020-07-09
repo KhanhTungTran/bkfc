@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Update order's Status";
     ViewData["css"] = "profile.css";
+    string typeDate = (string)ViewData["typeDate"];
 }
 
 <h1 style="text-align: center;">Update Order Status</h1>
@@ -11,9 +12,9 @@
     void renderOrder(MyOrderFood item){
         <div class="d-flex flex-row d-flex justify-content-between align-items-center">
             <div class="order-number ml-3">Order #@item.Id</div>
-            <div class="text-muted">@item.Date</div>
             <div class="order-status mr-3">@item.Status</div>
         </div>
+        <div class="text-muted text-center">@item.Date</div>        
         int i=1;
         @foreach (var food in item.Foods)
         {
@@ -34,19 +35,21 @@
         return;
     }
 }
-<select class="custom-select mb-2" id="DaySelect" onchange="renderOrder(this)">
-    <option selected value="ToDay">Today</option>
+<form asp-action="UpdateOrderStatus" method="GET">
+<select class="custom-select mb-2" id="DaySelect" onchange="this.form.submit()" name="typeDate">
+    <option value="ToDay">Today</option>
     <option value="7Day">7 days ago</option>
     <option value="All">All</option>
 </select>
+</form>
 @foreach (var item in Model.Reverse())
 {
-    TimeSpan timeDifference = DateTime.Now.Subtract(item.Date);
-    <div class="order py-2 
-    @(timeDifference.Days==0? "order-0":"") @(timeDifference.Days<7? "order-7": "")"  @(timeDifference.Days!=0? "hidden":"")>
+    
+    <div class="order py-2">
     @{renderOrder(item);}
     <form method="POST" class="form-row">
         <input type="text" name="orderId" value=@item.Id hidden>
+        <input type="text" name="typeDate" value=@typeDate hidden>
         <div class="col">
             <select class="custom-select" id="inputGroupSelect01" name="status">
                 @if(item.Status=="To Receive")
@@ -68,6 +71,14 @@
 
 @section Scripts{
     <script>
+        function setSelectedIndex(s, v) {
+            for ( var i = 0; i < s.options.length; i++ ) {
+                if ( s.options[i].value == v ) {
+                    s.options[i].selected = true;
+                    return;
+                }
+            }
+        }
         $(".order-status").each(function(){
             if ($(this).text()=="To Receive"){
                 $(this)[0].classList.add("text-success");
@@ -104,6 +115,8 @@
                 })
             }
         }
+        var t = "@typeDate";
+        setSelectedIndex(document.getElementById("DaySelect"),t);
     </script>
 
 }

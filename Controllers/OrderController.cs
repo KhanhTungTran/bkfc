@@ -17,21 +17,30 @@ namespace bkfc.Controllers
     {
         private readonly bkfcContext _context;
         private readonly UserManager<bkfcUser> _userManager;
-
         public OrderController(bkfcContext context, UserManager<bkfcUser> userManager)
         {
             _context = context;
             _userManager = userManager;
         }
-
         // GET: Order
-        ///**** fix cho nayy
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string typeDate="ToDay")
         {
+            ViewData["typeDate"] = typeDate;
             var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             var orders = from m in _context.Order
                          select m;
-            orders = orders.Where(orders => orders.UserId == userId);
+            switch(typeDate)
+            {
+                case "ToDay":
+                    orders = orders.Where(orders => orders.UserId == userId && orders.Date.Date==DateTime.Now.Date);
+                    break;
+                case "7Day":
+                    orders = orders.Where(orders => orders.UserId == userId && orders.Date.Date>DateTime.Now.Date.AddDays(-7));
+                    break;
+                case "All":
+                    orders = orders.Where(orders => orders.UserId == userId);
+                    break;
+            }
             await orders.ToListAsync();
             List<Order> orderList = orders.ToList();
             List<MyOrderFood> myOrderFoods = new List<MyOrderFood>();
@@ -63,13 +72,25 @@ namespace bkfc.Controllers
         }
         // GET: Oder/UpdateOrderStatus
         [Authorize(Roles = "VendorManager,Staff")]
-        public async Task<IActionResult> UpdateOrderStatus()
+        public async Task<IActionResult> UpdateOrderStatus(string typeDate="ToDay")
         {
+            ViewData["typeDate"] = typeDate;
             var user =  await _userManager.GetUserAsync(User);
             int vendorId = user.vendorid;
             var orders = from m in _context.Order
                          select m;
-            orders = orders.Where(order => order.VendorId == vendorId);
+            switch(typeDate)
+            {
+                case "ToDay":
+                    orders = orders.Where(orders => orders.VendorId==vendorId && orders.Date.Date==DateTime.Now.Date);
+                    break;
+                case "7Day":
+                    orders = orders.Where(orders => orders.VendorId==vendorId && orders.Date.Date>DateTime.Now.Date.AddDays(-7));
+                    break;
+                case "All":
+                    orders = orders.Where(orders => orders.VendorId==vendorId);
+                    break;
+            }
             List<Order> orderList = orders.ToList();
             List<MyOrderFood> myOrderFoods = new List<MyOrderFood>();
             foreach (Order order in orderList)
@@ -101,7 +122,7 @@ namespace bkfc.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         //POST: Order/UpdateOrderStatus?orderId=orderId&status=status
-        public async Task<IActionResult> UpdateOrderStatus(int? orderId, string status)
+        public async Task<IActionResult> UpdateOrderStatus(int? orderId, string status, string typeDate)
         {
             if (orderId == null || status == null)
             {
@@ -116,7 +137,7 @@ namespace bkfc.Controllers
             order.Status = status;
             _context.Update(order);
             await _context.SaveChangesAsync();
-            return RedirectToAction("UpdateOrderStatus",new{vendorId = order.VendorId});
+            return RedirectToAction("UpdateOrderStatus",new{typeDate = typeDate});
 
         }
     }
