@@ -18,7 +18,15 @@
     void renderOrder(MyOrderFood item){
         <div class="d-flex flex-row d-flex justify-content-between align-items-center">
             <div class="order-number ml-3">Order #@item.Id</div>
-            <div class="order-status mr-3">@item.Status</div>
+            @if(item.Status == "Cooking")
+            {
+                <div class="order-status mr-3 text-warning">@if(item.Date.Date == DateTime.Now.Date){<small class = "font-weight-lighter my-auto">@item.EstimateMinutes minutes left | </small>}@item.Status</div>
+            }
+            else
+            {
+                <div class="order-status mr-3">@item.Status</div>
+            }
+            
         </div>
         <div class="text-muted text-center">@item.Date</div>
         int i =1;

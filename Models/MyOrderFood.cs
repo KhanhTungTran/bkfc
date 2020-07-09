@@ -10,5 +10,6 @@ namespace bkfc.Models
         public string Status { get; set; }
         public IList<Food> Foods { get; set; }
         public DateTime Date{get;set;}
+        public int EstimateMinutes {get;set;}
     }
 }
