@@ -37,24 +37,6 @@ namespace bkfc.Controllers
             return View(await payments.ToListAsync());
         }
 
-        // GET: Payment/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var payment = await _context.Payment
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (payment == null)
-            {
-                return NotFound();
-            }
-
-            return View(payment);
-        }
-
         // GET: Payment/Create
         public IActionResult Create()
         {

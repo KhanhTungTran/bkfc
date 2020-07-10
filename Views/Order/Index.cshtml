@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "My Orders";
     ViewData["css"] = "profile.css";
+    string typeDate = (string)ViewData["typeDate"];
 }
 
 <h1 style="text-align: center;">My Orders</h1>
@@ -17,9 +18,17 @@
     void renderOrder(MyOrderFood item){
         <div class="d-flex flex-row d-flex justify-content-between align-items-center">
             <div class="order-number ml-3">Order #@item.Id</div>
-            <div class="text-muted">@item.Date</div>
-            <div class="order-status mr-3">@item.Status</div>
+            @if(item.Status == "Cooking")
+            {
+                <div class="order-status mr-3 text-warning">@if(item.Date.Date == DateTime.Now.Date){<small class = "font-weight-lighter my-auto">@item.EstimateMinutes minutes left | </small>}@item.Status</div>
+            }
+            else
+            {
+                <div class="order-status mr-3">@item.Status</div>
+            }
+            
         </div>
+        <div class="text-muted text-center">@item.Date</div>
         int i =1;
         
         @foreach (var food in item.Foods)
@@ -41,22 +50,31 @@
         return;
     }
 }
-<select class="custom-select mb-2" id="DaySelect" onchange="renderOrder(this)">
+<form asp-action="Index" method="GET">
+<select class="custom-select mb-2" id="DaySelect" onchange="this.form.submit()" name="typeDate">
     <option value="ToDay">Today</option>
     <option value="7Day">7 days ago</option>
     <option value="All">All</option>
 </select>
+</form>
 <div id="list-order">
 @foreach (var item in Model.Reverse())
 {
-    TimeSpan timeDifference = DateTime.Now.Subtract(item.Date);
-    <div class="order py-2 @(timeDifference.Days==0? "order-0":"") @(timeDifference.Days<7? "order-7": "")" @(timeDifference.Days!=0? "hidden":"")>
+    <div class="order py-2">
     @{renderOrder(item);}
     </div>
 }
 </div>
 @section Scripts{
     <script>
+        function setSelectedIndex(s, v) {
+            for ( var i = 0; i < s.options.length; i++ ) {
+                if ( s.options[i].value == v ) {
+                    s.options[i].selected = true;
+                    return;
+                }
+            }
+        }
         $(".order-status").each(function(){
             if ($(this).text()=="To Receive"){
                 $(this)[0].classList.add("text-success");
@@ -68,30 +86,8 @@
                 $(this)[0].classList.add("text-warning");
             }      
         });
-        function renderOrder(DaySelect){
-            var value = DaySelect.value;
-            if (value=="ToDay"){
-                $('.order').each(function(){
-                    $(this)[0].hidden=true;
-                })
-                $('.order-0').each(function(){
-                    $(this)[0].hidden=false;
-                })
-            }
-            else if (value=="7Day"){
-                $('.order').each(function(){
-                    $(this)[0].hidden=true;
-                })
-                $('.order-7').each(function(){
-                    $(this)[0].hidden=false;
-                })
-            }
-            else if (value=="All"){
-                $('.order').each(function(){
-                    $(this)[0].hidden=false;
-                })
-            }
-        }
+        var t = "@typeDate";
+        setSelectedIndex(document.getElementById("DaySelect"),t);
     </script>
 
 }
