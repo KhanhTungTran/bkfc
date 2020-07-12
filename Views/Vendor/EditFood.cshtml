@@ -1,14 +1,18 @@
 @model bkfc.Models.Food
 
 @{
-    ViewData["Title"] = "Create new Food";
-    var vendorId = ViewData["vendorId"];
+    ViewData["Title"] = "Edit " + @Model.Name;
+    ViewData["css"] = "profile.css";
 }
 @if (User.Identity.IsAuthenticated && (User.IsInRole("Admin")||User.IsInRole("FoodCourtManager")||User.IsInRole("VendorManager")))
-{    
-<h1>Create</h1>
-
-<h4>Food</h4>
+{   
+<div class="header-profile">
+  <img id="img-up" class="logo" src= @Model.Image >
+  <div class="profile-title">
+    <h1>@Html.DisplayFor(model => model.Name)</h1>
+    <h4> Edit Food</h4>
+  </div>
+</div>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -17,16 +21,17 @@
                 <div class="info"></div>
             </div>
         </div>
-        <form asp-action="Create" >
+        <form asp-action="EditFood">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
             <div class="form-group">
-                <label asp-for="Image" class="control-label">Or paste your URL of image here</label>
+                <label asp-for="Image" class="control-label">Or paste URL of image here</label>
                 <input id="upload-img" asp-for="Image" class="form-control" />
                 <span asp-validation-for="Image" class="text-danger"></span>
-            </div>
+            </div>            
             <div class="form-group" hidden>
                 <label asp-for="VendorId" class="control-label"></label>
-                <input asp-for="VendorId" class="form-control" value=@vendorId />
+                <input asp-for="VendorId" class="form-control" value = "@Model.VendorId"/>
                 <span asp-validation-for="VendorId" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -55,14 +60,14 @@
                 <span asp-validation-for="Discount" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Save" class="btn btn-primary btn-lg btn-block" />
             </div>
         </form>
+        <div class = "change-page">
+            <span><a asp-action="DeleteFood" asp-route-id="@Model.Id" asp-route-vendorid=@Model.VendorId >Delete</a> | </span>
+            <a asp-action="Index" asp-route-id="@Model.VendorId">Back to vendor</a>
+        </div>
     </div>
-</div>
-
-<div class = "change-page">
-    <a asp-action="Index">Back to List</a>
 </div>
 }
 @section Scripts {

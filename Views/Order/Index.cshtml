@@ -3,92 +3,91 @@
 @{
     ViewData["Title"] = "My Orders";
     ViewData["css"] = "profile.css";
+    string typeDate = (string)ViewData["typeDate"];
 }
 
 <h1 style="text-align: center;">My Orders</h1>
 
-@* <p>
-    <a asp-action="Create">Create New</a>
-</p> *@
-
-@foreach (var item in Model)
-{
-    @if (item.Status != "Cooking")
-        continue;
-    <div class="order">
-        <div class="order-number">
-            Order #@item.Id
-        </div>
-        <div class="order-status">
-            @item.Status
-        </div>
-        <div class = "food-management" >
-            @{int i=1;}
-            @foreach (var food in item.Foods)
+@* @if (User.Identity.IsAuthenticated && (User.IsInRole("FoodCourtManager")))
+{    
+<p>
+    <a asp-action="UpdateOrderStatus" class="btn btn-primary">Update order's status</a>
+</p>
+} *@
+@functions{
+    void renderOrder(MyOrderFood item){
+        <div class="d-flex flex-row d-flex justify-content-between align-items-center">
+            <div class="order-number ml-3">Order #@item.Id</div>
+            @if(item.Status == "Cooking")
             {
-                <div class = "food-management-information">
-                    <a>
-                        <img src=@food.Image class="image-food">
-                    </a>
-                    
-                    <div class="food-information">
-                        <div>Food order number: @i</div>
-                        <div>Food name: @food.Name</div>
-                        <div>Quantity: @food.Amount</div>
-                    </div>
-                    @{i++;}
-                </div>
-            } 
+                <div class="order-status mr-3 text-warning">@if(item.Date.Date == DateTime.Now.Date){<small class = "font-weight-lighter my-auto">@item.EstimateMinutes minutes left | </small>}@item.Status</div>
+            }
+            else
+            {
+                <div class="order-status mr-3">@item.Status</div>
+            }
+            
         </div>
+        <div class="text-muted text-center">@item.Date</div>
+        int i =1;
+        
+        @foreach (var food in item.Foods)
+        {
+        <div class = "food-management d-flex flex-row align-items-center" >
+            <div class = "food-management-information">
+                <a>
+                    <img src=@food.Image class="image-food">
+                </a>
+                
+            </div>
+            <div class="food-information d-flex flex-column ml-3">
+                <div>Food order number: @i @{i++;}</div>
+                <div>Food name: @food.Name</div>
+                <div>Quantity: @food.Amount</div>
+            </div>
+        </div>    
+        } 
+        return;
+    }
+}
+<form asp-action="Index" method="GET">
+<select class="custom-select mb-2" id="DaySelect" onchange="this.form.submit()" name="typeDate">
+    <option value="ToDay">Today</option>
+    <option value="7Day">7 days ago</option>
+    <option value="All">All</option>
+</select>
+</form>
+<div id="list-order">
+@foreach (var item in Model.Reverse())
+{
+    <div class="order py-2">
+    @{renderOrder(item);}
     </div>
-    
+}
+</div>
+@section Scripts{
+    <script>
+        function setSelectedIndex(s, v) {
+            for ( var i = 0; i < s.options.length; i++ ) {
+                if ( s.options[i].value == v ) {
+                    s.options[i].selected = true;
+                    return;
+                }
+            }
+        }
+        $(".order-status").each(function(){
+            if ($(this).text()=="To Receive"){
+                $(this)[0].classList.add("text-success");
+            }
+            if ($(this).text()=="Cancelled"){
+                $(this)[0].classList.add("text-danger");
+            }
+            if ($(this).text() == "Cooking"){
+                $(this)[0].classList.add("text-warning");
+            }      
+        });
+        var t = "@typeDate";
+        setSelectedIndex(document.getElementById("DaySelect"),t);
+    </script>
 
 }
-@* <table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Status)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Date)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UserId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PaymentId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.VendorId)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Date)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UserId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PaymentId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.VendorId)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table> *@

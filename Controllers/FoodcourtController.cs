@@ -117,60 +117,6 @@ namespace bkfc.Controllers
             }
             return View(vendor);
         }
-
-        // GET: Foodcourt/Edit/5
-        [Authorize(Roles = "FoodCourtManager,Admin,VendorManager")]
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var vendor = await _context.Vendor.FindAsync(id);
-            if (vendor == null)
-            {
-                return NotFound();
-            }
-            return View(vendor);
-        }
-
-        // POST: Foodcourt/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Authorize(Roles = "FoodCourtManager,Admin,VendorManager")]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Logo,Category")] Vendor vendor)
-        {
-            if (id != vendor.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(vendor);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!VendorExists(vendor.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(vendor);
-        }
-
         // GET: Foodcourt/Delete/5
         [Authorize(Roles = "FoodCourtManager,Admin,VendorManager")]
         public async Task<IActionResult> Delete(int? id)
@@ -189,7 +135,6 @@ namespace bkfc.Controllers
 
             return View(vendor);
         }
-
         // POST: Foodcourt/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]

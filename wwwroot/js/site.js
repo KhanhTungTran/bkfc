@@ -11,6 +11,13 @@ function formatMoney(){
         
         $(this).text(num);
     });
+    $('.vnMoney-withoutVND').each(function () {
+        var item = $(this).text();
+        item = item.replace(",","");
+        var num = Number(item).toLocaleString('en');    
+        
+        $(this).text(num);
+    });
 }
 function hasClass(element, cls) {
     return (' ' + element.className + ' ').indexOf(' ' + cls + ' ') > -1;

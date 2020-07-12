@@ -1,0 +1,33 @@
+@model bkfc.Models.Vendor
+@{
+    ViewData["Title"] = @Model.Name;
+    var result = (String)ViewData["result"];
+}
+<h1>Vendor @Model.Name Management</h1>
+<form method="POST" asp-controller="Vendor" asp-action="StaffManagement">
+    <h3>Add new staff to @Model.Name vendor</h3>
+    @if (@result=="mail is empty")
+    {
+        <p class="text-warning">@result</p>    
+    }
+    else if(@result.Contains("Fail"))
+    {
+        <p class="text-danger">@result</p>
+    }
+    else
+    {
+        <p class="text-success">@result</p>
+    }
+    <div class="form-group">
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <div class="input-group-text">
+                    <i class="fas fa-envelope"></i>
+                </div>
+            </div>
+            <input type="text" class="form-control" placeholder="Email Address" name="mail" />
+            <input type="hidden" class="form-control" value=@Model.Id name="vendorId" />
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </div>
+</form>

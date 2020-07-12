@@ -1,26 +1,22 @@
 @model IEnumerable<bkfc.Models.Payment>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Payment history";
 }
 
-<h1>Index</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
+<h1>Payment history</h1>
+<table class="table table-striped">
     <thead>
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.Date)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.BalanceCharge)
+                <p class="text-right mb-0">@Html.DisplayNameFor(model => model.BalanceCharge)</p>
             </th>
-            <th>
+            @* <th>
                 @Html.DisplayNameFor(model => model.UserId)
-            </th>
+            </th> *@
         </tr>
     </thead>
     <tbody>
@@ -30,16 +26,16 @@
                 @Html.DisplayFor(modelItem => item.Date)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.BalanceCharge)
+                <p class="vnMoney text-right mb-0">@Html.DisplayFor(modelItem => item.BalanceCharge)</p>
             </td>
-            <td>
+            @* <td>
                 @Html.DisplayFor(modelItem => item.UserId)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
+            </td> *@
         </tr>
 }
     </tbody>
