@@ -68,8 +68,8 @@ namespace bkfc.Controllers
         }
         public IActionResult ChangeSystemStage()
         {
-            DateTime localDate = Da
-            ViewData["listVendor"] = _context.Vendor.ToList(); teTime.Now;
+            DateTime localDate = DateTime.Now;
+            ViewData["listVendor"] = _context.Vendor.ToList();
             int currentHour = localDate.Hour;
             if (Models.State.Mode == "On" && (currentHour < 0 || currentHour > 5))
             {
