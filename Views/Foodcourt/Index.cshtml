@@ -22,7 +22,7 @@
         </div>
     </div>
     <div id="collapse1" class="panel-collapse collapse" style="padding:10px 10px 10px 10px;">
-        <form method="get" asp-controller="Foodcourt" asp-action="Index"style="width:100%">
+        <form method="get" asp-controller="Foodcourt" asp-action="Index" style="width:100%">
             <div class="form-group row">
                 <div class="col">
                     <label>Vendor category</label>
@@ -38,11 +38,14 @@
             </div>
 
             <div class="form-row">
-                <button type="submit" class="btn btn-primary btn-block" >Search now</button>
+                <button type="submit" class="btn btn-primary btn-block">Search now</button>
             </div>
         </form>
     </div>
 </div>
+<form asp-action="clickne">
+    <button type="submit" class="btn btn-primary">click voo nhan</button>
+</form>
 @if (User.Identity.IsAuthenticated && (User.IsInRole("FoodCourtManager")))
 {
     <p class="mt-2">
@@ -61,7 +64,7 @@
             vendors.Add(vendor);
         }
     }
-    if(vendors.Count > 0)
+    if (vendors.Count > 0)
     {
         <div class="category">
             @Html.DisplayFor(modelItem => item.Text)
@@ -90,3 +93,4 @@
 
 
 }
+<!-- The core Firebase JS SDK is always required and must be listed first -->

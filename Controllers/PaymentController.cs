@@ -15,16 +15,20 @@ using System.IO;
 using System.Text;
 using System.Net;
 using Newtonsoft.Json.Linq;
+using bkfc.Areas.Identity.Data;
+using FirebaseAdmin.Messaging;
 
 namespace bkfc.Controllers
 {
     public class PaymentController : Controller
     {
         private readonly bkfcContext _context;
+        private readonly UserManager<bkfcUser> _userManager;
 
-        public PaymentController(bkfcContext context)
+        public PaymentController(bkfcContext context, UserManager<bkfcUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Payment
@@ -53,10 +57,10 @@ namespace bkfc.Controllers
             string accessKey = "0kA4tysnxO9tUKOx";
             string serectkey = "t2xCHeQr7pbnLBHqtutz5H1bt0hinODy";
             string orderInfo = "Đơn hàng từ Bách Khoa Food Court";
-            string returnUrl = "https://bkfc.azurewebsites.net/payment/done";
-            string notifyurl = "https://bkfc.azurewebsites.net/order";
-            // string returnUrl = "https://localhost:5001/payment/done";
-            // string notifyurl = "https://localhost:5001/order";
+            //string returnUrl = "https://bkfc.azurewebsites.net/payment/done";
+            //string notifyurl = "https://bkfc.azurewebsites.net/order";
+            string returnUrl = "https://localhost:5001/payment/done";
+            string notifyurl = "https://localhost:5001/order";
 
             string amount = money.ToString();
             string orderid = Guid.NewGuid().ToString();
@@ -110,6 +114,33 @@ namespace bkfc.Controllers
             ViewData["payURL"] = payURL;
             return View();
         }
+        private async void sendMess(int vendorId)
+        {
+            var users = await _userManager.GetUsersInRoleAsync("Staff");
+            foreach(bkfcUser staff in users)
+            {
+                if (staff.vendorid != vendorId || staff.Token == null) continue;
+                try
+                {
+                    var message = new Message()
+                    {
+                        Data = new Dictionary<string, string>()
+                        {
+                            ["Tilte"] = "New order is coming"
+                        },
+                        Notification = new Notification
+                        {
+                            Title = "New order is coming",
+                            Body = "Please check order list for more detail"
+                        },
+
+                        Token = staff.Token,
+                    };
+                    var messaging = FirebaseMessaging.DefaultInstance;
+                    var result = await messaging.SendAsync(message);
+                }
+            }
+        }
         private async Task<int> SaveOrderByVendor(List<Item> cart, Payment payment)
         {
             Dictionary<int, int> VendorOrderIndex = new Dictionary<int, int>();
@@ -133,6 +164,7 @@ namespace bkfc.Controllers
                     _context.Add(order);
                     await _context.SaveChangesAsync();
                     Orders.Add(order);
+                    sendMess(order.VendorId);
                 }
             }
             foreach (Item item in cart)
@@ -154,6 +186,7 @@ namespace bkfc.Controllers
             }
             return 0;
         }
+        
         // GET: Payement/Done
         // Momo will call this after payment succeded
         public async Task<ActionResult> Done(string amount, string errorCode)
