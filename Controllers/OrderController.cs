@@ -151,5 +151,14 @@ namespace bkfc.Controllers
             return RedirectToAction("UpdateOrderStatus",new{typeDate = typeDate});
 
         }
+        [HttpPost]
+        public async Task<string> setToken(string id)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            user.Token = id;
+            await _userManager.UpdateAsync(user);
+            await _context.SaveChangesAsync();
+            return id;
+        }
     }
 }

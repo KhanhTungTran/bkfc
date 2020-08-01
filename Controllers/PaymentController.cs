@@ -139,6 +139,9 @@ namespace bkfc.Controllers
                     var messaging = FirebaseMessaging.DefaultInstance;
                     var result = await messaging.SendAsync(message);
                 }
+                catch
+                {
+                }
             }
         }
         private async Task<int> SaveOrderByVendor(List<Item> cart, Payment payment)
