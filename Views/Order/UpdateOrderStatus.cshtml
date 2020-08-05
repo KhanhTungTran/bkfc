@@ -120,3 +120,52 @@
     </script>
 
 }
+<script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-messaging.js"></script>
+<script type="text/javascript">
+    function connectToFirebase() {
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyAp3HuLnXMr4WTBrUDLIrpZUVl2YukJwT0",
+            authDomain: "bkfc-9fc2a.firebaseapp.com",
+            databaseURL: "https://bkfc-9fc2a.firebaseio.com",
+            projectId: "bkfc-9fc2a",
+            storageBucket: "bkfc-9fc2a.appspot.com",
+            messagingSenderId: "485655542037",
+            appId: "1:485655542037:web:ebf07e068e73e474f9d11c",
+            measurementId: "G-6S5PN104SN"
+        };
+        // Initialize Firebase
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const messaging = firebase.messaging();
+        messaging.usePublicVapidKey("BHJMFC6prqgO94hirMHAlubfSFnn7PRmyzC-wTxoM87yESwzhA4zXeCYaI_4kNLZbIW4DMZlIef59uXfk-mnR_M");
+        messaging.getToken().then
+            (
+                (currentToken) =>
+                {
+                    if (currentToken) {
+                        $.ajax
+                            (
+                                {
+                                    type: "POST",
+                                    url: 'setToken',
+                                    data: { id: currentToken }
+                                }
+                            ).done
+                            (
+                                function () {
+                                    console.log('Join to cook room successfully');
+                                }
+                            );
+                    }
+                }
+        )
+        messaging.onMessage((payload) => {
+            alert("New order has come. Please reload the page");
+            console.log('Message received. ', payload);
+        });
+    }
+    window.onload = connectToFirebase;
+</script>

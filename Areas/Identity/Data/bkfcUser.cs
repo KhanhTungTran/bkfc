@@ -31,5 +31,8 @@ namespace bkfc.Areas.Identity.Data
         [PersonalData]
         [Column(TypeName = "int")]
         public int vendorid { get; set; }
+        [PersonalData]
+        [Column(TypeName = "nvarchar(1000)")]
+        public string Token { get; set; }
     }
 }

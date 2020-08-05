@@ -14,7 +14,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Identity;
 using bkfc.Areas.Identity.Data;
-
+using FirebaseAdmin;
+using Google.Apis.Auth.OAuth2;
+using System.IO;
 namespace bkfc
 {
     public class Startup
@@ -90,6 +92,10 @@ namespace bkfc
                 endpoints.MapRazorPages();
             });
             CreateUserRoles(services).Wait();
+            var defaultApp = FirebaseApp.Create(new AppOptions()
+            {
+                Credential = GoogleCredential.FromFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "key.json")),
+            });
         }
         private async Task CreateUserRoles(IServiceProvider serviceProvider)
         {
