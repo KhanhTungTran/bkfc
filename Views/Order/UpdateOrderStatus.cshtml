@@ -163,8 +163,14 @@
                 }
         )
         messaging.onMessage((payload) => {
-            alert("New order has come. Please reload the page");
-            console.log('Message received. ', payload);
+            try {
+                console.log("something");
+                alert("New order has come. Please reload the page");
+                console.log('Message received. ', payload);
+            }
+            catch(err)  {
+                console.log(err);
+            }
         });
     }
     window.onload = connectToFirebase;
