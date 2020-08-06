@@ -117,7 +117,7 @@ namespace bkfc.Controllers
         private async void sendMess(int vendorId)
         {
             var users = await _userManager.GetUsersInRoleAsync("Staff");
-            foreach(bkfcUser staff in users)
+            foreach (bkfcUser staff in users)
             {
                 if (staff.vendorid != vendorId || staff.Token == null) continue;
                 try
@@ -189,7 +189,7 @@ namespace bkfc.Controllers
             }
             return 0;
         }
-        
+
         // GET: Payement/Done
         // Momo will call this after payment succeded
         public async Task<ActionResult> Done(string amount, string errorCode)
