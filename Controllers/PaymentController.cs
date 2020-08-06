@@ -57,10 +57,10 @@ namespace bkfc.Controllers
             string accessKey = "0kA4tysnxO9tUKOx";
             string serectkey = "t2xCHeQr7pbnLBHqtutz5H1bt0hinODy";
             string orderInfo = "Đơn hàng từ Bách Khoa Food Court";
-            string returnUrl = "https://bkfc.azurewebsites.net/payment/done";
-            string notifyurl = "https://bkfc.azurewebsites.net/order";
-            //string returnUrl = "https://localhost:5001/payment/done";
-            //string notifyurl = "https://localhost:5001/order";
+            //string returnUrl = "https://bkfc.azurewebsites.net/payment/done";
+            //string notifyurl = "https://bkfc.azurewebsites.net/order";
+            string returnUrl = "https://localhost:5001/payment/done";
+            string notifyurl = "https://localhost:5001/order";
 
             string amount = money.ToString();
             string orderid = Guid.NewGuid().ToString();
@@ -117,7 +117,7 @@ namespace bkfc.Controllers
         private async void sendMess(int vendorId)
         {
             var users = await _userManager.GetUsersInRoleAsync("Staff");
-            foreach(bkfcUser staff in users)
+            foreach (bkfcUser staff in users)
             {
                 if (staff.vendorid != vendorId || staff.Token == null) continue;
                 try
@@ -189,7 +189,7 @@ namespace bkfc.Controllers
             }
             return 0;
         }
-        
+
         // GET: Payement/Done
         // Momo will call this after payment succeded
         public async Task<ActionResult> Done(string amount, string errorCode)

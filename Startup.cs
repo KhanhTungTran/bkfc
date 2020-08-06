@@ -34,7 +34,7 @@ namespace bkfc
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-                    // .AddSessionStateTempDataProvider();
+            // .AddSessionStateTempDataProvider();
 
             services.AddDbContext<bkfcContext>(options =>
             {
@@ -81,7 +81,7 @@ namespace bkfc
 
             app.UseAuthentication();
             app.UseAuthorization();
-            
+
             // app.UseSession();
 
             app.UseEndpoints(endpoints =>
@@ -94,7 +94,7 @@ namespace bkfc
             CreateUserRoles(services).Wait();
             var defaultApp = FirebaseApp.Create(new AppOptions()
             {
-                Credential = GoogleCredential.FromFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "key.json")),
+                Credential = GoogleCredential.FromFile("key.json"),
             });
         }
         private async Task CreateUserRoles(IServiceProvider serviceProvider)
