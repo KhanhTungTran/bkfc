@@ -59,8 +59,8 @@ namespace bkfc.Controllers
             string orderInfo = "Đơn hàng từ Bách Khoa Food Court";
             string returnUrl = "https://bkfc.azurewebsites.net/payment/done";
             string notifyurl = "https://bkfc.azurewebsites.net/order";
-            // string returnUrl = "https://localhost:5001/payment/done";
-            // string notifyurl = "https://localhost:5001/order";
+            //string returnUrl = "https://localhost:5001/payment/done";
+            //string notifyurl = "https://localhost:5001/order";
 
             string amount = money.ToString();
             string orderid = Guid.NewGuid().ToString();
@@ -204,9 +204,13 @@ namespace bkfc.Controllers
 
                 }
             }
-            await sendMess(19);
+            foreach (KeyValuePair<int, int> entry in VendorOrderIndex)
+            {
+                await sendMess(entry.Key);
+            }
             foreach (Item item in cart)
             {
+
                 int ind = VendorOrderIndex[item.food.VendorId];
                 Order order = Orders[ind];
                 Food food = await _context.Food.FindAsync(item.food.Id);
