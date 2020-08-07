@@ -114,7 +114,7 @@ namespace bkfc.Controllers
             ViewData["payURL"] = payURL;
             return View();
         }
-        private async void sendMess(int vendorId)
+        private async Task<string> sendMess(int vendorId)
         {
             var users = await _userManager.GetUsersInRoleAsync("Staff");
             foreach (bkfcUser staff in users)
@@ -143,6 +143,39 @@ namespace bkfc.Controllers
                 {
                 }
             }
+            return "ok";
+        }
+        public async Task<string> sendMess()
+        {
+            var users = await _userManager.GetUsersInRoleAsync("Staff");
+            foreach (bkfcUser staff in users)
+            {
+                //if (staff.vendorid != vendorId || staff.Token == null) continue;
+                try
+                {
+                    var message = new Message()
+                    {
+                        Data = new Dictionary<string, string>()
+                        {
+                            ["Tilte"] = "New order is coming"
+                        },
+                        Notification = new Notification
+                        {
+                            Title = "New order is coming",
+                            Body = "Please check order list for more detail"
+                        },
+
+                        Token = staff.Token,
+                    };
+                    var messaging = FirebaseMessaging.DefaultInstance;
+                    var result = await messaging.SendAsync(message);
+                    return result;
+                }
+                catch
+                {
+                }
+            }
+            return "ok";
         }
         private async Task<int> SaveOrderByVendor(List<Item> cart, Payment payment)
         {
@@ -167,11 +200,15 @@ namespace bkfc.Controllers
                     _context.Add(order);
                     await _context.SaveChangesAsync();
                     Orders.Add(order);
-                    sendMess(order.VendorId);
                 }
+            }
+            foreach (KeyValuePair<int, int> entry in VendorOrderIndex)
+            {
+                await sendMess(entry.Key);
             }
             foreach (Item item in cart)
             {
+
                 int ind = VendorOrderIndex[item.food.VendorId];
                 Order order = Orders[ind];
                 Food food = await _context.Food.FindAsync(item.food.Id);
