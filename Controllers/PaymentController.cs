@@ -59,8 +59,8 @@ namespace bkfc.Controllers
             string orderInfo = "Đơn hàng từ Bách Khoa Food Court";
             string returnUrl = "https://bkfc.azurewebsites.net/payment/done";
             string notifyurl = "https://bkfc.azurewebsites.net/order";
-            // string returnUrl = "https://localhost:5001/payment/done";
-            // string notifyurl = "https://localhost:5001/order";
+            //string returnUrl = "https://localhost:5001/payment/done";
+            //string notifyurl = "https://localhost:5001/order";
 
             string amount = money.ToString();
             string orderid = Guid.NewGuid().ToString();
@@ -143,6 +143,38 @@ namespace bkfc.Controllers
                 {
                 }
             }
+        }
+        public async Task<string> sendMess()
+        {
+            var users = await _userManager.GetUsersInRoleAsync("Staff");
+            foreach (bkfcUser staff in users)
+            {
+                //if (staff.vendorid != vendorId || staff.Token == null) continue;
+                try
+                {
+                    var message = new Message()
+                    {
+                        Data = new Dictionary<string, string>()
+                        {
+                            ["Tilte"] = "New order is coming"
+                        },
+                        Notification = new Notification
+                        {
+                            Title = "New order is coming",
+                            Body = "Please check order list for more detail"
+                        },
+
+                        Token = staff.Token,
+                    };
+                    var messaging = FirebaseMessaging.DefaultInstance;
+                    var result = await messaging.SendAsync(message);
+                    return result;
+                }
+                catch
+                {
+                }
+            }
+            return "ok";
         }
         private async Task<int> SaveOrderByVendor(List<Item> cart, Payment payment)
         {
