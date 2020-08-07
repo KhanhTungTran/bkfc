@@ -114,7 +114,7 @@ namespace bkfc.Controllers
             ViewData["payURL"] = payURL;
             return View();
         }
-        private async void sendMess(int vendorId)
+        private async Task<string> sendMess(int vendorId)
         {
             var users = await _userManager.GetUsersInRoleAsync("Staff");
             foreach (bkfcUser staff in users)
@@ -143,6 +143,7 @@ namespace bkfc.Controllers
                 {
                 }
             }
+            return "ok";
         }
         public async Task<string> sendMess()
         {
@@ -199,7 +200,7 @@ namespace bkfc.Controllers
                     _context.Add(order);
                     await _context.SaveChangesAsync();
                     Orders.Add(order);
-                    sendMess(order.VendorId);
+                    await sendMess(order.VendorId);
                 }
             }
             foreach (Item item in cart)
